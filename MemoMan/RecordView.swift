@@ -7,81 +7,92 @@
 
 import SwiftUI
 import AVFoundation
+import CoreData
+import CloudKit
 
 struct RecordView: View {
     @State private var isRecording : Bool = false
     @State private var fadeInOut : Bool = false
-    @State private var AudioSesh : AVAudioSession!
-    @State private var AudioRecoder : AVAudioRecorder!
+    @State private var circleMultiplier : CGFloat = 1.0
+    @State private var showFiles : Bool = false
+    private var recorder : AudioRecorder = AudioRecorder()
     
     var body: some View {
-        GeometryReader { g in
-            ZStack {
-                Circle()
-                    .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
-                    .opacity(0.2)
-                    .frame(width: fadeInOut ? g.size.width/2.1 : g.size.width/4, height: fadeInOut ? g.size.width/2.1 : g.size.width/4)
-                Circle()
-                    .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
-                    .opacity(0.3)
-                    .frame(width: fadeInOut ? g.size.width/2.50384615384
-                           : g.size.width/4, height: fadeInOut ? g.size.width/2.50384615384
-                           : g.size.width/4)
-                Circle()
-                    .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
-                    .opacity(0.5)
-                    .frame(width: fadeInOut ? g.size.width/3.1 : g.size.width/4, height: fadeInOut ? g.size.width/3.1 : g.size.width/4)
-                
-                Button(action: {}) {
-                    Image(systemName: "mic.fill")
-                        .font(.system(size: g.size.width/12))
-                        .imageScale(.medium)
-                        .frame(width: g.size.width/4, height: g.size.width/4)
-                        .foregroundColor(Color.white)
-                        .foregroundColor(.red)
-                        .background(Color.yellow)
-                        .clipShape(Circle())
-                }
-                .simultaneousGesture(TapGesture(count: 2).onEnded({
-                    print("Double tap")
-                    isRecording.toggle()
-                    switch isRecording {
-                    case true:
-                        //AudioRecoder.record()
-                        print("Record")
-                    case false:
-                        //AudioRecoder.stop()
-                        print("Stop")
+        NavigationStack {
+            GeometryReader { g in
+                ZStack {
+                    Circle()
+                        .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
+                        .opacity(fadeInOut ? 0.2 : 0.0)
+                        .frame(width: fadeInOut ? (g.size.width * circleMultiplier)/2.1 : g.size.width/4, height: fadeInOut ? (g.size.width * circleMultiplier)/2.1 : g.size.width/4)
+                    Circle()
+                        .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
+                        .opacity(fadeInOut ? 0.3 : 0.0)
+                        .frame(width: fadeInOut ? (g.size.width * circleMultiplier)/2.50384615384
+                               : g.size.width/4, height: fadeInOut ? (g.size.width * circleMultiplier)/2.50384615384
+                               : g.size.width/4)
+                    Circle()
+                        .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
+                        .opacity(fadeInOut ? 0.5 : 0.0)
+                        .frame(width: fadeInOut ? (g.size.width * circleMultiplier)/3.1 : g.size.width/4, height: fadeInOut ? (g.size.width * circleMultiplier)/3.1 : g.size.width/4)
+                    
+                    Button(action: {}) {
+                        Image(systemName: "mic.fill")
+                            .font(.system(size: g.size.width/12))
+                            .imageScale(.medium)
+                            .frame(width: g.size.width/4, height: g.size.width/4)
+                            .foregroundColor(Color.white)
+                            .background(fadeInOut ? Color.red : Color.yellow)
+                            .clipShape(Circle())
                     }
-                }))
-                .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
-                    .onEnded({_ in
+                    .simultaneousGesture(TapGesture(count: 2).onEnded({
                         isRecording.toggle()
-                        //AudioRecoder.record()
-                    })
-                        .sequenced(before: DragGesture(minimumDistance: 0)
-                            .onEnded({_ in
+                        switch isRecording {
+                        case true:
+                            try? recorder.record()
+                        case false:
+                            recorder.stop()
+                        }
+                    }))
+                    .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
+                        .onEnded({_ in
+                            if isRecording {
                                 isRecording.toggle()
-                                //AudioRecoder.stop()
-                            }))
-                )
-            }.onAppear {
-                do {
-                    AudioSesh = AVAudioSession.sharedInstance()
-                    try AudioSesh.setCategory(.playAndRecord)
-                    AudioSesh.requestRecordPermission { (status) in
+                                recorder.stop()
+                            }
+                            try? recorder.record()
+                            isRecording.toggle()
+                        })
+                            .sequenced(before: DragGesture(minimumDistance: 0)
+                                .onEnded({_ in
+                                    isRecording.toggle()
+                                    recorder.stop()
+                                }))
+                    )
+                }
+                .onChange(of: isRecording) {newValue in
+                    withAnimation(Animation.easeInOut(duration: 0.6)) {
+                        fadeInOut.toggle()
                     }
                 }
-                catch {
-                    print(error.localizedDescription)
+                .frame(width: g.size.width, height: g.size.height, alignment: .center)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Stuff") {
+                        showFiles.toggle()
+                    }
                 }
             }
-            .onChange(of: isRecording) {newValue in
-                withAnimation(Animation.easeInOut(duration: 0.6)) {
-                    fadeInOut.toggle()
-                }
+            .navigationDestination(isPresented: $showFiles) {
+                FilesView()
             }
-            .frame(width: g.size.width, height: g.size.height, alignment: .center)
+        }
+        .onDisappear {
+            if isRecording {
+                isRecording.toggle()
+                recorder.stop()
+            }
         }
     }
 }
