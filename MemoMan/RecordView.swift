@@ -15,7 +15,7 @@ struct RecordView: View {
     @State private var fadeInOut : Bool = false
     @State private var circleMultiplier : CGFloat = 1.0
     @State private var showFiles : Bool = false
-    private var recorder : AudioRecorder = AudioRecorder()
+    @StateObject var recorder : PlayerRecorder = PlayerRecorder()
     
     var body: some View {
         NavigationStack {
@@ -42,7 +42,7 @@ struct RecordView: View {
                             .imageScale(.medium)
                             .frame(width: g.size.width/4, height: g.size.width/4)
                             .foregroundColor(Color.white)
-                            .background(fadeInOut ? Color.red : Color.yellow)
+                            .background(fadeInOut ? Color.red : Color(red: 166/255, green: 104/255, blue: 247/255))
                             .clipShape(Circle())
                     }
                     .simultaneousGesture(TapGesture(count: 2).onEnded({
@@ -80,18 +80,16 @@ struct RecordView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Stuff") {
+                        if isRecording {
+                            isRecording.toggle()
+                            recorder.stop()
+                        }
                         showFiles.toggle()
                     }
                 }
             }
             .navigationDestination(isPresented: $showFiles) {
-                FilesView()
-            }
-        }
-        .onDisappear {
-            if isRecording {
-                isRecording.toggle()
-                recorder.stop()
+                FilesView().environmentObject(self.recorder)
             }
         }
     }
