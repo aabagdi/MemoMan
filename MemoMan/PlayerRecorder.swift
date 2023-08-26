@@ -100,6 +100,7 @@ class PlayerRecorder : ObservableObject {
             try engine.start()
             playNode.play()
             state = .playing
+            state = .stopped
         } catch {
             print("Engine not started!!")
         }
