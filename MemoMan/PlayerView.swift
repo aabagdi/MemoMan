@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct PlayerView: View {
     @State private var isPlaying : Bool = false
-    @EnvironmentObject var player : PlayerRecorder
+    @State private var player : AVAudioPlayer!
     let soundURL : URL
     
     var body: some View {
@@ -22,7 +23,7 @@ struct PlayerView: View {
                         isPlaying.toggle()
                         switch isPlaying {
                         case true:
-                            player.play(url: soundURL)
+                            player.play()
                         case false:
                             player.pause()
                         }
@@ -30,6 +31,10 @@ struct PlayerView: View {
                 Spacer()
                 Image(systemName: "goforward.5")
             }
+        }
+        .onAppear {
+            let sound = soundURL
+            self.player = try! AVAudioPlayer(contentsOf: sound)
         }
     }
 }

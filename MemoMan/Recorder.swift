@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class PlayerRecorder : ObservableObject {
+class Recorder : ObservableObject {
     enum RecordingState {
         case recording
         case paused

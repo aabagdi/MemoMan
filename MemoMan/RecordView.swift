@@ -13,9 +13,8 @@ import CloudKit
 struct RecordView: View {
     @State private var isRecording : Bool = false
     @State private var fadeInOut : Bool = false
-    @State private var circleMultiplier : CGFloat = 1.0
     @State private var showFiles : Bool = false
-    @StateObject var recorder : PlayerRecorder = PlayerRecorder()
+    @StateObject var recorder : Recorder = Recorder()
     
     var body: some View {
         NavigationStack {
@@ -24,17 +23,17 @@ struct RecordView: View {
                     Circle()
                         .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
                         .opacity(fadeInOut ? 0.2 : 0.0)
-                        .frame(width: fadeInOut ? (g.size.width * circleMultiplier)/2.1 : g.size.width/4, height: fadeInOut ? (g.size.width * circleMultiplier)/2.1 : g.size.width/4)
+                        .frame(width: fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: fadeInOut ? (g.size.width )/2.1 : g.size.width/4)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
                         .opacity(fadeInOut ? 0.3 : 0.0)
-                        .frame(width: fadeInOut ? (g.size.width * circleMultiplier)/2.50384615384
-                               : g.size.width/4, height: fadeInOut ? (g.size.width * circleMultiplier)/2.50384615384
+                        .frame(width: fadeInOut ? (g.size.width )/2.50384615384
+                               : g.size.width/4, height: fadeInOut ? (g.size.width )/2.50384615384
                                : g.size.width/4)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
                         .opacity(fadeInOut ? 0.5 : 0.0)
-                        .frame(width: fadeInOut ? (g.size.width * circleMultiplier)/3.1 : g.size.width/4, height: fadeInOut ? (g.size.width * circleMultiplier)/3.1 : g.size.width/4)
+                        .frame(width: fadeInOut ? (g.size.width )/3.1 : g.size.width/4, height: fadeInOut ? (g.size.width )/3.1 : g.size.width/4)
                     
                     Button(action: {}) {
                         Image(systemName: "mic.fill")
