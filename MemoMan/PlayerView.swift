@@ -10,17 +10,17 @@ import AVFoundation
 
 struct PlayerView: View {
     @State private var isPlaying : Bool = false
-    @State private var player : AVAudioPlayer!
     let soundURL : URL
     
     var body: some View {
+        var player = Player(soundURL: soundURL)
         VStack {
             HStack {
                 Image(systemName: "gobackward.5")
                 Spacer()
-                Image(systemName: player.isPlaying ? "pause.fill" : "play.fill")
+                Image(systemName: player.isPlaying() ? "pause.fill" : "play.fill")
                     .onTapGesture {
-                        switch player.isPlaying {
+                        switch player.isPlaying() {
                         case true:
                             player.pause()
                         case false:
@@ -33,8 +33,6 @@ struct PlayerView: View {
             }
         }
         .onAppear {
-            let sound = soundURL
-            self.player = try! AVAudioPlayer(contentsOf: sound)
         }
     }
 }

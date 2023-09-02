@@ -13,6 +13,7 @@
 		3951A91429E13F6200C80C26 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3951A91329E13F6200C80C26 /* Preview Assets.xcassets */; };
 		395FD59929E3F0CA009E2F94 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395FD59829E3F0CA009E2F94 /* Recorder.swift */; };
 		3987468929EDDC79007791F9 /* FilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3987468829EDDC79007791F9 /* FilesView.swift */; };
+		399118872AA2D64B009731AE /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399118862AA2D64B009731AE /* Player.swift */; };
 		39CBA1A42A042F4A00DA4952 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CBA1A32A042F4A00DA4952 /* RecordModel.swift */; };
 		39CBA1A82A04516B00DA4952 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CBA1A72A04516B00DA4952 /* PlayerView.swift */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,7 @@
 		3951A91329E13F6200C80C26 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		395FD59829E3F0CA009E2F94 /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		3987468829EDDC79007791F9 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
+		399118862AA2D64B009731AE /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		39CBA1A32A042F4A00DA4952 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		39CBA1A72A04516B00DA4952 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,6 +67,7 @@
 				395FD59829E3F0CA009E2F94 /* Recorder.swift */,
 				39CBA1A72A04516B00DA4952 /* PlayerView.swift */,
 				3987468829EDDC79007791F9 /* FilesView.swift */,
+				399118862AA2D64B009731AE /* Player.swift */,
 				3951A91029E13F6200C80C26 /* Assets.xcassets */,
 				3951A91229E13F6200C80C26 /* Preview Content */,
 			);
@@ -153,6 +156,7 @@
 				3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */,
 				39CBA1A42A042F4A00DA4952 /* RecordModel.swift in Sources */,
 				3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */,
+				399118872AA2D64B009731AE /* Player.swift in Sources */,
 				39CBA1A82A04516B00DA4952 /* PlayerView.swift in Sources */,
 				395FD59929E3F0CA009E2F94 /* Recorder.swift in Sources */,
 			);
