@@ -18,15 +18,15 @@ struct PlayerView: View {
             HStack {
                 Image(systemName: "gobackward.5")
                 Spacer()
-                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                Image(systemName: player.isPlaying ? "pause.fill" : "play.fill")
                     .onTapGesture {
-                        isPlaying.toggle()
-                        switch isPlaying {
+                        switch player.isPlaying {
                         case true:
-                            player.play()
-                        case false:
                             player.pause()
+                        case false:
+                            player.play()
                         }
+                        print(player.isPlaying)
                     }
                 Spacer()
                 Image(systemName: "goforward.5")
@@ -38,4 +38,3 @@ struct PlayerView: View {
         }
     }
 }
-
