@@ -1,5 +1,14 @@
 //
 //  ContentView.swift
+//  MemoMan clean
+//
+//  Created by Aadit Bagdi on 11/1/23.
+//
+
+import SwiftUI
+
+//
+//  ContentView.swift
 //  MemoMan
 //
 //  Created by Aadit Bagdi on 4/7/23.
@@ -14,7 +23,8 @@ struct RecordView: View {
     @State private var isRecording : Bool = false
     @State private var fadeInOut : Bool = false
     @State private var showFiles : Bool = false
-    @StateObject var recorder : Recorder = Recorder()
+    @State private var animationAmount : Double = 1.0
+    //@StateObject var recorder : Recorder = Recorder()
     
     var body: some View {
         NavigationStack {
@@ -44,32 +54,48 @@ struct RecordView: View {
                             .background(fadeInOut ? Color.red : Color(red: 166/255, green: 104/255, blue: 247/255))
                             .clipShape(Circle())
                     }
+                    .overlay(
+                        Circle()
+                            .stroke(.white)
+                            .scaleEffect(animationAmount)
+                            .opacity(2 - animationAmount)
+                            .animation(
+                                .easeInOut(duration: 1)
+                                .repeatForever(autoreverses: false),
+                                value: animationAmount
+                            )
+                    )
+                    .onChange(of: isRecording){
+                        animationAmount = isRecording ? 2.0 : 1.0
+                    }
                     .simultaneousGesture(TapGesture(count: 2).onEnded({
                         isRecording.toggle()
                         switch isRecording {
                         case true:
-                            try? recorder.record()
+                            //recorder.record()
+                            print("recording")
                         case false:
-                            recorder.stop()
+                            //recorder.stop()
+                            print("stopped")
                         }
                     }))
                     .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
                         .onEnded({_ in
                             if isRecording {
                                 isRecording.toggle()
-                                recorder.stop()
+                                //recorder.stop()
                             }
-                            try? recorder.record()
+                            //recorder.record()
                             isRecording.toggle()
                         })
                             .sequenced(before: DragGesture(minimumDistance: 0)
                                 .onEnded({_ in
                                     isRecording.toggle()
-                                    recorder.stop()
+                                    //recorder.stop()
                                 }))
                     )
                 }
-                .onChange(of: isRecording) {newValue in
+                .onChange(of: isRecording) {
                     withAnimation(Animation.easeInOut(duration: 0.6)) {
                         fadeInOut.toggle()
                     }
@@ -81,14 +107,11 @@ struct RecordView: View {
                     Button("Stuff") {
                         if isRecording {
                             isRecording.toggle()
-                            recorder.stop()
+                            //recorder.stop()
                         }
                         showFiles.toggle()
                     }
                 }
-            }
-            .navigationDestination(isPresented: $showFiles) {
-                FilesView().environmentObject(self.recorder)
             }
         }
     }
