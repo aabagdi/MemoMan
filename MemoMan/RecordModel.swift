@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
+
+extension RecordView {
+    class RecordModel : ObservableObject {
+        @Published var isRecording : Bool = false
+        @Published var fadeInOut : Bool = false
+        @Published var showFiles : Bool = false
+        @Published var animationAmount : Double = 1.0
+    }
+}

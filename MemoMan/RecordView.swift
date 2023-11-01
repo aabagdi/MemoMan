@@ -20,11 +20,8 @@ import CoreData
 import CloudKit
 
 struct RecordView: View {
-    @State private var isRecording : Bool = false
-    @State private var fadeInOut : Bool = false
-    @State private var showFiles : Bool = false
-    @State private var animationAmount : Double = 1.0
     //@StateObject var recorder : Recorder = Recorder()
+    @StateObject private var model : RecordModel = RecordModel()
     
     var body: some View {
         NavigationStack {
@@ -32,18 +29,18 @@ struct RecordView: View {
                 ZStack {
                     Circle()
                         .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
-                        .opacity(fadeInOut ? 0.2 : 0.0)
-                        .frame(width: fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: fadeInOut ? (g.size.width )/2.1 : g.size.width/4)
+                        .opacity(model.fadeInOut ? 0.2 : 0.0)
+                        .frame(width: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width )/2.1 : g.size.width/4)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
-                        .opacity(fadeInOut ? 0.3 : 0.0)
-                        .frame(width: fadeInOut ? (g.size.width )/2.50384615384
-                               : g.size.width/4, height: fadeInOut ? (g.size.width )/2.50384615384
+                        .opacity(model.fadeInOut ? 0.3 : 0.0)
+                        .frame(width: model.fadeInOut ? (g.size.width )/2.50384615384
+                               : g.size.width/4, height: model.fadeInOut ? (g.size.width )/2.50384615384
                                : g.size.width/4)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
-                        .opacity(fadeInOut ? 0.5 : 0.0)
-                        .frame(width: fadeInOut ? (g.size.width )/3.1 : g.size.width/4, height: fadeInOut ? (g.size.width )/3.1 : g.size.width/4)
+                        .opacity(model.fadeInOut ? 0.5 : 0.0)
+                        .frame(width: model.fadeInOut ? (g.size.width )/3.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width )/3.1 : g.size.width/4)
                     
                     Button(action: {}) {
                         Image(systemName: "mic.fill")
@@ -51,23 +48,23 @@ struct RecordView: View {
                             .imageScale(.medium)
                             .frame(width: g.size.width/4, height: g.size.width/4)
                             .foregroundColor(Color.white)
-                            .background(fadeInOut ? Color.red : Color(red: 166/255, green: 104/255, blue: 247/255))
+                            .background(model.fadeInOut ? Color.red : Color(red: 166/255, green: 104/255, blue: 247/255))
                             .clipShape(Circle())
                     }
                     .overlay(
                         Circle()
                             .stroke(Color.white, lineWidth: 3)
-                            .scaleEffect(isRecording ? 2.4 : animationAmount)
-                            .opacity(isRecording ? 0 : 2 - animationAmount)
-                            .animation(isRecording ? Animation.easeOut(duration: animationAmount)
-                                .repeatForever(autoreverses: false) : .default, value: isRecording)
+                            .scaleEffect(model.isRecording ? 2.4 : model.animationAmount)
+                            .opacity(model.isRecording ? 0 : 2 - model.animationAmount)
+                            .animation(model.isRecording ? Animation.easeOut(duration: model.animationAmount)
+                                .repeatForever(autoreverses: false) : .default, value: model.isRecording)
                     )
-                    .onChange(of: isRecording){
-                        animationAmount = isRecording ? 2.0 : 1.0
+                    .onChange(of: model.isRecording){
+                        model.animationAmount = model.isRecording ? 2.0 : 1.0
                     }
                     .simultaneousGesture(TapGesture(count: 2).onEnded({
-                        isRecording.toggle()
-                        switch isRecording {
+                        model.isRecording.toggle()
+                        switch model.isRecording {
                         case true:
                             //recorder.record()
                             print("recording")
@@ -78,23 +75,23 @@ struct RecordView: View {
                     }))
                     .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
                         .onEnded({_ in
-                            if isRecording {
-                                isRecording.toggle()
+                            if model.isRecording {
+                                model.isRecording.toggle()
                                 //recorder.stop()
                             }
                             //recorder.record()
-                            isRecording.toggle()
+                            model.isRecording.toggle()
                         })
                             .sequenced(before: DragGesture(minimumDistance: 0)
                                 .onEnded({_ in
-                                    isRecording.toggle()
+                                    model.isRecording.toggle()
                                     //recorder.stop()
                                 }))
                     )
                 }
-                .onChange(of: isRecording) {
+                .onChange(of: model.isRecording) {
                     withAnimation(Animation.easeInOut(duration: 0.6)) {
-                        fadeInOut.toggle()
+                        model.fadeInOut.toggle()
                     }
                 }
                 .frame(width: g.size.width, height: g.size.height, alignment: .center)
@@ -102,11 +99,11 @@ struct RecordView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Stuff") {
-                        if isRecording {
-                            isRecording.toggle()
+                        if model.isRecording {
+                            model.isRecording.toggle()
                             //recorder.stop()
                         }
-                        showFiles.toggle()
+                        model.showFiles.toggle()
                     }
                 }
             }

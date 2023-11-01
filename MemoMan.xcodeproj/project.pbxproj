@@ -11,6 +11,8 @@
 		3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3951A90E29E13F6100C80C26 /* RecordView.swift */; };
 		3951A91129E13F6200C80C26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3951A91029E13F6200C80C26 /* Assets.xcassets */; };
 		3951A91429E13F6200C80C26 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3951A91329E13F6200C80C26 /* Preview Assets.xcassets */; };
+		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
+		398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		3951A90E29E13F6100C80C26 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		3951A91029E13F6200C80C26 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3951A91329E13F6200C80C26 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
+		398C8A062AF1F49B009848AF /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				3951A90C29E13F6100C80C26 /* MemoManApp.swift */,
 				3951A90E29E13F6100C80C26 /* RecordView.swift */,
+				398C8A062AF1F49B009848AF /* RecordModel.swift */,
+				398C8A042AF1F46F009848AF /* Recorder.swift */,
 				3951A91029E13F6200C80C26 /* Assets.xcassets */,
 				3951A91229E13F6200C80C26 /* Preview Content */,
 			);
@@ -137,6 +143,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */,
+				398C8A052AF1F46F009848AF /* Recorder.swift in Sources */,
 				3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */,
 				3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */,
 			);
