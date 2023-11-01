@@ -56,14 +56,11 @@ struct RecordView: View {
                     }
                     .overlay(
                         Circle()
-                            .stroke(.white)
-                            .scaleEffect(animationAmount)
-                            .opacity(2 - animationAmount)
-                            .animation(
-                                .easeInOut(duration: 1)
-                                .repeatForever(autoreverses: false),
-                                value: animationAmount
-                            )
+                            .stroke(Color.white, lineWidth: 3)
+                            .scaleEffect(isRecording ? 2.4 : animationAmount)
+                            .opacity(isRecording ? 0 : 2 - animationAmount)
+                            .animation(isRecording ? Animation.easeOut(duration: animationAmount)
+                                .repeatForever(autoreverses: false) : .default, value: isRecording)
                     )
                     .onChange(of: isRecording){
                         animationAmount = isRecording ? 2.0 : 1.0
