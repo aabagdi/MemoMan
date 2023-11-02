@@ -11,7 +11,7 @@ import AVFoundation
 
 class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     var audioRecorder: AVAudioRecorder!
-
+    
     func record(){
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -32,7 +32,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
+            AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
@@ -50,13 +50,13 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     func stop() {
         audioRecorder.stop()
     }
-
+    
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             print("Recording failed")
         }
     }
-
+    
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
