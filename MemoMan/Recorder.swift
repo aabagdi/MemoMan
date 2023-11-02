@@ -15,7 +15,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     func record(){
         let date = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YY/MM/dd"
+        dateFormatter.dateFormat = "h:mm a, MMM d yyyy"
         
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -26,7 +26,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         }
         
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileName = path.appendingPathComponent("test.m4a")
+        let fileName = path.appendingPathComponent("\(dateFormatter.string(from: date)).m4a")
         
         
         
