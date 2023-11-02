@@ -20,7 +20,7 @@ import CoreData
 import CloudKit
 
 struct RecordView: View {
-    //@StateObject var recorder : Recorder = Recorder()
+    @StateObject var recorder : Recorder = Recorder()
     @StateObject private var model : RecordModel = RecordModel()
     
     var body: some View {
@@ -53,7 +53,7 @@ struct RecordView: View {
                     }
                     .overlay(
                         Circle()
-                            .stroke(Color.white, lineWidth: 3)
+                            .stroke(model.isRecording ? Color.white : Color(red: 166/255, green: 104/255, blue: 247/255), lineWidth: 3)
                             .scaleEffect(model.isRecording ? 2.4 : model.animationAmount)
                             .opacity(model.isRecording ? 0 : 2 - model.animationAmount)
                             .animation(model.isRecording ? Animation.easeOut(duration: model.animationAmount)
@@ -66,10 +66,10 @@ struct RecordView: View {
                         model.isRecording.toggle()
                         switch model.isRecording {
                         case true:
-                            //recorder.record()
+                            recorder.record()
                             print("recording")
                         case false:
-                            //recorder.stop()
+                            recorder.stop()
                             print("stopped")
                         }
                     }))
@@ -77,15 +77,15 @@ struct RecordView: View {
                         .onEnded({_ in
                             if model.isRecording {
                                 model.isRecording.toggle()
-                                //recorder.stop()
+                                recorder.stop()
                             }
-                            //recorder.record()
+                            recorder.record()
                             model.isRecording.toggle()
                         })
                             .sequenced(before: DragGesture(minimumDistance: 0)
                                 .onEnded({_ in
                                     model.isRecording.toggle()
-                                    //recorder.stop()
+                                    recorder.stop()
                                 }))
                     )
                 }
