@@ -20,8 +20,8 @@ import CoreData
 import CloudKit
 
 struct RecordView: View {
-    @StateObject var recorder : Recorder = Recorder()
-    @StateObject private var model : RecordModel = RecordModel()
+    @StateObject private var recorder : Recorder = Recorder()
+    @StateObject private var model : RecordViewModel = RecordViewModel()
     
     var body: some View {
         NavigationStack {
@@ -98,12 +98,15 @@ struct RecordView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Stuff") {
+                    Button("Recordings") {
                         if model.isRecording {
                             model.isRecording.toggle()
-                            //recorder.stop()
+                            recorder.stop()
                         }
                         model.showFiles.toggle()
+                    }
+                    .navigationDestination(isPresented: $model.showFiles) {
+                        FilesView()
                     }
                 }
             }

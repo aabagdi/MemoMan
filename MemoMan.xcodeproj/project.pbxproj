@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		390D49502AF5D2960033C879 /* FilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D494F2AF5D2960033C879 /* FilesView.swift */; };
+		393EAA232AF48FFF0042C085 /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393EAA222AF48FFF0042C085 /* Recording.swift */; };
 		3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3951A90C29E13F6100C80C26 /* MemoManApp.swift */; };
 		3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3951A90E29E13F6100C80C26 /* RecordView.swift */; };
 		3951A91129E13F6200C80C26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3951A91029E13F6200C80C26 /* Assets.xcassets */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		390D494F2AF5D2960033C879 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
+		393EAA222AF48FFF0042C085 /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
 		3951A90929E13F6100C80C26 /* MemoMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3951A90C29E13F6100C80C26 /* MemoManApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoManApp.swift; sourceTree = "<group>"; };
 		3951A90E29E13F6100C80C26 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
@@ -56,9 +60,11 @@
 			isa = PBXGroup;
 			children = (
 				3951A90C29E13F6100C80C26 /* MemoManApp.swift */,
+				390D494F2AF5D2960033C879 /* FilesView.swift */,
 				3951A90E29E13F6100C80C26 /* RecordView.swift */,
 				398C8A062AF1F49B009848AF /* RecordModel.swift */,
 				398C8A042AF1F46F009848AF /* Recorder.swift */,
+				393EAA222AF48FFF0042C085 /* Recording.swift */,
 				3951A91029E13F6200C80C26 /* Assets.xcassets */,
 				3951A91229E13F6200C80C26 /* Preview Content */,
 			);
@@ -145,8 +151,10 @@
 			files = (
 				398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */,
 				398C8A052AF1F46F009848AF /* Recorder.swift in Sources */,
+				390D49502AF5D2960033C879 /* FilesView.swift in Sources */,
 				3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */,
 				3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */,
+				393EAA232AF48FFF0042C085 /* Recording.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

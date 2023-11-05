@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct MemoManApp: App {
@@ -13,5 +14,6 @@ struct MemoManApp: App {
         WindowGroup {
             RecordView()
         }
+        .modelContainer(for: Recording.self)
     }
 }
