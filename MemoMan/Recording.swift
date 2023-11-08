@@ -13,11 +13,9 @@ import SwiftData
     private var date : Date
     private var url : URL
     
-    init(url: URL) {
-        self.name = ""
+    init(name: String, url: URL) {
+        self.name = name
         self.date = .now
         self.url = url
     }
-    
-    
 }

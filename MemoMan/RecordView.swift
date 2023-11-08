@@ -34,13 +34,13 @@ struct RecordView: View {
                     Circle()
                         .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
                         .opacity(model.fadeInOut ? 0.3 : 0.0)
-                        .frame(width: model.fadeInOut ? (g.size.width )/2.50384615384
+                        .frame(width: model.fadeInOut ? (g.size.width)/2.50384615384
                                : g.size.width/4, height: model.fadeInOut ? (g.size.width )/2.50384615384
                                : g.size.width/4)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
                         .opacity(model.fadeInOut ? 0.5 : 0.0)
-                        .frame(width: model.fadeInOut ? (g.size.width )/3.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width )/3.1 : g.size.width/4)
+                        .frame(width: model.fadeInOut ? (g.size.width)/3.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width )/3.1 : g.size.width/4)
                     
                     Button(action: {}) {
                         Image(systemName: "mic.fill")
@@ -66,7 +66,9 @@ struct RecordView: View {
                         model.isRecording.toggle()
                         switch model.isRecording {
                         case true:
-                            recorder.record()
+                            Task {
+                                await recorder.record()
+                            }
                             print("recording")
                         case false:
                             recorder.stop()
@@ -79,7 +81,10 @@ struct RecordView: View {
                                 model.isRecording.toggle()
                                 recorder.stop()
                             }
-                            recorder.record()
+                            Task {
+                                await recorder.record()
+                            }
+                            
                             model.isRecording.toggle()
                         })
                             .sequenced(before: DragGesture(minimumDistance: 0)

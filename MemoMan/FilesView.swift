@@ -11,12 +11,38 @@ import AVFoundation
 import SwiftData
 
 struct FilesView: View {
-    @Query var recordings: [Recording]
-
+    @State private var recordings: [URL] = []
     
     var body: some View {
         VStack {
-            Text("Hello")
+            List {
+                ForEach(recordings.reversed(), id: \.self) { recording in
+                    PlayerView(soundURL: recording)
+                }
+            }
+        }
+        .onAppear {
+            self.getRecordings()
+        }
+    }
+    
+    func getRecordings() {
+        do {
+            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            
+            let result = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .producesRelativePathURLs)
+            
+            self.recordings.removeAll()
+            for i in result {
+                self.recordings.append(i)
+            }
+            recordings.sort {
+                $0.lastPathComponent < $1.lastPathComponent
+            }
+            
+        }
+        catch {
+            print(error.localizedDescription)
         }
     }
 }
