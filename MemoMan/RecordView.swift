@@ -16,6 +16,7 @@ import SwiftUI
 
 import SwiftUI
 import AVFoundation
+import AVFAudio
 import CoreData
 import CloudKit
 
@@ -113,6 +114,22 @@ struct RecordView: View {
                     .navigationDestination(isPresented: $model.showFiles) {
                         FilesView()
                     }
+                }
+            }
+        }
+        .alert("Microphone permissions not enabled, you can change this in Privacy & Security settings", isPresented: $model.showAlert) {
+            Button("OK", role: .cancel) { }
+        }
+        .onAppear {
+            Task {
+                if await AVAudioApplication.requestRecordPermission() {
+                    // The user grants access. Present recording interface.
+                    print("Permission granted")
+                } else {
+                    // The user denies access. Present a message that indicates
+                    // that they can change their permission settings in the
+                    // Privacy & Security section of the Settings app.
+                    model.showAlert.toggle()
                 }
             }
         }
