@@ -12,12 +12,15 @@ import SwiftData
 
 struct FilesView: View {
     @State private var recordings: [URL] = []
+    @State private var isPlaying : Bool = false
     
     var body: some View {
         VStack {
             List {
                 ForEach(recordings.reversed(), id: \.self) { recording in
-                    PlayerView(soundURL: recording)
+                    VStack {
+                        PlayerView(soundURL: recording)
+                    }
                 }
             }
         }

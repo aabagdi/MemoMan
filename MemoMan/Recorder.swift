@@ -12,7 +12,7 @@ import AVFAudio
 class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder!
     
-    func record() async {
+    func record() async throws {
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a, MMM d yyyy"
@@ -23,7 +23,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
         } catch {
-            print("Can not setup the Recording")
+            throw Errors.FailedToInitSessionError
         }
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileName = path.appendingPathComponent("\(dateFormatter.string(from: date)).m4a")
@@ -44,7 +44,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
             audioRecorder.record()
             
         } catch {
-            print("Failed to Setup the Recording")
+            throw Errors.FailedToRecordError
         }
         
     }
