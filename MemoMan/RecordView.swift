@@ -68,7 +68,7 @@ struct RecordView: View {
                         switch model.isRecording {
                         case true:
                             Task {
-                                try await recorder.record()
+                                try? recorder.record()
                             }
                             print("recording")
                         case false:
@@ -83,7 +83,7 @@ struct RecordView: View {
                                 recorder.stop()
                             }
                             Task {
-                                try await recorder.record()
+                                 try? recorder.record()
                             }
                             
                             model.isRecording.toggle()

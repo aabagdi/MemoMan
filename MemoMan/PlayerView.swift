@@ -17,7 +17,7 @@ struct PlayerView: View {
             Spacer()
             HStack {
                 Spacer()
-                Image(systemName: player.isPlaying ? "pause.fill" : "play.fill")
+                Image(systemName: player.isPlaying ? "stop.fill" : "play.fill")
                     .onTapGesture {
                         switch player.isPlaying {
                         case true:
@@ -29,6 +29,14 @@ struct PlayerView: View {
                 Spacer()
             }
             Spacer()
+        }
+    }
+    
+    func deleteRecording() throws {
+        do {
+            try FileManager.default.removeItem(at: soundURL)
+        } catch {
+            throw Errors.FileDeletionError
         }
     }
 }

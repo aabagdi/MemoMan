@@ -9,10 +9,11 @@ import Foundation
 import AVFoundation
 import AVFAudio
 
+@MainActor
 class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder!
     
-    func record() async throws {
+    func record() throws {
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a, MMM d yyyy"
@@ -27,8 +28,6 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         }
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileName = path.appendingPathComponent("\(dateFormatter.string(from: date)).m4a")
-        
-        
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -46,13 +45,13 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         } catch {
             throw Errors.FailedToRecordError
         }
-        
     }
+    
     func stop() {
         audioRecorder.stop()
     }
     
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             print("Recording failed")
         }

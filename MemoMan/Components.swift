@@ -12,4 +12,5 @@ enum Errors : Error {
     case FailedToRecordError
     case FailedToInitPlayer
     case FailedToPlayURL
+    case FileDeletionError
 }
