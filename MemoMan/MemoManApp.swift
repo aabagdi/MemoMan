@@ -14,6 +14,6 @@ struct MemoManApp: App {
         WindowGroup {
             RecordView()
         }
-        .modelContainer(for: Recording.self)
+        //.modelContainer(for: Recording.self)
     }
 }
