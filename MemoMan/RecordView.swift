@@ -23,6 +23,7 @@ import CloudKit
 struct RecordView: View {
     @StateObject private var recorder : Recorder = Recorder()
     @StateObject private var model : RecordViewModel = RecordViewModel()
+    @State var recordings : [Recording] = []
     
     var body: some View {
         NavigationStack {
@@ -134,4 +135,9 @@ struct RecordView: View {
             }
         }
     }
+    
+    func fetchRecordings() {
+        
+    }
+    
 }

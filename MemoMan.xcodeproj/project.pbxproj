@@ -34,6 +34,7 @@
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
 		39D7DBFD2BB73FD800EECAD9 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MemoMan.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +67,7 @@
 		3951A90B29E13F6100C80C26 /* MemoMan */ = {
 			isa = PBXGroup;
 			children = (
+				39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */,
 				390D49512AFB409A0033C879 /* Info.plist */,
 				39D7DBFD2BB73FD800EECAD9 /* Components.swift */,
 				3951A90C29E13F6100C80C26 /* MemoManApp.swift */,
@@ -296,6 +298,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MemoMan/MemoMan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MemoMan/Preview Content\"";
@@ -328,6 +331,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MemoMan/MemoMan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MemoMan/Preview Content\"";
