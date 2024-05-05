@@ -9,9 +9,9 @@ import Foundation
 import SwiftData
 
 @Model class Recording {
-    var name : String
-    var date : Date
-    var url : URL
+    var name : String?
+    var date : Date?
+    var url : URL?
     
     init(name: String, url: URL) {
         self.name = name

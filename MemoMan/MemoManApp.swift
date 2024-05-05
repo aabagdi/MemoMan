@@ -10,10 +10,21 @@ import SwiftData
 
 @main
 struct MemoManApp: App {
+    
+    let container : ModelContainer
+    
+    init() {
+        do {
+            container = try ModelContainer(for: Recording.self)
+        } catch {
+            fatalError("Could not initialize container")
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             RecordView()
         }
-        //.modelContainer(for: Recording.self)
+        .modelContainer(container)
     }
 }
