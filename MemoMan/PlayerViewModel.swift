@@ -23,8 +23,8 @@ class PlayerViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func play(soundURL: URL) throws {
-        try player.play(soundURL: soundURL)
+    func play(soundURL: URL) {
+        player.play()
     }
     
     func pause() {
