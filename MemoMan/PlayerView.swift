@@ -32,6 +32,7 @@ struct PlayerView: View {
                     Spacer()
                 }
                 Spacer()
+                FileNameButtonView(soundURL: soundURL)
             }
         }
     }

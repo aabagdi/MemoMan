@@ -13,4 +13,5 @@ enum Errors : Error {
     case FailedToInitPlayer
     case FailedToPlayURL
     case FileDeletionError
+    case FileRenameError
 }
