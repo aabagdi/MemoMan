@@ -23,7 +23,7 @@ class PlayerViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func play(soundURL: URL) {
+    func play() {
         player.play()
     }
     

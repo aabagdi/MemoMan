@@ -11,17 +11,17 @@ struct PlayerView: View {
             }
         }
     }
-    
+
     @StateObject private var viewModel: PlayerViewModel
     @State private var sliderValue: TimeInterval = 0
-    
+
     init(soundURL: URL, openedGroup: Binding<URL?>) {
         self._soundURL = State(initialValue: soundURL)
         self._openedGroup = openedGroup
         let player = try? Player(soundURL: soundURL)
         self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player!))
     }
-    
+
     var body: some View {
         DisclosureGroup(isExpanded: Binding(
             get: { self.openedGroup == self.soundURL },
@@ -40,21 +40,21 @@ struct PlayerView: View {
                         viewModel.pause()
                     } else {
                         viewModel.seek(to: sliderValue)
-                        viewModel.play(soundURL: soundURL)
+                        viewModel.play()
                     }
                 })
                 .padding()
                 .onChange(of: viewModel.currentTime) {
                     sliderValue = viewModel.currentTime
                 }
-                
+
                 HStack {
                     Text(timeString(from: viewModel.currentTime))
                     Spacer()
                     Text(timeString(from: viewModel.duration))
                 }
                 .padding(.horizontal)
-                
+
                 HStack {
                     Spacer()
                     Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
@@ -63,7 +63,7 @@ struct PlayerView: View {
                             case true:
                                 viewModel.pause()
                             case false:
-                                viewModel.play(soundURL: soundURL)
+                                viewModel.play()
                             }
                         }
                     Spacer()
@@ -75,13 +75,13 @@ struct PlayerView: View {
             Text(soundURL.lastPathComponent)
         }
     }
-    
+
     private func timeString(from timeInterval: TimeInterval) -> String {
         let minutes = Int(timeInterval) / 60
         let seconds = Int(timeInterval) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    
+
     func deleteRecording() throws {
         do {
             try FileManager.default.removeItem(at: soundURL)
