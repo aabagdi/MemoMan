@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct FileNameButtonView : View {
-    let soundURL : URL
+    @State var soundURL : URL
     @State private var showingAlert = false
     @State private var newFilename = ""
     
@@ -30,6 +30,7 @@ struct FileNameButtonView : View {
         let oldURL = soundURL
         var newURL = soundURL.deletingLastPathComponent()
         newURL = newURL.appendingPathComponent("\(newFilename).m4a")
+        soundURL = newURL
         do {
             try FileManager.default.moveItem(at: oldURL, to: newURL)
         } catch {

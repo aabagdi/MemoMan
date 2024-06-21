@@ -1,32 +1,41 @@
-//
-//  Player.swift
-//  MemoMan
-//
-//  Created by Aadit Bagdi on 5/4/23.
-//
-
 import SwiftUI
 import AVFoundation
 
 struct PlayerView: View {
-    let soundURL : URL
-    @State private var isOpened : Bool = false
+    @State var soundURL: URL
+    @State private var isOpened: Bool = false
     
-    @ObservedObject var player = Player()
+    @StateObject private var viewModel: PlayerViewModel
+    
+    init(soundURL: URL) {
+        self._soundURL = State(initialValue: soundURL)
+        let player = Player()
+        self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player))
+    }
     
     var body: some View {
         DisclosureGroup(soundURL.lastPathComponent, isExpanded: $isOpened) {
             VStack {
-                Spacer()
+                Slider(value: $viewModel.currentTime, in: 0...viewModel.duration, onEditingChanged: { editing in
+                    if !editing {
+                        viewModel.seek(to: viewModel.currentTime)
+                    }
+                })
+                .padding()
+                
                 HStack {
                     Spacer()
-                    Image(systemName: player.isPlaying ? "stop.fill" : "play.fill")
+                    Image(systemName: viewModel.player.isPlaying ? "stop.fill" : "play.fill")
                         .onTapGesture {
-                            switch player.isPlaying {
+                            switch viewModel.player.isPlaying {
                             case true:
-                                player.pause()
+                                viewModel.pause()
                             case false:
-                                try? player.play(soundURL: soundURL)
+                                do {
+                                    try viewModel.play(soundURL: soundURL)
+                                } catch {
+                                    print("Failed to play audio: \(error.localizedDescription)")
+                                }
                             }
                         }
                     Spacer()
