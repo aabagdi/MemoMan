@@ -10,25 +10,29 @@ import AVFoundation
 
 struct PlayerView: View {
     let soundURL : URL
+    @State private var isOpened : Bool = false
+    
     @ObservedObject var player = Player()
     
     var body: some View {
-        VStack {
-            Spacer()
-            HStack {
+        DisclosureGroup(soundURL.lastPathComponent, isExpanded: $isOpened) {
+            VStack {
                 Spacer()
-                Image(systemName: player.isPlaying ? "stop.fill" : "play.fill")
-                    .onTapGesture {
-                        switch player.isPlaying {
-                        case true:
-                            player.pause()
-                        case false:
-                            try? player.play(soundURL: soundURL)
+                HStack {
+                    Spacer()
+                    Image(systemName: player.isPlaying ? "stop.fill" : "play.fill")
+                        .onTapGesture {
+                            switch player.isPlaying {
+                            case true:
+                                player.pause()
+                            case false:
+                                try? player.play(soundURL: soundURL)
+                            }
                         }
-                    }
+                    Spacer()
+                }
                 Spacer()
             }
-            Spacer()
         }
     }
     
