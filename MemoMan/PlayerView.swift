@@ -31,6 +31,8 @@ struct PlayerView: View {
                     self.openedGroup = self.soundURL
                 } else if self.openedGroup == self.soundURL {
                     self.openedGroup = nil
+                    viewModel.stop()
+                    viewModel.seek(to: 0.0)
                 }
             }
         )) {

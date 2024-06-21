@@ -31,6 +31,10 @@ class PlayerViewModel: ObservableObject {
         player.pause()
     }
     
+    func stop() {
+        player.stop()
+    }
+    
     func seek(to time: TimeInterval) {
         seekingSubject.send(time)
     }
