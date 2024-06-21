@@ -1,25 +1,18 @@
-//
-//  FilesView.swift
-//  MemoMan
-//
-//  Created by Aadit Bagdi on 11/4/23.
-//
-
 import Foundation
 import SwiftUI
 import AVFoundation
-import SwiftData
 
 struct FilesView: View {
     @State private var recordings: [URL] = []
-    @State private var isPlaying : Bool = false
-    
+    @State private var isPlaying: Bool = false
+    @State private var openedGroup: URL? = nil
+
     var body: some View {
         VStack {
             List {
                 ForEach(recordings.reversed(), id: \.self) { recording in
                     VStack {
-                        PlayerView(soundURL: recording)
+                        PlayerView(soundURL: recording, openedGroup: $openedGroup)
                     }
                 }
             }
