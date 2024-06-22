@@ -3,7 +3,7 @@ import Combine
 
 class PlayerViewModel: ObservableObject {
     @Published var currentTime: TimeInterval = 0
-    let player: Player
+    var player: Player
     private var cancellables = Set<AnyCancellable>()
     private var seekingSubject = PassthroughSubject<TimeInterval, Never>()
 

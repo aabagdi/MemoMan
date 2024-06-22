@@ -4,13 +4,7 @@ import AVFoundation
 struct PlayerView: View {
     @State var soundURL: URL
     @Binding var openedGroup: URL?
-    @State private var isOpened: Bool = false {
-        didSet {
-            if isOpened {
-                openedGroup = soundURL
-            }
-        }
-    }
+    @State private var isOpened: Bool = false
 
     @StateObject private var viewModel: PlayerViewModel
     @State private var sliderValue: TimeInterval = 0
@@ -26,13 +20,11 @@ struct PlayerView: View {
         DisclosureGroup(isExpanded: Binding(
             get: { self.openedGroup == self.soundURL },
             set: { newValue in
-                self.isOpened = newValue
                 if newValue {
                     self.openedGroup = self.soundURL
                 } else if self.openedGroup == self.soundURL {
                     self.openedGroup = nil
                     viewModel.stop()
-                    viewModel.seek(to: 0.0)
                 }
             }
         )) {
@@ -61,10 +53,9 @@ struct PlayerView: View {
                     Spacer()
                     Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
                         .onTapGesture {
-                            switch viewModel.player.isPlaying {
-                            case true:
+                            if viewModel.player.isPlaying {
                                 viewModel.pause()
-                            case false:
+                            } else {
                                 viewModel.play()
                             }
                         }
@@ -82,13 +73,5 @@ struct PlayerView: View {
         let minutes = Int(timeInterval) / 60
         let seconds = Int(timeInterval) % 60
         return String(format: "%02d:%02d", minutes, seconds)
-    }
-
-    func deleteRecording() throws {
-        do {
-            try FileManager.default.removeItem(at: soundURL)
-        } catch {
-            throw Errors.FileDeletionError
-        }
     }
 }
