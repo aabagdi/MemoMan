@@ -12,8 +12,8 @@ struct PlayerView: View {
     init(soundURL: URL, openedGroup: Binding<URL?>) {
         self._soundURL = State(initialValue: soundURL)
         self._openedGroup = openedGroup
-        let player = try? Player(soundURL: soundURL)
-        self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player!))
+        let player = Player(soundURL: soundURL)
+        self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player))
     }
 
     var body: some View {
