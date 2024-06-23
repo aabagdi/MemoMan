@@ -16,7 +16,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var currentTime: TimeInterval = 0
     private var timer: AnyCancellable?
 
-    init(soundURL: URL) throws {
+    init(soundURL: URL) {
         super.init()
         if FileManager().fileExists(atPath: soundURL.path) {
             do {
@@ -24,7 +24,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 player?.prepareToPlay()
                 self.player?.delegate = self
             } catch {
-                throw Errors.FailedToPlayURL
+                print("URL failed to initialize")
             }
         } else {
             print("URL not valid!")
