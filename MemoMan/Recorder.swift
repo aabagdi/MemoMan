@@ -7,11 +7,13 @@
 
 import Foundation
 import AVFoundation
+import SwiftData
+import SwiftUI
 
-@MainActor
 class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
+    @Environment(\.modelContext) var modelContext
     private var audioRecorder: AVAudioRecorder!
-
+    private var currentURL: URL?
     
     func record() throws {
         let date = Date()
@@ -28,6 +30,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         }
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileName = path.appendingPathComponent("\(dateFormatter.string(from: date)).m4a")
+        currentURL = fileName
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -40,6 +43,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         do {
             audioRecorder = try AVAudioRecorder(url: fileName, settings: settings)
             audioRecorder.prepareToRecord()
+            audioRecorder.delegate = self
             audioRecorder.record()
             
         } catch {
@@ -51,8 +55,28 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         audioRecorder.stop()
     }
     
-    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if !flag {
+    private func saveRecording(with fileURL: URL) {
+        let now = Date.now
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        let recordingName = formatter.string(from: now)
+        
+        let newRecording = Recording(name: recordingName, url: fileURL)
+        
+        do {
+            modelContext.insert(newRecording)
+            try modelContext.save()
+            print("Recording saved successfully")
+        } catch {
+            print("Failed to save recording: \(error)")
+        }
+    }
+    
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        if flag, let fileName = currentURL {
+            saveRecording(with: fileName)
+            print("Recording saved")
+        } else {
             print("Recording failed")
         }
     }
