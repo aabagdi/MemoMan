@@ -24,6 +24,7 @@ struct RecordView: View {
     @StateObject private var recorder : Recorder = Recorder()
     @StateObject private var model : RecordViewModel = RecordViewModel()
     @State var recordings : [Recording] = []
+    @Environment(\.modelContext) var modelContext
     
     var body: some View {
         NavigationStack {
@@ -73,7 +74,7 @@ struct RecordView: View {
                             }
                             print("recording")
                         case false:
-                            recorder.stop()
+                            recorder.stop(modelContext: modelContext)
                             print("stopped")
                         }
                     }))
@@ -81,7 +82,7 @@ struct RecordView: View {
                         .onEnded({_ in
                             if model.isRecording {
                                 model.isRecording.toggle()
-                                recorder.stop()
+                                recorder.stop(modelContext: modelContext)
                             }
                             Task {
                                  try? recorder.record()
@@ -92,7 +93,7 @@ struct RecordView: View {
                             .sequenced(before: DragGesture(minimumDistance: 0)
                                 .onEnded({_ in
                                     model.isRecording.toggle()
-                                    recorder.stop()
+                                    recorder.stop(modelContext: modelContext)
                                 }))
                     )
                 }
@@ -108,7 +109,7 @@ struct RecordView: View {
                     Button("Recordings") {
                         if model.isRecording {
                             model.isRecording.toggle()
-                            recorder.stop()
+                            recorder.stop(modelContext: modelContext)
                         }
                         model.showFiles.toggle()
                     }
@@ -134,10 +135,6 @@ struct RecordView: View {
                 }
             }
         }
+        .environment(\.modelContext, modelContext)
     }
-    
-    func fetchRecordings() {
-        
-    }
-    
 }

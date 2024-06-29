@@ -2,27 +2,26 @@ import SwiftUI
 import AVFoundation
 
 struct PlayerView: View {
-    @State var soundURL: URL
-    @Binding var openedGroup: URL?
-    @State private var isOpened: Bool = false
+    var recording : Recording
+    @Binding var openedGroup : URL?
 
-    @StateObject private var viewModel: PlayerViewModel
-    @State private var sliderValue: TimeInterval = 0
+    @StateObject private var viewModel : PlayerViewModel
+    @State private var sliderValue : TimeInterval = 0
 
-    init(soundURL: URL, openedGroup: Binding<URL?>) {
-        self._soundURL = State(initialValue: soundURL)
+    init(openedGroup: Binding<URL?>, recording: Recording) {
+        self.recording = recording
         self._openedGroup = openedGroup
-        let player = Player(soundURL: soundURL)
+        let player = Player(recording: recording)
         self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player))
     }
 
     var body: some View {
         DisclosureGroup(isExpanded: Binding(
-            get: { self.openedGroup == self.soundURL },
+            get: { self.openedGroup == self.recording.url },
             set: { newValue in
                 if newValue {
-                    self.openedGroup = self.soundURL
-                } else if self.openedGroup == self.soundURL {
+                    self.openedGroup = self.recording.url
+                } else if self.openedGroup == self.recording.url {
                     self.openedGroup = nil
                     viewModel.stop()
                 }
@@ -62,16 +61,21 @@ struct PlayerView: View {
                     Spacer()
                 }
                 Spacer()
-                FileNameButtonView(soundURL: soundURL)
+                //FileNameButtonView(soundURL: soundURL)
             }
         } label: {
-            Text(soundURL.lastPathComponent)
+            Text(recording.name ?? "")
         }
     }
 
     private func timeString(from timeInterval: TimeInterval) -> String {
-        let minutes = Int(timeInterval) / 60
+        let hours = Int(timeInterval) / 3600
+        let minutes = (Int(timeInterval) % 3600) / 60
         let seconds = Int(timeInterval) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+        if hours > 0 {
+            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%02d:%02d", minutes, seconds)
+        }
     }
 }
