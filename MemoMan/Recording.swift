@@ -11,13 +11,17 @@ import SwiftData
 @Model class Recording {
     var id : UUID?
     var name : String?
-    var date : Date?
     var url : URL?
+    var date : String?
     
     init(name: String, url: URL) {
         self.id = UUID()
         self.name = name
-        self.date = .now
         self.url = url
+        let now = Date.now
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        self.date =  dateFormatter.string(from: now)
     }
 }

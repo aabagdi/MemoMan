@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct FileNameButtonView : View {
-    @State var soundURL : URL
+    @State var recording : Recording
     @State private var showingAlert = false
     @State private var newFilename = ""
     
@@ -21,20 +21,13 @@ struct FileNameButtonView : View {
         .alert("Enter new file name", isPresented: $showingAlert) {
             TextField("Enter your name", text: $newFilename)
             Button("OK", action: submit)
+            Button("Cancel", role: .cancel) { }
         } message: {
             Text("Enter the new filename:")
         }
     }
     
     func submit() {
-        let oldURL = soundURL
-        var newURL = soundURL.deletingLastPathComponent()
-        newURL = newURL.appendingPathComponent("\(newFilename).m4a")
-        soundURL = newURL
-        do {
-            try FileManager.default.moveItem(at: oldURL, to: newURL)
-        } catch {
-            print("File rename error")
-        }
+        recording.name = newFilename
     }
 }

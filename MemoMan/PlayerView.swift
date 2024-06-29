@@ -2,7 +2,7 @@ import SwiftUI
 import AVFoundation
 
 struct PlayerView: View {
-    var recording : Recording
+    @State var recording : Recording
     @Binding var openedGroup : URL?
 
     @StateObject private var viewModel : PlayerViewModel
@@ -61,7 +61,10 @@ struct PlayerView: View {
                     Spacer()
                 }
                 Spacer()
-                //FileNameButtonView(soundURL: soundURL)
+                FileNameButtonView(recording: recording)
+                Text("Created on \(recording.date ?? "")")
+                    .font(.footnote)
+                    .foregroundStyle(.gray)
             }
         } label: {
             Text(recording.name ?? "")
