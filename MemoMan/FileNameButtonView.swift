@@ -20,14 +20,12 @@ struct FileNameButtonView : View {
         .padding()
         .alert("Enter new file name", isPresented: $showingAlert) {
             TextField("Enter your name", text: $newFilename)
-            Button("OK", action: submit)
+            Button("OK") {
+                recording.name = newFilename
+            }
             Button("Cancel", role: .cancel) { }
         } message: {
             Text("Enter the new filename:")
         }
-    }
-    
-    func submit() {
-        recording.name = newFilename
     }
 }
