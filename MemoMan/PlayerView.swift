@@ -61,7 +61,13 @@ struct PlayerView: View {
                     Spacer()
                 }
                 Spacer()
-                FileNameButtonView(recording: recording)
+                HStack {
+                    ShareLink(item: recording.url!) {
+                        Image(systemName: "square.and.arrow.up.circle")
+                        .font(.system(size: 30))
+                    }
+                    FileNameButtonView(recording: recording)
+                }
                 Text("Created on \(recording.date ?? "")")
                     .font(.footnote)
                     .foregroundStyle(.gray)

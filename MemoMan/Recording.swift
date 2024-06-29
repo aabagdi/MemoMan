@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model class Recording {
-    var id : UUID?
+    var id: UUID
     var name : String?
     var url : URL?
     var date : String?

@@ -25,10 +25,11 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         } catch {
             throw Errors.FailedToInitSessionError
         }
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileName = path.appendingPathComponent("\(dateFormatter.string(from: date)).m4a")
-        currentURL = fileName
-        print("Recording will be saved to: \(fileName.path)")
+        if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let fileName = documentsDirectory.appendingPathComponent("\(dateFormatter.string(from: date)).m4a")
+            currentURL = fileName
+            print("Recording will be saved to: \(fileName.path)")
+        }
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -38,7 +39,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: fileName, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: currentURL!, settings: settings)
             audioRecorder.prepareToRecord()
             audioRecorder.delegate = self
             audioRecorder.record()

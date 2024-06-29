@@ -19,6 +19,7 @@
 		39573A612C2606DB008B13D8 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39573A602C2606DB008B13D8 /* PlayerViewModel.swift */; };
 		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
 		398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordModel.swift */; };
+		39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */; };
 		39D7DBFE2BB73FD800EECAD9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7DBFD2BB73FD800EECAD9 /* Components.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		39573A602C2606DB008B13D8 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
+		39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording+Transferable.swift"; sourceTree = "<group>"; };
 		39D7DBFD2BB73FD800EECAD9 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MemoMan.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -83,6 +85,7 @@
 				398C8A062AF1F49B009848AF /* RecordModel.swift */,
 				398C8A042AF1F46F009848AF /* Recorder.swift */,
 				393EAA222AF48FFF0042C085 /* Recording.swift */,
+				39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */,
 				390D49542AFB5ACE0033C879 /* Player.swift */,
 				3951A91029E13F6200C80C26 /* Assets.xcassets */,
 				3951A91229E13F6200C80C26 /* Preview Content */,
@@ -168,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */,
 				39573A5F2C251AB4008B13D8 /* FileNameButtonView.swift in Sources */,
 				398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */,
 				398C8A052AF1F46F009848AF /* Recorder.swift in Sources */,
