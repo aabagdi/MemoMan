@@ -3,12 +3,12 @@ import AVFoundation
 
 struct PlayerView: View {
     @State var recording : Recording
-    @Binding var openedGroup : URL?
+    @Binding var openedGroup : UUID?
 
     @StateObject private var viewModel : PlayerViewModel
     @State private var sliderValue : TimeInterval = 0
 
-    init(openedGroup: Binding<URL?>, recording: Recording) {
+    init(openedGroup: Binding<UUID?>, recording: Recording) {
         self.recording = recording
         self._openedGroup = openedGroup
         let player = Player(recording: recording)
@@ -17,11 +17,11 @@ struct PlayerView: View {
 
     var body: some View {
         DisclosureGroup(isExpanded: Binding(
-            get: { self.openedGroup == self.recording.url },
+            get: { self.openedGroup == self.recording.id },
             set: { newValue in
                 if newValue {
-                    self.openedGroup = self.recording.url
-                } else if self.openedGroup == self.recording.url {
+                    self.openedGroup = self.recording.id
+                } else if self.openedGroup == self.recording.id {
                     self.openedGroup = nil
                     viewModel.stop()
                 }
@@ -62,18 +62,24 @@ struct PlayerView: View {
                 }
                 Spacer()
                 HStack {
-                    ShareLink(item: recording.url!) {
+                    ShareLink(item: URL.documentsDirectory.appending(path: "\(recording.name ?? "").m4a")) {
                         Image(systemName: "square.and.arrow.up.circle")
                         .font(.system(size: 30))
-                    }
+                     }
                     FileNameButtonView(recording: recording)
                 }
                 Text("Created on \(recording.date ?? "")")
                     .font(.footnote)
                     .foregroundStyle(.gray)
+                    .padding()
             }
         } label: {
             Text(recording.name ?? "")
+        }
+        .onChange(of: openedGroup) {
+            if openedGroup != self.recording.id {
+                viewModel.stop()
+            }
         }
     }
 

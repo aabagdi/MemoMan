@@ -9,15 +9,13 @@ import Foundation
 import SwiftData
 
 @Model class Recording {
-    var id: UUID
+    var id: UUID?
     var name : String?
-    var url : URL?
     var date : String?
     
-    init(name: String, url: URL) {
+    init(name: String) {
         self.id = UUID()
         self.name = name
-        self.url = url
         let now = Date.now
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium

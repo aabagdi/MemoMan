@@ -10,7 +10,7 @@ import SwiftUI
 
 extension Recording : Transferable {
     public static var transferRepresentation: some TransferRepresentation {
-        ProxyRepresentation(exporting: \.url!)
+        ProxyRepresentation(exporting: \.name!)
         }
     
 }

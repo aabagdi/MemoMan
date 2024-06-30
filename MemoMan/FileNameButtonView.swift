@@ -27,19 +27,16 @@ struct FileNameButtonView : View {
         }
     }
     
-    func submit() {
-        if !newFilename.isEmpty {
-            recording.name = newFilename
-        }
-        let oldURL = recording.url!
-        var newURL = oldURL.deletingLastPathComponent()
-        newURL = newURL.appendingPathComponent("\(newFilename).m4a")
+    private func submit() {
+        let oldURL = URL.documentsDirectory.appending(path: "\(recording.name ?? "").m4a")
+        let newURL = URL.documentsDirectory.appending(path: "\(newFilename).m4a")
         do {
             try FileManager.default.moveItem(at: oldURL, to: newURL)
         } catch {
-            print("File rename error")
+            print("\(error.localizedDescription)")
         }
-        recording.url = newURL
+        if !newFilename.isEmpty {
+            recording.name = newFilename
+        }
     }
-    
 }

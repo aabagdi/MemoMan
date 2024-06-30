@@ -21,7 +21,7 @@ import CoreData
 import CloudKit
 
 struct RecordView: View {
-    @StateObject private var recorder : Recorder = Recorder()
+    @StateObject var recorder : Recorder = Recorder()
     @StateObject private var model : RecordViewModel = RecordViewModel()
     @State var recordings : [Recording] = []
     @Environment(\.modelContext) var modelContext
@@ -50,7 +50,7 @@ struct RecordView: View {
                             .font(.system(size: g.size.width/12))
                             .imageScale(.medium)
                             .frame(width: g.size.width/4, height: g.size.width/4)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(.white)
                             .background(model.fadeInOut ? Color.red : Color(red: 166/255, green: 104/255, blue: 247/255))
                             .clipShape(Circle())
                     }

@@ -3,7 +3,7 @@ import AVFoundation
 import SwiftData
 
 struct FilesView: View {
-    @State private var openedGroup: URL? = nil
+    @State private var openedGroup: UUID? = nil
     @Query var recordings: [Recording]
 
     var body: some View {
