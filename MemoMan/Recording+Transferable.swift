@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import SwiftUI
+import CoreTransferable
 
 extension Recording : Transferable {
     public static var transferRepresentation: some TransferRepresentation {
         ProxyRepresentation(exporting: \.name!)
         }
-    
 }

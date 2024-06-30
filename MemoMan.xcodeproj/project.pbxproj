@@ -19,6 +19,7 @@
 		39573A612C2606DB008B13D8 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39573A602C2606DB008B13D8 /* PlayerViewModel.swift */; };
 		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
 		398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordModel.swift */; };
+		39A013FA2C31EB0400BE7BBF /* Recording+returnURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A013F92C31EB0400BE7BBF /* Recording+returnURL.swift */; };
 		39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */; };
 		39D7DBFE2BB73FD800EECAD9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7DBFD2BB73FD800EECAD9 /* Components.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +39,7 @@
 		39573A602C2606DB008B13D8 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
+		39A013F92C31EB0400BE7BBF /* Recording+returnURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording+returnURL.swift"; sourceTree = "<group>"; };
 		39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording+Transferable.swift"; sourceTree = "<group>"; };
 		39D7DBFD2BB73FD800EECAD9 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MemoMan.entitlements; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */,
 				390D49512AFB409A0033C879 /* Info.plist */,
 				39D7DBFD2BB73FD800EECAD9 /* Components.swift */,
+				39A013F92C31EB0400BE7BBF /* Recording+returnURL.swift */,
 				3951A90C29E13F6100C80C26 /* MemoManApp.swift */,
 				390D494F2AF5D2960033C879 /* FilesView.swift */,
 				39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */,
@@ -176,6 +179,7 @@
 				398C8A072AF1F49B009848AF /* RecordModel.swift in Sources */,
 				398C8A052AF1F46F009848AF /* Recorder.swift in Sources */,
 				390D49532AFB53460033C879 /* PlayerView.swift in Sources */,
+				39A013FA2C31EB0400BE7BBF /* Recording+returnURL.swift in Sources */,
 				390D49502AF5D2960033C879 /* FilesView.swift in Sources */,
 				390D49552AFB5ACE0033C879 /* Player.swift in Sources */,
 				3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */,
