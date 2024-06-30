@@ -15,28 +15,17 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     @Published var currentTime: TimeInterval = 0
     private var timer: AnyCancellable?
-
+    
     init(recording: Recording) {
         super.init()
-        guard let url = recording.url else {
-            print("Recording URL is nil")
-            return
-        }
-        let path = url.path
-        print("Attempting to initialize AVAudioPlayer with file at path: \(path)")
-        
-        if FileManager.default.fileExists(atPath: path) {
-            print("File exists at path: \(path)")
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("\(recording.name ?? "").m4a")
+        if FileManager.default.fileExists(atPath: path.path) {
             do {
-                self.player = try AVAudioPlayer(contentsOf: url)
+                self.player = try AVAudioPlayer(contentsOf: path)
                 player?.prepareToPlay()
                 self.player?.delegate = self
-                print("AVAudioPlayer initialized successfully")
             } catch {
-                print("Failed to initialize AVAudioPlayer with URL: \(error.localizedDescription)")
             }
-        } else {
-            print("File does not exist at path: \(path)")
         }
     }
     
