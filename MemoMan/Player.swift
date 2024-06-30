@@ -18,13 +18,14 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     init(recording: Recording) {
         super.init()
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("\(recording.name ?? "").m4a")
+        let path = recording.returnURL()
         if FileManager.default.fileExists(atPath: path.path) {
             do {
                 self.player = try AVAudioPlayer(contentsOf: path)
                 player?.prepareToPlay()
                 self.player?.delegate = self
             } catch {
+                print("AVAudioPlayer failed to initialise")
             }
         }
     }
