@@ -2,11 +2,11 @@ import SwiftUI
 import AVFoundation
 
 struct PlayerView: View {
-    @State var recording : Recording
-    @Binding var openedGroup : UUID?
+    @State var recording: Recording
+    @Binding var openedGroup: UUID?
 
-    @StateObject private var viewModel : PlayerViewModel
-    @State private var sliderValue : TimeInterval = 0
+    @StateObject private var viewModel: PlayerViewModel
+    @State private var sliderValue: TimeInterval = 0
 
     init(openedGroup: Binding<UUID?>, recording: Recording) {
         self.recording = recording
@@ -16,69 +16,68 @@ struct PlayerView: View {
     }
 
     var body: some View {
-        DisclosureGroup(isExpanded: Binding(
-            get: { self.openedGroup == self.recording.id },
-            set: { newValue in
-                if newValue {
-                    self.openedGroup = self.recording.id
-                } else if self.openedGroup == self.recording.id {
-                    self.openedGroup = nil
-                    viewModel.stop()
-                }
-            }
-        )) {
-            VStack {
-                Slider(value: $sliderValue, in: 0...viewModel.duration, onEditingChanged: { editing in
-                    if editing {
-                        viewModel.pause()
-                    } else {
-                        viewModel.seek(to: sliderValue)
-                        viewModel.play()
+        VStack {
+            DisclosureGroup(isExpanded: Binding(
+                get: { self.openedGroup == self.recording.id },
+                set: { newValue in
+                    if newValue {
+                        self.openedGroup = self.recording.id
+                    } else if self.openedGroup == self.recording.id {
+                        self.openedGroup = nil
+                        viewModel.stop()
                     }
-                })
-                .padding()
-                .onChange(of: viewModel.currentTime) {
-                    sliderValue = viewModel.currentTime
                 }
-
-                HStack {
-                    Text(timeString(from: viewModel.currentTime))
-                    Spacer()
-                    Text(timeString(from: viewModel.duration))
-                }
-                .padding(.horizontal)
-
-                HStack {
-                    Spacer()
-                    Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
-                        .onTapGesture {
-                            if viewModel.player.isPlaying {
-                                viewModel.pause()
-                            } else {
-                                viewModel.play()
-                            }
+            )) {
+                VStack {
+                    Slider(value: $sliderValue, in: 0...viewModel.duration, onEditingChanged: { editing in
+                        if editing {
+                            viewModel.pause()
+                        } else {
+                            viewModel.seek(to: sliderValue)
+                            viewModel.play()
                         }
+                    })
+                    .padding()
+                    .onChange(of: viewModel.currentTime) {
+                        sliderValue = viewModel.currentTime
+                    }
+
+                    HStack {
+                        Text(timeString(from: viewModel.currentTime))
+                        Spacer()
+                        Text(timeString(from: viewModel.duration))
+                    }
+                    .padding(.horizontal)
+
+                    HStack {
+                        Spacer()
+                        Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
+                            .onTapGesture {
+                                if viewModel.player.isPlaying {
+                                    viewModel.pause()
+                                } else {
+                                    viewModel.play()
+                                }
+                            }
+                        Spacer()
+                    }
                     Spacer()
+                    HStack {
+                        FileNameButtonView(recording: recording)
+                    }
+                    Text("Created on \(recording.date ?? "")")
+                        .font(.footnote)
+                        .foregroundStyle(.gray)
+                        .padding()
                 }
-                Spacer()
-                HStack {
-                    ShareLink(item: URL.documentsDirectory.appending(path: "\(recording.name ?? "").m4a")) {
-                        Image(systemName: "square.and.arrow.up.circle")
-                        .font(.system(size: 30))
-                     }
-                    FileNameButtonView(recording: recording)
-                }
-                Text("Created on \(recording.date ?? "")")
-                    .font(.footnote)
-                    .foregroundStyle(.gray)
+            } label: {
+                Text(recording.name ?? "")
                     .padding()
             }
-        } label: {
-            Text(recording.name ?? "")
-        }
-        .onChange(of: openedGroup) {
-            if openedGroup != self.recording.id {
-                viewModel.stop()
+            .onChange(of: openedGroup) {
+                if openedGroup != self.recording.id {
+                    viewModel.stop()
+                }
             }
         }
     }

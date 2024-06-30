@@ -12,11 +12,10 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd, HH:mm:ss"
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let timestamp = dateFormatter.string(from: date)
         self.recording = Recording(name: timestamp)
-        let fileURL = documentsDirectory.appendingPathComponent("\(recording?.name ?? "").m4a")
-        print("File URL: \(fileURL)")
+        let fileURL = recording?.returnURL()
+        print("File URL: \(fileURL!)")
         self.currentURL = fileURL
         
         let recordingSession = AVAudioSession.sharedInstance()

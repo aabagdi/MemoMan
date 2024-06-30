@@ -12,6 +12,7 @@ struct FileNameButtonView : View {
     @State var recording : Recording
     @State private var showingAlert = false
     @State private var nameExistsAlert = false
+    @State private var emptyNameAlert = false
     @State private var newFilename = ""
     
     var body: some View {
@@ -29,9 +30,16 @@ struct FileNameButtonView : View {
         .alert("Recording with same name already exists!", isPresented: $nameExistsAlert) {
             Button("OK", role: .cancel) { }
         } message: { }
+        .alert("Recording name can't be empty!", isPresented: $emptyNameAlert) {
+            Button("OK", role: .cancel) { }
+        } message: { }
     }
     
     private func submit() {
+        if newFilename.isEmpty {
+            emptyNameAlert.toggle()
+            return
+        }
         let oldURL = recording.returnURL()
         let newURL = URL.documentsDirectory.appending(path: "\(newFilename).m4a")
         do {
@@ -41,8 +49,6 @@ struct FileNameButtonView : View {
             nameExistsAlert.toggle()
             return
         }
-        if !newFilename.isEmpty {
-            recording.name = newFilename
-        }
+        recording.name = newFilename
     }
 }
