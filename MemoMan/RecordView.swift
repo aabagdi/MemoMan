@@ -81,10 +81,7 @@ struct RecordView: View {
                                 model.isRecording.toggle()
                                 recorder.stop(modelContext: modelContext)
                             }
-                            Task {
-                                 try? recorder.record()
-                            }
-                            
+                            try? recorder.record()
                             model.isRecording.toggle()
                         })
                             .sequenced(before: DragGesture(minimumDistance: 0)
