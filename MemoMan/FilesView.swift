@@ -20,7 +20,7 @@ struct FilesView: View {
         else {
             VStack {
                 List {
-                    ForEach(filtered.reversed(), id: \.self) { recording in
+                    ForEach(filtered.sorted { $0.date ?? "" < $1.date ?? "" }, id: \.self) { recording in
                         PlayerView(openedGroup: $openedGroup, recording: recording)
                             .swipeActions(edge: .trailing) {
                                 Button("Delete", systemImage: "trash", role: .destructive) {
