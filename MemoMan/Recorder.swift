@@ -15,7 +15,6 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         let timestamp = dateFormatter.string(from: date)
         self.recording = Recording(name: timestamp)
         let fileURL = recording?.returnURL()
-        print("File URL: \(fileURL!)")
         self.currentURL = fileURL
         
         let recordingSession = AVAudioSession.sharedInstance()
@@ -51,14 +50,17 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     }
     
     private func saveRecording(modelContext: ModelContext) {
-        let newRecording = recording
+        guard let newRecording = recording else {
+            print("Recording is nil")
+            return
+        }
         
         do {
-            modelContext.insert(newRecording!)
+            modelContext.insert(newRecording)
             try modelContext.save()
-            //print("Recording saved successfully at URL: \(url.path)")
         } catch {
-            //print("Failed to save recording: \(error)")
+            print("Failed to save recording: \(error)")
         }
+        self.recording = nil
     }
 }
