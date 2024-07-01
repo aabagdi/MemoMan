@@ -68,9 +68,7 @@ struct RecordView: View {
                         model.isRecording.toggle()
                         switch model.isRecording {
                         case true:
-                            Task {
-                                try? recorder.record()
-                            }
+                            try? recorder.record()
                             print("recording")
                         case false:
                             recorder.stop(modelContext: modelContext)
