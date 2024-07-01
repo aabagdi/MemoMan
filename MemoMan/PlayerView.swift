@@ -2,7 +2,7 @@ import SwiftUI
 import AVFoundation
 
 struct PlayerView: View {
-    @State var recording: Recording
+    var recording: Recording
     @Binding var openedGroup: UUID?
 
     @StateObject private var viewModel: PlayerViewModel

@@ -23,7 +23,6 @@ import CloudKit
 struct RecordView: View {
     @StateObject var recorder : Recorder = Recorder()
     @StateObject private var model : RecordViewModel = RecordViewModel()
-    @State var recordings : [Recording] = []
     @Environment(\.modelContext) var modelContext
     
     var body: some View {

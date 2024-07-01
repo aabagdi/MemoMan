@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 
 struct FileNameButtonView : View {
-    @State var recording : Recording
+    var recording : Recording
+    
     @State private var showingAlert = false
     @State private var nameExistsAlert = false
     @State private var emptyNameAlert = false
