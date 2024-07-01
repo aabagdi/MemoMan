@@ -10,7 +10,7 @@ struct FilesView: View {
     
     var filtered: [Recording] {
         guard searchString.isEmpty == false else { return recordings }
-        return recordings.filter { $0.name!.contains(searchString) }
+        return recordings.filter { $0.name!.localizedStandardContains(searchString) }
     }
     
     var body: some View {

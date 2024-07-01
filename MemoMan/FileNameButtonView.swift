@@ -46,6 +46,7 @@ struct FileNameButtonView : View {
             try FileManager.default.moveItem(at: oldURL, to: newURL)
         } catch {
             print("\(error.localizedDescription)")
+            newFilename = ""
             nameExistsAlert.toggle()
             return
         }
