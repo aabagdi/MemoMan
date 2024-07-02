@@ -19,10 +19,12 @@ import AVFoundation
 import AVFAudio
 import CoreData
 import CloudKit
+import UIKit
 
 struct RecordView: View {
     @StateObject var recorder : Recorder = Recorder()
     @StateObject private var model : RecordViewModel = RecordViewModel()
+    @State private var deviceOrientation : UIInterfaceOrientation = .portrait
     @Environment(\.modelContext) var modelContext
     
     var body: some View {
@@ -129,6 +131,19 @@ struct RecordView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                       let orientation = windowScene.windows.first?.windowScene?.interfaceOrientation {
+                        deviceOrientation = orientation
+                        Task {
+                            do {
+                                try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
+                            } catch {
+                                throw Errors.UnableToUpdateOrientation
+                            }
+                        }
+                    }
+                }
         .environment(\.modelContext, modelContext)
     }
 }

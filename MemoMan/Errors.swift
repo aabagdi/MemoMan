@@ -14,4 +14,9 @@ enum Errors : Error {
     case FailedToPlayURL
     case FileDeletionError
     case FileRenameError
+    case UnableToCreateAudioRecorder
+    case NoBuiltInMic
+    case UnableToSetBuiltInMicrophone
+    case UnableToSelectDataSource
+    case UnableToUpdateOrientation
 }
