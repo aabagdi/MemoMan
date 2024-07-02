@@ -16,7 +16,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     }
     
     // MARK: - Initialization
-
+    
     override init() {
         super.init()
         
@@ -34,39 +34,26 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     // MARK: - Audio Session and Recorder Configuration
     
     private func enableBuiltInMicrophone() throws {
-        // Get the instance of audio session.
         let audioSession = AVAudioSession.sharedInstance()
-
-        // Get the audio inputs.
         let availableInputs = audioSession.availableInputs
         
-        // Find the available input that corresponds to the built-in microphone.
         guard let builtInMicInput = availableInputs?.first(where: { $0.portType == .builtInMic }) else {
-            // If no built-in microphone is found, throw an error.
             throw Errors.NoBuiltInMic
         }
         
         do {
-            // Set the built-in microphone as the preferred input.
             try audioSession.setPreferredInput(builtInMicInput)
         } catch {
-            // If an error occurs while setting the preferred input, throw an appropriate error.
             throw Errors.UnableToSetBuiltInMicrophone
         }
     }
     
     private func configureAudioSession() throws {
+        let audioSession = AVAudioSession.sharedInstance()
         do {
-            // Get the instance of audio session.
-            let audioSession = AVAudioSession.sharedInstance()
-            
-            // Set the audio session category to record.
             try audioSession.setCategory(.record, mode: .default)
-            
-            // Activate the audio session.
             try audioSession.setActive(true)
         } catch {
-            // If an error occurs during configuration, throw an appropriate error.
             throw Errors.FailedToInitSessionError
         }
     }
@@ -78,8 +65,12 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd, HH:mm:ss"
         let timestamp = dateFormatter.string(from: date)
         self.recording = Recording(name: timestamp)
-        let fileURL = recording?.returnURL()
+        
+        guard let fileURL = recording?.returnURL() else {
+            fatalError("Failed to create file URL")
+        }
         self.currentURL = fileURL
+        print("Recording URL: \(fileURL)")
         
         do {
             let audioSettings: [String: Any] = [
@@ -90,7 +81,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
                 AVLinearPCMBitDepthKey: 16,
                 AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue
             ]
-            audioRecorder = try AVAudioRecorder(url: fileURL!, settings: audioSettings)
+            audioRecorder = try AVAudioRecorder(url: fileURL, settings: audioSettings)
         } catch {
             throw Errors.UnableToCreateAudioRecorder
         }
@@ -101,49 +92,39 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     
     // MARK: recording controls
     func record() throws {
+        try configureAudioSession()
+        try setupAudioRecorder()
+        guard audioRecorder != nil else {
+            fatalError("Audio Recorder is not initialized")
+        }
+        print("Starting recording...")
         audioRecorder.record()
     }
     
     func stop(modelContext: ModelContext) {
+        guard audioRecorder != nil else {
+            fatalError("Audio Recorder is not initialized")
+        }
         audioRecorder.stop()
+        print("Stopping recording...")
         saveRecording(modelContext: modelContext)
     }
     
-    
     //MARK: update orientation
     public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, interfaceOrientation: UIInterfaceOrientation) async throws {
-        // Get the shared audio session.
         let session = AVAudioSession.sharedInstance()
-
-        // Find the data source matching the specified orientation.
         guard let preferredInput = session.preferredInput,
               let dataSources = preferredInput.dataSources,
               let newDataSource = dataSources.first(where: { $0.orientation == orientation }),
               let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
             return
         }
-
-        do {
-            // Check for iOS 14.0 availability to handle stereo support.
-            if #available(iOS 14.0, *) {
-                isStereoSupported = supportedPolarPatterns.contains(.stereo)
-
-                // Set the preferred polar pattern to stereo if supported.
-                if isStereoSupported {
-                    try newDataSource.setPreferredPolarPattern(.stereo)
-                }
-            }
-
-            // Set the preferred data source.
-            try preferredInput.setPreferredDataSource(newDataSource)
-
-            // Set the preferred input orientation based on the interface orientation.
-            if #available(iOS 14.0, *) {
-                try session.setPreferredInputOrientation(interfaceOrientation.inputOrientation)
-            }
-        } catch {
-            throw Errors.UnableToSelectDataSource
+        isStereoSupported = supportedPolarPatterns.contains(.stereo)
+        if isStereoSupported {
+            try newDataSource.setPreferredPolarPattern(.stereo)
         }
+        try preferredInput.setPreferredDataSource(newDataSource)
+        try session.setPreferredInputOrientation(interfaceOrientation.inputOrientation)
     }
     
     //MARK: save recording functions
@@ -156,8 +137,18 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         do {
             modelContext.insert(newRecording)
             try modelContext.save()
+            print("Recording saved: \(newRecording.name ?? "")")
         } catch {
             print("Failed to save recording: \(error)")
+        }
+    }
+    
+    //MARK: Audio delegate functions
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        if flag {
+            print("Recording finished.")
+        } else {
+            print("Recording failed.")
         }
         self.recording = nil
     }
