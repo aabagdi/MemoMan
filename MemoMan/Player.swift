@@ -25,6 +25,8 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 self.player = try AVAudioPlayer(contentsOf: path)
                 player?.prepareToPlay()
                 self.player?.delegate = self
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
             } catch {
                 print("AVAudioPlayer failed to initialise")
             }
