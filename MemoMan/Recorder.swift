@@ -113,7 +113,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     //MARK: update orientation
     public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, interfaceOrientation: UIInterfaceOrientation) async throws {
         let session = AVAudioSession.sharedInstance()
-        guard let preferredInput = session.preferredInput,
+        guard let preferredInput = session.preferredInput ?? session.availableInputs?.first,
               let dataSources = preferredInput.dataSources,
               let newDataSource = dataSources.first(where: { $0.orientation == orientation }),
               let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
