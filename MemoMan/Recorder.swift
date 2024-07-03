@@ -1,7 +1,7 @@
 import Foundation
+import UIKit
 import AVFoundation
 import SwiftData
-import UIKit
 
 class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     // MARK: - Properties
@@ -51,7 +51,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private func configureAudioSession() throws {
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(.record, mode: .default)
+            try audioSession.setCategory(.record, mode: .default, options: [.allowBluetooth])
             try audioSession.setActive(true)
         } catch {
             throw Errors.FailedToInitSessionError
@@ -74,7 +74,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         
         do {
             let audioSettings: [String: Any] = [
-                AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                AVFormatIDKey: Int(kAudioFormatLinearPCM),
                 AVLinearPCMIsNonInterleaved: false,
                 AVSampleRateKey: 44_100.0,
                 AVNumberOfChannelsKey: isStereoSupported ? 2 : 1,

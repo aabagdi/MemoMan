@@ -9,6 +9,6 @@ import Foundation
 
 extension Recording {
     func returnURL() -> URL {
-        return URL.documentsDirectory.appendingPathComponent("\(self.name ?? "").m4a")
+        return URL.documentsDirectory.appendingPathComponent("\(self.name ?? "").wav")
     }
 }
