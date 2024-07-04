@@ -25,6 +25,7 @@ struct PlayerView: View {
                     } else if self.openedGroup == self.recording.id {
                         self.openedGroup = nil
                         viewModel.stop()
+                        resetSlider()
                     }
                 }
             )) {
@@ -77,11 +78,17 @@ struct PlayerView: View {
             .onChange(of: openedGroup) {
                 if openedGroup != self.recording.id {
                     viewModel.stop()
+                    resetSlider()
                 }
             }
         }
     }
-
+    
+    private func resetSlider() {
+        sliderValue = 0
+        viewModel.seek(to: 0)
+    }
+    
     private func timeString(from timeInterval: TimeInterval) -> String {
         let hours = Int(timeInterval) / 3600
         let minutes = (Int(timeInterval) % 3600) / 60

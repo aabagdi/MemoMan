@@ -149,8 +149,14 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     
     func updateMeters() {
         audioRecorder.updateMeters()
-        let averagePower = audioRecorder.averagePower(forChannel: 0)
-        self.avgPower = pow(10, (0.05 * averagePower))
+        if isStereoSupported {
+            let averagePower = max(audioRecorder.averagePower(forChannel: 0), audioRecorder.averagePower(forChannel: 1))
+            self.avgPower = pow(10, (0.05 * averagePower))
+        }
+        else {
+            let averagePower = audioRecorder.averagePower(forChannel: 0)
+            self.avgPower = pow(10, (0.05 * averagePower))
+        }
     }
     
     
