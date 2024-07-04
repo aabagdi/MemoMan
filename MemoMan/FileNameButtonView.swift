@@ -42,7 +42,7 @@ struct FileNameButtonView : View {
             return
         }
         let oldURL = recording.returnURL()
-        let newURL = URL.documentsDirectory.appending(path: "\(newFilename).wav")
+        let newURL = URL.documentsDirectory.appending(path: "\(newFilename).m4a")
         do {
             try FileManager.default.moveItem(at: oldURL, to: newURL)
         } catch {

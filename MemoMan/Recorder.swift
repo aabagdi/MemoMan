@@ -79,7 +79,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         
         do {
             let audioSettings: [String: Any] = [
-                AVFormatIDKey: Int(kAudioFormatLinearPCM),
+                AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                 AVLinearPCMIsNonInterleaved: false,
                 AVSampleRateKey: 44_100.0,
                 AVNumberOfChannelsKey: isStereoSupported ? 2 : 1,
