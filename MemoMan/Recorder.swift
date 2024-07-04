@@ -8,6 +8,11 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder!
     private var currentURL: URL?
     private var recording: Recording?
+    private var meteringQueue: DispatchQueue = DispatchQueue(label: "metering.queue")
+    private var meteringWorkItem: DispatchWorkItem?
+
+    @Published var peakPower : Float = 0.0
+    @Published var avgPower : Float = 0.0
     
     private var isStereoSupported: Bool = false {
         didSet {
@@ -82,6 +87,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
                 AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue
             ]
             audioRecorder = try AVAudioRecorder(url: fileURL, settings: audioSettings)
+            audioRecorder.isMeteringEnabled = true
         } catch {
             throw Errors.UnableToCreateAudioRecorder
         }
@@ -99,6 +105,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         }
         print("Starting recording...")
         audioRecorder.record()
+        startMetering()
     }
     
     func stop(modelContext: ModelContext) {
@@ -106,6 +113,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
             fatalError("Audio Recorder is not initialized")
         }
         audioRecorder.stop()
+        stopMetering()
         print("Stopping recording...")
         saveRecording(modelContext: modelContext)
     }
@@ -126,6 +134,32 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         try preferredInput.setPreferredDataSource(newDataSource)
         try session.setPreferredInputOrientation(interfaceOrientation.inputOrientation)
     }
+    
+    //MARK: Audio metering
+    private func startMetering() {
+        stopMetering()
+        meteringWorkItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            self.updateMeters()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: self.meteringWorkItem!)
+        }
+        DispatchQueue.main.async(execute: meteringWorkItem!)
+    }
+    
+    private func stopMetering() {
+        meteringWorkItem?.cancel()
+        meteringWorkItem = nil
+    }
+    
+    func updateMeters() {
+        audioRecorder.updateMeters()
+        let averagePower = audioRecorder.averagePower(forChannel: 0)
+        let peakPower = audioRecorder.peakPower(forChannel: 0)
+        
+        self.avgPower = pow(10, (0.05 * averagePower))
+        self.peakPower = pow(10, (0.05 * peakPower))
+    }
+    
     
     //MARK: save recording functions
     private func saveRecording(modelContext: ModelContext) {

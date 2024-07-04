@@ -5,14 +5,6 @@
 //  Created by Aadit Bagdi on 11/1/23.
 //
 
-import SwiftUI
-
-//
-//  ContentView.swift
-//  MemoMan
-//
-//  Created by Aadit Bagdi on 4/7/23.
-//
 
 import SwiftUI
 import AVFoundation
@@ -34,18 +26,19 @@ struct RecordView: View {
                     Circle()
                         .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
                         .opacity(model.fadeInOut ? 0.2 : 0.0)
-                        .frame(width: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width )/2.1 : g.size.width/4)
+                        //.frame(width: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4)
+                        .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width), height: circleSize(for: recorder.avgPower, maxWidth: g.size.width))
                     Circle()
                         .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
                         .opacity(model.fadeInOut ? 0.3 : 0.0)
-                        .frame(width: model.fadeInOut ? (g.size.width)/2.50384615384
-                               : g.size.width/4, height: model.fadeInOut ? (g.size.width )/2.50384615384
-                               : g.size.width/4)
+                        //.frame(width: model.fadeInOut ? (g.size.width)/2.50384615384: g.size.width/4, height: model.fadeInOut ? (g.size.width)/2.50384615384: g.size.width/4)
+                        .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
                         .opacity(model.fadeInOut ? 0.5 : 0.0)
-                        .frame(width: model.fadeInOut ? (g.size.width)/3.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width )/3.1 : g.size.width/4)
-                    
+                        //.frame(width: model.fadeInOut ? (g.size.width)/3.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width)/3.1 : g.size.width/4)
+                        .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.8, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.8)
+
                     Button(action: {}) {
                         Image(systemName: "mic.fill")
                             .font(.system(size: g.size.width/12))
@@ -146,5 +139,11 @@ struct RecordView: View {
                     }
                 }
         .environment(\.modelContext, modelContext)
+    }
+    
+    func circleSize(for power: Float, maxWidth: CGFloat) -> CGFloat {
+        let minSize: CGFloat = maxWidth / 4
+        let maxSize: CGFloat = maxWidth * 0.85
+        return minSize + (maxSize - minSize) * CGFloat(power)
     }
 }
