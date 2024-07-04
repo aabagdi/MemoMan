@@ -18,14 +18,14 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     init(recording: Recording) {
         super.init()
-        let path = recording.returnURL()
+        let path = recording.returnURL
         if FileManager.default.fileExists(atPath: path.path) {
             do {
                 print("AVAudioPlayer initalized properly")
                 self.player = try AVAudioPlayer(contentsOf: path)
                 player?.prepareToPlay()
                 self.player?.delegate = self
-                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.allowAirPlay])
                 try AVAudioSession.sharedInstance().setActive(true)
             } catch {
                 print("AVAudioPlayer failed to initialise")
