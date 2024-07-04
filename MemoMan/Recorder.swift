@@ -71,7 +71,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         let timestamp = dateFormatter.string(from: date)
         self.recording = Recording(name: timestamp)
         
-        guard let fileURL = recording?.returnURL() else {
+        guard let fileURL = recording?.returnURL else {
             fatalError("Failed to create file URL")
         }
         self.currentURL = fileURL

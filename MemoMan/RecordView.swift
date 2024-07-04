@@ -27,12 +27,12 @@ struct RecordView: View {
                         .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
                         .opacity(model.fadeInOut ? 0.2 : 0.0)
                         //.frame(width: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4)
-                        .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width), height: circleSize(for: recorder.avgPower, maxWidth: g.size.width))
+                        .frame(width: circleSize(for: recorder.peakPower, maxWidth: g.size.width), height: circleSize(for: recorder.avgPower, maxWidth: g.size.width))
                     Circle()
                         .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
                         .opacity(model.fadeInOut ? 0.3 : 0.0)
                         //.frame(width: model.fadeInOut ? (g.size.width)/2.50384615384: g.size.width/4, height: model.fadeInOut ? (g.size.width)/2.50384615384: g.size.width/4)
-                        .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9)
+                        .frame(width: circleSize(for: recorder.peakPower, maxWidth: g.size.width) * 0.9, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9)
                     Circle()
                         .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
                         .opacity(model.fadeInOut ? 0.5 : 0.0)
@@ -94,16 +94,33 @@ struct RecordView: View {
                 .frame(width: g.size.width, height: g.size.height, alignment: .center)
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Recordings") {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
                         if model.isRecording {
                             model.isRecording.toggle()
                             recorder.stop(modelContext: modelContext)
                         }
                         model.showFiles.toggle()
+                    } label: {
+                        Image(systemName: "folder.fill")
                     }
                     .navigationDestination(isPresented: $model.showFiles) {
                         FilesView()
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        if model.isRecording {
+                            model.isRecording.toggle()
+                            recorder.stop(modelContext: modelContext)
+                        }
+                        model.showSettings.toggle()
+                        
+                    } label: {
+                        Image(systemName: "gearshape.2.fill")
+                    }
+                    .navigationDestination(isPresented: $model.showSettings) {
+                        SettingsView()
                     }
                 }
             }
@@ -145,7 +162,7 @@ struct RecordView: View {
     
     func circleSize(for power: Float, maxWidth: CGFloat) -> CGFloat {
         let minSize: CGFloat = maxWidth / 4
-        let maxSize: CGFloat = maxWidth * 0.85
+        let maxSize: CGFloat = maxWidth * 0.90
         return minSize + (maxSize - minSize) * CGFloat(power)
     }
 }

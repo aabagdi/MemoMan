@@ -13,6 +13,7 @@ extension RecordView {
         @Published var isRecording : Bool = false
         @Published var fadeInOut : Bool = false
         @Published var showFiles : Bool = false
+        @Published var showSettings : Bool = false
         @Published var showAlert : Bool = false
         @Published var animationAmount : Double = 1.0
     }
