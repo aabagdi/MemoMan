@@ -8,10 +8,8 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder!
     private var currentURL: URL?
     private var recording: Recording?
-    private var meteringQueue: DispatchQueue = DispatchQueue(label: "metering.queue")
     private var meteringWorkItem: DispatchWorkItem?
 
-    @Published var peakPower : Float = 0.0
     @Published var avgPower : Float = 0.0
     
     private var isStereoSupported: Bool = false {
@@ -139,7 +137,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         meteringWorkItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
             self.updateMeters()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: self.meteringWorkItem!)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: self.meteringWorkItem!)
         }
         DispatchQueue.main.async(execute: meteringWorkItem!)
     }
@@ -152,10 +150,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     func updateMeters() {
         audioRecorder.updateMeters()
         let averagePower = audioRecorder.averagePower(forChannel: 0)
-        let peakPower = audioRecorder.peakPower(forChannel: 0)
-        
         self.avgPower = pow(10, (0.05 * averagePower))
-        self.peakPower = pow(10, (0.05 * peakPower))
     }
     
     
