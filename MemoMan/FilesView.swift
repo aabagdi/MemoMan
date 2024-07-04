@@ -26,7 +26,7 @@ struct FilesView: View {
                                 Button("Delete", systemImage: "trash", role: .destructive) {
                                     modelContext.delete(recording)
                                     do {
-                                        try FileManager.default.removeItem(at: recording.returnURL)
+                                        try FileManager.default.removeItem(at: recording.fileURL)
                                     } catch {
                                         print("Error removing item URL")
                                     }
@@ -38,7 +38,7 @@ struct FilesView: View {
                                 }
                             }
                             .swipeActions(edge: .leading) {
-                                ShareLink(item: recording.returnURL) {
+                                ShareLink(item: recording.fileURL) {
                                     VStack {
                                         Image(systemName: "square.and.arrow.up")
                                         Text("Share")
