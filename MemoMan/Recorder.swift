@@ -80,11 +80,9 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         do {
             let audioSettings: [String: Any] = [
                 AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                AVLinearPCMIsNonInterleaved: false,
-                AVSampleRateKey: 44_100.0,
+                AVSampleRateKey: UserDefaults.standard.double(forKey: "sampleRate"),
                 AVNumberOfChannelsKey: isStereoSupported ? 2 : 1,
-                AVLinearPCMBitDepthKey: 16,
-                AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue
+                AVEncoderAudioQualityKey: UserDefaults.standard.integer(forKey: "audioQuality")
             ]
             audioRecorder = try AVAudioRecorder(url: fileURL, settings: audioSettings)
             audioRecorder.isMeteringEnabled = true
