@@ -131,7 +131,9 @@ struct RecordView: View {
                         deviceOrientation = orientation
                         Task {
                             do {
-                                try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
+                                if !model.isRecording {
+                                    try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
+                                }
                             } catch {
                                 throw Errors.UnableToUpdateOrientation
                             }
