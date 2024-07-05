@@ -4,7 +4,7 @@ import SwiftData
 struct FilesView: View {
     @State private var searchString : String = ""
     var body: some View {
-        FilesListView(sort: SortDescriptor(\Recording.name), searchString: searchString)
+        FilesListView(searchString: searchString)
             .searchable(text: $searchString)
     }
 }

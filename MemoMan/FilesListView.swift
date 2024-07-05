@@ -14,7 +14,7 @@ struct FilesListView: View {
     @State private var openedGroup : UUID? = nil
     @Environment(\.modelContext) var modelContext
     
-    init(sort: SortDescriptor<Recording>, searchString: String) {
+    init(searchString: String) {
         self.searchString = searchString
         _recordings = Query(filter: #Predicate {
             if searchString.isEmpty {
@@ -24,7 +24,7 @@ struct FilesListView: View {
                 return $0.name?.localizedStandardContains(searchString) ?? false
             }
             
-        }, sort: [sort])
+        })
     }
     
     
