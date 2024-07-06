@@ -13,7 +13,7 @@
 		393E579D2C3367F700690315 /* UIInterfaceOrientation++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */; };
 		393E57AB2C372FD800690315 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57AA2C372FD800690315 /* SettingsView.swift */; };
 		393E57B12C38675800690315 /* FilesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57B02C38675800690315 /* FilesListView.swift */; };
-		393E57B72C38F0DB00690315 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57B62C38F0DB00690315 /* SettingsViewModel.swift */; };
+		393E57B92C39D9CA00690315 /* RecordView++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57B82C39D9CA00690315 /* RecordView++.swift */; };
 		393EAA232AF48FFF0042C085 /* RecordingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393EAA222AF48FFF0042C085 /* RecordingModel.swift */; };
 		3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3951A90C29E13F6100C80C26 /* MemoManApp.swift */; };
 		3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3951A90E29E13F6100C80C26 /* RecordView.swift */; };
@@ -30,13 +30,13 @@
 
 /* Begin PBXFileReference section */
 		390D494F2AF5D2960033C879 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
-		390D49512AFB409A0033C879 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		390D49522AFB53460033C879 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		390D49542AFB5ACE0033C879 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Player.swift; path = "../../MemoMan backup/MemoMan/Player.swift"; sourceTree = "<group>"; };
+		390D49542AFB5ACE0033C879 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIInterfaceOrientation++.swift"; sourceTree = "<group>"; };
 		393E57AA2C372FD800690315 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		393E57B02C38675800690315 /* FilesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesListView.swift; sourceTree = "<group>"; };
-		393E57B62C38F0DB00690315 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		393E57B82C39D9CA00690315 /* RecordView++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecordView++.swift"; sourceTree = "<group>"; };
+		393E57C12C39E3A600690315 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		393EAA222AF48FFF0042C085 /* RecordingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingModel.swift; sourceTree = "<group>"; };
 		3951A90929E13F6100C80C26 /* MemoMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3951A90C29E13F6100C80C26 /* MemoManApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoManApp.swift; sourceTree = "<group>"; };
@@ -64,10 +64,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		393E57BC2C39E06A00690315 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				393E57AA2C372FD800690315 /* SettingsView.swift */,
+				390D494F2AF5D2960033C879 /* FilesView.swift */,
+				393E57B02C38675800690315 /* FilesListView.swift */,
+				390D49522AFB53460033C879 /* PlayerView.swift */,
+				3951A90E29E13F6100C80C26 /* RecordView.swift */,
+				39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		393E57BD2C39E07B00690315 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				393E57B82C39D9CA00690315 /* RecordView++.swift */,
+				39A013F92C31EB0400BE7BBF /* Recording++.swift */,
+				393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */,
+				39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		393E57BE2C39E09C00690315 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				39573A602C2606DB008B13D8 /* PlayerViewModel.swift */,
+				398C8A062AF1F49B009848AF /* RecordViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		393E57BF2C39E0AE00690315 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				398C8A042AF1F46F009848AF /* Recorder.swift */,
+				393EAA222AF48FFF0042C085 /* RecordingModel.swift */,
+				390D49542AFB5ACE0033C879 /* Player.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		393E57C02C39E0C700690315 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				39D7DBFD2BB73FD800EECAD9 /* Errors.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		3951A90029E13F6100C80C26 = {
 			isa = PBXGroup;
 			children = (
-				393E57B62C38F0DB00690315 /* SettingsViewModel.swift */,
 				3951A90B29E13F6100C80C26 /* MemoMan */,
 				3951A90A29E13F6100C80C26 /* Products */,
 			);
@@ -84,24 +134,14 @@
 		3951A90B29E13F6100C80C26 /* MemoMan */ = {
 			isa = PBXGroup;
 			children = (
-				39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */,
-				390D49512AFB409A0033C879 /* Info.plist */,
-				39D7DBFD2BB73FD800EECAD9 /* Errors.swift */,
-				393E57AA2C372FD800690315 /* SettingsView.swift */,
-				39A013F92C31EB0400BE7BBF /* Recording++.swift */,
 				3951A90C29E13F6100C80C26 /* MemoManApp.swift */,
-				390D494F2AF5D2960033C879 /* FilesView.swift */,
-				393E57B02C38675800690315 /* FilesListView.swift */,
-				39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */,
-				390D49522AFB53460033C879 /* PlayerView.swift */,
-				39573A602C2606DB008B13D8 /* PlayerViewModel.swift */,
-				3951A90E29E13F6100C80C26 /* RecordView.swift */,
-				398C8A062AF1F49B009848AF /* RecordViewModel.swift */,
-				398C8A042AF1F46F009848AF /* Recorder.swift */,
-				393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */,
-				393EAA222AF48FFF0042C085 /* RecordingModel.swift */,
-				39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */,
-				390D49542AFB5ACE0033C879 /* Player.swift */,
+				393E57C12C39E3A600690315 /* Info.plist */,
+				39F8D31D2BD06A0100D66B1A /* MemoMan.entitlements */,
+				393E57BD2C39E07B00690315 /* Extensions */,
+				393E57C02C39E0C700690315 /* Components */,
+				393E57BC2C39E06A00690315 /* Views */,
+				393E57BE2C39E09C00690315 /* ViewModels */,
+				393E57BF2C39E0AE00690315 /* Models */,
 				3951A91029E13F6200C80C26 /* Assets.xcassets */,
 				3951A91229E13F6200C80C26 /* Preview Content */,
 			);
@@ -194,10 +234,10 @@
 				390D49532AFB53460033C879 /* PlayerView.swift in Sources */,
 				39A013FA2C31EB0400BE7BBF /* Recording++.swift in Sources */,
 				390D49502AF5D2960033C879 /* FilesView.swift in Sources */,
-				393E57B72C38F0DB00690315 /* SettingsViewModel.swift in Sources */,
 				393E57B12C38675800690315 /* FilesListView.swift in Sources */,
 				390D49552AFB5ACE0033C879 /* Player.swift in Sources */,
 				3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */,
+				393E57B92C39D9CA00690315 /* RecordView++.swift in Sources */,
 				3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */,
 				39D7DBFE2BB73FD800EECAD9 /* Errors.swift in Sources */,
 				393EAA232AF48FFF0042C085 /* RecordingModel.swift in Sources */,

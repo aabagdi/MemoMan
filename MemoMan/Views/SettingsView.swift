@@ -15,7 +15,6 @@ struct SettingsView: View {
         let availableInputs = AVAudioSession.sharedInstance().availableInputs
         return availableInputs?.first!.portName ?? "iPhone Microphone"
     }()
-    @AppStorage("iCloudEnabled") var iCloudEnabled : Bool = false
     
     private var inputSourceList : [String] {
         var inputs : [String] = []
@@ -60,7 +59,6 @@ struct SettingsView: View {
                     }
                 }
             }
-            Toggle("Enable iCloud storage", isOn: $iCloudEnabled)
         }
     }
 }

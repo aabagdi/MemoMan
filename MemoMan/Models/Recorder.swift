@@ -5,6 +5,7 @@ import SwiftData
 
 class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     // MARK: - Properties
+    var startTime: Date?
     private var audioRecorder: AVAudioRecorder!
     private var currentURL: URL?
     private var recording: Recording?
@@ -97,6 +98,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
             fatalError("Audio Recorder is not initialized")
         }
         print("Starting recording...")
+        startTime = Date()
         audioRecorder.record()
         startMetering()
     }
