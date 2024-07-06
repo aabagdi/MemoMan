@@ -32,8 +32,7 @@ struct SettingsView: View {
     
     var body: some View {
         List {
-            Toggle("Enable iCloud storage", isOn: $iCloudEnabled)
-            Picker("Choose input source", selection: $inputSource) {
+            Picker("Input source", selection: $inputSource) {
                 ForEach(inputSourceList, id: \.self) { inputSource in
                     Text(inputSource)
                 }
@@ -41,7 +40,7 @@ struct SettingsView: View {
             Picker("Sample rate", selection: $sampleRate) {
                 ForEach(sampleRateList, id: \.self) { sampleRate in
                     switch sampleRate {
-                        case 11_025: Text("11 kHz (super space saver)")
+                        case 11_025: Text("11 kHz (space saver+)")
                         case 22_050: Text("22 kHz (space saver)")
                         case 44_100: Text("44.1 kHz (CD quality)")
                         case 48_000: Text("48 kHz (studio quality)")
@@ -61,6 +60,7 @@ struct SettingsView: View {
                     }
                 }
             }
+            Toggle("Enable iCloud storage", isOn: $iCloudEnabled)
         }
     }
 }
