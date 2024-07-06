@@ -38,14 +38,11 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     
     private func enableBuiltInMicrophone() throws {
         let audioSession = AVAudioSession.sharedInstance()
-        let availableInputs = audioSession.availableInputs
-        
-        guard let builtInMicInput = availableInputs?.first(where: { $0.portType == .builtInMic }) else {
-            throw Errors.NoBuiltInMic
-        }
+        let portName = UserDefaults.standard.string(forKey: "inputSource") ?? "iPhone Microphone"
+        let preferredInput = getAVAudioPortDesc(portName: portName)
         
         do {
-            try audioSession.setPreferredInput(builtInMicInput)
+            try audioSession.setPreferredInput(preferredInput)
         } catch {
             throw Errors.UnableToSetBuiltInMicrophone
         }
@@ -175,6 +172,19 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
             print("Failed to save recording: \(error)")
         }
     }
+    
+    //MARK: Audio input functions
+    private func getAVAudioPortDesc(portName: String) -> AVAudioSessionPortDescription? {
+        let session = AVAudioSession.sharedInstance()
+        let inputList = session.availableInputs ?? []
+        for input in inputList {
+            if input.portName == portName {
+                return input
+            }
+        }
+        return nil
+    }
+    
     
     //MARK: Audio delegate functions
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {

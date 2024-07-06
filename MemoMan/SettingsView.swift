@@ -11,13 +11,33 @@ import AVFoundation
 struct SettingsView: View {
     @AppStorage("sampleRate") var sampleRate : Double = 44_100
     @AppStorage("audioQuality") var audioQuality : Int = AVAudioQuality.max.rawValue
+    @AppStorage("inputSource") var inputSource: String = {
+        let availableInputs = AVAudioSession.sharedInstance().availableInputs
+        return availableInputs?.first!.portName ?? "iPhone Microphone"
+    }()
+    @AppStorage("iCloudEnabled") var iCloudEnabled : Bool = false
     
+    private var inputSourceList : [String] {
+        var inputs : [String] = []
+        let session = AVAudioSession.sharedInstance()
+        let availableInputs = session.availableInputs
+        availableInputs?.forEach( { input in
+            inputs.append(input.portName)
+        })
+        return inputs
+    }
     private var sampleRateList: [Double] = [11_025, 22_050, 44_100, 48_000]
     private var audioQualityList : [Int] = [AVAudioQuality.min.rawValue, AVAudioQuality.low.rawValue, AVAudioQuality.medium.rawValue, AVAudioQuality.high.rawValue, AVAudioQuality.max.rawValue]
 
     
     var body: some View {
         List {
+            Toggle("Enable iCloud storage", isOn: $iCloudEnabled)
+            Picker("Choose input source", selection: $inputSource) {
+                ForEach(inputSourceList, id: \.self) { inputSource in
+                    Text(inputSource)
+                }
+            }
             Picker("Sample rate", selection: $sampleRate) {
                 ForEach(sampleRateList, id: \.self) { sampleRate in
                     switch sampleRate {

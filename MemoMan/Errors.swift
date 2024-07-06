@@ -15,7 +15,6 @@ enum Errors : Error {
     case FileDeletionError
     case FileRenameError
     case UnableToCreateAudioRecorder
-    case NoBuiltInMic
     case UnableToSetBuiltInMicrophone
     case UnableToSelectDataSource
     case UnableToUpdateOrientation
