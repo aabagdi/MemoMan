@@ -25,7 +25,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         
         do {
             try configureAudioSession()
-            try enableBuiltInMicrophone()
+            try enableMicrophone()
             try setupAudioRecorder()
         } catch {
             // If any errors occur during initialization,
@@ -36,7 +36,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
     
     // MARK: - Audio Session and Recorder Configuration
     
-    private func enableBuiltInMicrophone() throws {
+    private func enableMicrophone() throws {
         let audioSession = AVAudioSession.sharedInstance()
         let portName = UserDefaults.standard.string(forKey: "inputSource") ?? "iPhone Microphone"
         let preferredInput = getAVAudioPortDesc(portName: portName)
@@ -44,7 +44,7 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         do {
             try audioSession.setPreferredInput(preferredInput)
         } catch {
-            throw Errors.UnableToSetBuiltInMicrophone
+            throw Errors.UnableToSetMicrophone
         }
     }
     
