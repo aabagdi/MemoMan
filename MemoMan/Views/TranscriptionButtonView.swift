@@ -1,5 +1,5 @@
 //
-//  TranscriptionView.swift
+//  TranscriptionButtonView.swift
 //  MemoMan
 //
 //  Created by Aadit Bagdi on 7/6/24.
@@ -30,20 +30,22 @@ struct TranscriptionButtonView : View {
                     .padding()
                 TextEditor(text: .constant(transcription))
                     .padding(8)
-                     .background(
-                         RoundedRectangle(cornerRadius: 10)
-                             .stroke(Color.gray, lineWidth: 1)
-                     )
-                     .cornerRadius(10)
-                Button("Copy transcript") {
-                    copy()
-                    showTranscription.toggle()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray, lineWidth: 1)
+                    )
+                    .cornerRadius(10)
+                HStack {
+                    Button("Cancel") {
+                        showTranscription.toggle()
+                    }
+                    .buttonStyle(PurpleButtonStyle())
+                    Button("Copy transcript") {
+                        copy()
+                        showTranscription.toggle()
+                    }
+                    .buttonStyle(PurpleButtonStyle())
                 }
-                .buttonStyle(PurpleButtonStyle())
-                Button("Cancel") {
-                    showTranscription.toggle()
-                }
-                .buttonStyle(PurpleButtonStyle())
             }
         }
     }
