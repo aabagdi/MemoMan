@@ -6,6 +6,7 @@ struct PlayerView: View {
     @Binding var openedGroup: UUID?
 
     @StateObject private var viewModel: PlayerViewModel
+    @StateObject private var recognizer : SpeechRecognizer
     @State private var sliderValue: TimeInterval = 0
 
     init(openedGroup: Binding<UUID?>, recording: Recording) {
@@ -13,6 +14,7 @@ struct PlayerView: View {
         self._openedGroup = openedGroup
         let player = Player(recording: recording)
         self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player))
+        self._recognizer = StateObject(wrappedValue: SpeechRecognizer(recording: recording))
     }
 
     var body: some View {
@@ -65,6 +67,7 @@ struct PlayerView: View {
                     Spacer()
                     HStack {
                         FileNameButtonView(recording: recording)
+                        TranscriptionButtonView(transcription: recording.transcript ?? "No transcript available.")
                     }
                     Text("Created on \(recording.date ?? "")")
                         .font(.footnote)
@@ -79,6 +82,13 @@ struct PlayerView: View {
                 if openedGroup != self.recording.id {
                     viewModel.stop()
                     resetSlider()
+                }
+            }
+            .onAppear() {
+                Task {
+                    if recording.transcript == nil {
+                        await recognizer.transcribe(recording: recording)
+                    }
                 }
             }
         }

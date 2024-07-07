@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Speech
 
 extension RecordView {
     @MainActor class RecordViewModel : ObservableObject {

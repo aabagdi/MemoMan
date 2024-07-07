@@ -20,8 +20,7 @@ struct FileNameButtonView : View {
         Button("Change file name") {
             showingAlert.toggle()
         }
-        .buttonStyle(.borderedProminent)
-        .padding()
+        .buttonStyle(PurpleButtonStyle())
         .alert("Enter new file name", isPresented: $showingAlert) {
             TextField("New file name", text: $newFilename)
                 .autocorrectionDisabled()

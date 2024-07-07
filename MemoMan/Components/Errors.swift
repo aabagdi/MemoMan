@@ -18,4 +18,7 @@ enum Errors : Error {
     case UnableToSetMicrophone
     case UnableToSelectDataSource
     case UnableToUpdateOrientation
+    case NilSpeechRecognizer
+    case NotAuthorizedToRecognize
+    case NotAuthorizedToRecord
 }
