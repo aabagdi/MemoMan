@@ -15,6 +15,7 @@ struct SettingsView: View {
         let availableInputs = AVAudioSession.sharedInstance().availableInputs
         return availableInputs?.first!.portName ?? "iPhone Microphone"
     }()
+    @State private var availableInputSources: [String] = []
     
     private var inputSourceList : [String] {
         var inputs : [String] = []
@@ -59,6 +60,20 @@ struct SettingsView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            updateInputSources()
+        }
+    }
+    
+    private func updateInputSources() {
+        let session = AVAudioSession.sharedInstance()
+        let inputs = session.availableInputs?.map { $0.portName } ?? []
+        availableInputSources = inputs.isEmpty ? ["iPhone Microphone"] : inputs
+        
+        // Ensure inputSource has a valid value
+        if !availableInputSources.contains(inputSource) {
+            inputSource = "iPhone Microphone"
         }
     }
 }

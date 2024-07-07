@@ -94,6 +94,7 @@ struct PlayerView: View {
         }
     }
     
+    @MainActor
     private func resetSlider() {
         sliderValue = 0
         viewModel.seek(to: 0)

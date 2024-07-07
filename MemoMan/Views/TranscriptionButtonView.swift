@@ -29,7 +29,7 @@ struct TranscriptionButtonView : View {
                     .font(.headline)
                     .padding()
                 TextEditor(text: .constant(transcription))
-                    .padding(8)
+                    .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray, lineWidth: 1)
