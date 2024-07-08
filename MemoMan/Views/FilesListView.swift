@@ -12,6 +12,7 @@ struct FilesListView: View {
     var searchString : String
     @Query var recordings : [Recording]
     @State private var openedGroup : UUID? = nil
+    @StateObject private var recognizer : SpeechRecognizer = SpeechRecognizer()
     @Environment(\.modelContext) var modelContext
     
     init(searchString: String) {
@@ -60,6 +61,11 @@ struct FilesListView: View {
                                 }
                             }
                     }
+                }
+            }
+            .onAppear {
+                Task {
+                    await transcribeRecordings(recordings: recordings, recognizer: recognizer)
                 }
             }
         }

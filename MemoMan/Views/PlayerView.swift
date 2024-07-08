@@ -2,11 +2,10 @@ import SwiftUI
 import AVFoundation
 
 struct PlayerView: View {
-    @State var recording: Recording
+    var recording: Recording
     @Binding var openedGroup: UUID?
 
     @StateObject private var viewModel: PlayerViewModel
-    @StateObject private var recognizer : SpeechRecognizer
     @State private var sliderValue: TimeInterval = 0
 
     init(openedGroup: Binding<UUID?>, recording: Recording) {
@@ -14,7 +13,6 @@ struct PlayerView: View {
         self._openedGroup = openedGroup
         let player = Player(recording: recording)
         self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player))
-        self._recognizer = StateObject(wrappedValue: SpeechRecognizer(recording: recording))
     }
 
     var body: some View {
@@ -82,13 +80,6 @@ struct PlayerView: View {
                 if openedGroup != self.recording.id {
                     viewModel.stop()
                     resetSlider()
-                }
-            }
-            .onAppear() {
-                Task {
-                    if recording.transcript == nil {
-                        await recognizer.transcribe(recording: recording)
-                    }
                 }
             }
         }

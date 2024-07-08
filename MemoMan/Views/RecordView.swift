@@ -17,7 +17,6 @@ struct RecordView: View {
     
     @State private var deviceOrientation : UIInterfaceOrientation = .portrait
     @State var time : Int = 0
-    @State var timer: Timer? = nil
 
     @Environment(\.modelContext) var modelContext
     

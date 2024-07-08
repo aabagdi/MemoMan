@@ -13,7 +13,7 @@ import UIKit
 struct TranscriptionButtonView : View {
     @State private var showTranscription : Bool = false
     @State private var showCopyAlert : Bool = false
-    private var transcription : String
+    @State private var transcription : String
     
     init(transcription: String) {
         self.transcription = transcription
