@@ -12,6 +12,7 @@ import UIKit
 
 struct TranscriptionButtonView : View {
     @State private var showTranscription : Bool = false
+    @State private var showCopyAlert : Bool = false
     private var transcription : String
     
     init(transcription: String) {
@@ -41,10 +42,17 @@ struct TranscriptionButtonView : View {
                     }
                     .buttonStyle(PurpleButtonStyle())
                     Button("Copy transcript") {
-                        copy()
-                        showTranscription.toggle()
+                        if self.transcription != "No transcription available. Either it's still loading or no speech was detected." {
+                            copy()
+                            showTranscription.toggle()
+                        } else {
+                            showCopyAlert.toggle()
+                        }
                     }
                     .buttonStyle(PurpleButtonStyle())
+                    .alert("No transcription available to copy!", isPresented: $showCopyAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
                 }
             }
         }

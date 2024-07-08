@@ -15,7 +15,6 @@ struct SettingsView: View {
         let availableInputs = AVAudioSession.sharedInstance().availableInputs
         return availableInputs?.first!.portName ?? "iPhone Microphone"
     }()
-    @State private var availableInputSources: [String] = []
     
     private var inputSourceList : [String] {
         var inputs : [String] = []
@@ -23,10 +22,11 @@ struct SettingsView: View {
         let availableInputs = session.availableInputs
         availableInputs?.forEach( { input in
             inputs.append(input.portName)
-        })
+        } )
         return inputs
     }
-    private var sampleRateList: [Double] = [11_025, 22_050, 44_100, 48_000]
+    
+    private var sampleRateList: [Double] = [8_000, 11_025, 22_050, 44_100, 48_000]
     private var audioQualityList : [Int] = [AVAudioQuality.min.rawValue, AVAudioQuality.low.rawValue, AVAudioQuality.medium.rawValue, AVAudioQuality.high.rawValue, AVAudioQuality.max.rawValue]
 
     
@@ -40,6 +40,7 @@ struct SettingsView: View {
             Picker("Sample rate", selection: $sampleRate) {
                 ForEach(sampleRateList, id: \.self) { sampleRate in
                     switch sampleRate {
+                        case 8_000: Text("8 kHz (space saver++)")
                         case 11_025: Text("11 kHz (space saver+)")
                         case 22_050: Text("22 kHz (space saver)")
                         case 44_100: Text("44.1 kHz (CD quality)")
@@ -69,9 +70,7 @@ struct SettingsView: View {
     private func updateInputSources() {
         let session = AVAudioSession.sharedInstance()
         let inputs = session.availableInputs?.map { $0.portName } ?? []
-        availableInputSources = inputs.isEmpty ? ["iPhone Microphone"] : inputs
-        
-        // Ensure inputSource has a valid value
+        let availableInputSources = inputs
         if !availableInputSources.contains(inputSource) {
             inputSource = "iPhone Microphone"
         }
