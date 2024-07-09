@@ -51,7 +51,7 @@ struct TranscriptionButtonView : View {
                     }
                     .buttonStyle(PurpleButtonStyle())
                     .alert("No transcription available to copy!", isPresented: $showCopyAlert) {
-                        Button("OK", role: .cancel) { }
+                        Button("OK", role: .cancel) { showTranscription.toggle() }
                     }
                 }
             }
