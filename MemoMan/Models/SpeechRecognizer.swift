@@ -32,7 +32,6 @@ actor SpeechRecognizer : ObservableObject {
         
         let url = recording.fileURL
         let request = SFSpeechURLRecognitionRequest(url: url)
-        request.requiresOnDeviceRecognition = true
         
         await withCheckedContinuation { continuation in
             recognizer.recognitionTask(with: request) { (result, error) in

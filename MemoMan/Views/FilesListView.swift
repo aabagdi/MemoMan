@@ -30,7 +30,7 @@ struct FilesListView: View {
     
     var body: some View {
         if recordings.isEmpty {
-            Text("You have no recordings!")
+            Text("No recordings found!")
         }
         else {
             VStack {
