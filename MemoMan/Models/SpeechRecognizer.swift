@@ -8,7 +8,6 @@
 import Foundation
 import Speech
 import SwiftData
-import SwiftUI
 
 actor SpeechRecognizer : ObservableObject {
     let recognizer : SFSpeechRecognizer?
@@ -33,42 +32,31 @@ actor SpeechRecognizer : ObservableObject {
             print("Authorization error: \(error)")
             return
         }
-        let recording = modelContext.model(for: recordingID) as? Recording
-        let url = recording!.fileURL
-        let request = SFSpeechURLRecognitionRequest(url: url)
-        
-        await withCheckedContinuation { continuation in
-            recognizer.recognitionTask(with: request) { (result, error) in
-                if let error = error {
-                    print("Recognition error: \(error)")
-                    continuation.resume()
-                    return
-                }
-                
-                guard let result = result else {
-                    print("No speech detected")
-                    continuation.resume()
-                    return
-                }
-                
-                if result.isFinal {
-                    recording!.transcript = result.bestTranscription.formattedString
-                    print(result.bestTranscription.formattedString)
-                    continuation.resume()
+        if let recording = modelContext.model(for: recordingID) as? Recording {
+            let url = recording.fileURL
+            let request = SFSpeechURLRecognitionRequest(url: url)
+            
+            await withCheckedContinuation { continuation in
+                recognizer.recognitionTask(with: request) { (result, error) in
+                    if let error = error {
+                        print("Recognition error: \(error)")
+                        continuation.resume()
+                        return
+                    }
+                    
+                    guard let result = result else {
+                        print("No speech detected")
+                        continuation.resume()
+                        return
+                    }
+                    
+                    if result.isFinal {
+                        recording.transcript = result.bestTranscription.formattedString
+                        print(result.bestTranscription.formattedString)
+                        continuation.resume()
+                    }
                 }
             }
         }
     }
 }
-
-/*func transcribeRecordings(recordings: [Recording], recognizer: SpeechRecognizer) async {
-    await withTaskGroup(of: Void.self) { taskGroup in
-        for recording in recordings {
-            if recording.transcript == nil {
-                taskGroup.addTask {
-                    await recognizer.transcribe(recording: recording)
-                }
-            }
-        }
-    }
-}*/

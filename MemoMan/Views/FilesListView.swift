@@ -67,7 +67,6 @@ struct FilesListView: View {
             }
             .task {
                 for recording in recordings {
-                    
                     await recognizer.transcribe(recordingID: recording.persistentModelID)
                 }
             }
