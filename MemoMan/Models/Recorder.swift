@@ -3,7 +3,8 @@ import UIKit
 import AVFoundation
 import SwiftData
 
-class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
+@MainActor
+final class Recorder: NSObject, ObservableObject, @preconcurrency AVAudioRecorderDelegate {
     // MARK: - Properties
     var startTime: Date?
     private var audioRecorder: AVAudioRecorder!

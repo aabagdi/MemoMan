@@ -12,10 +12,11 @@ struct FilesListView: View {
     var searchString : String
     @Query var recordings : [Recording]
     @State private var openedGroup : UUID? = nil
-    @StateObject private var recognizer : SpeechRecognizer = SpeechRecognizer()
+    @StateObject private var recognizer : SpeechRecognizer
     @Environment(\.modelContext) var modelContext
     
-    init(searchString: String) {
+    init(searchString: String, modelContainer: ModelContainer) {
+        self._recognizer = StateObject(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
         self.searchString = searchString
         _recordings = Query(filter: #Predicate {
             if searchString.isEmpty {
@@ -39,6 +40,7 @@ struct FilesListView: View {
                         PlayerView(openedGroup: $openedGroup, recording: recording)
                             .swipeActions(edge: .trailing) {
                                 Button("Delete", systemImage: "trash", role: .destructive) {
+                                    print("deleting recording")
                                     modelContext.delete(recording)
                                     do {
                                         try FileManager.default.removeItem(at: recording.fileURL)
@@ -63,9 +65,10 @@ struct FilesListView: View {
                     }
                 }
             }
-            .onAppear {
-                Task {
-                    await transcribeRecordings(recordings: recordings, recognizer: recognizer)
+            .task {
+                for recording in recordings {
+                    
+                    await recognizer.transcribe(recordingID: recording.persistentModelID)
                 }
             }
         }

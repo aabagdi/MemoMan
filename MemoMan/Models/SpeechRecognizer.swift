@@ -7,15 +7,19 @@
 
 import Foundation
 import Speech
+import SwiftData
+import SwiftUI
 
 actor SpeechRecognizer : ObservableObject {
-    let recognizer: SFSpeechRecognizer?
+    let recognizer : SFSpeechRecognizer?
+    let modelContext : ModelContext
     
-    init() {
+    init(modelContainer: ModelContainer) {
         self.recognizer = SFSpeechRecognizer()
+        self.modelContext = ModelContext(modelContainer)
     }
     
-    func transcribe(recording: Recording) async {
+    func transcribe(recordingID: PersistentIdentifier) async {
         guard let recognizer = recognizer else {
             print("Recognizer not available")
             return
@@ -29,8 +33,8 @@ actor SpeechRecognizer : ObservableObject {
             print("Authorization error: \(error)")
             return
         }
-        
-        let url = recording.fileURL
+        let recording = modelContext.model(for: recordingID) as? Recording
+        let url = recording!.fileURL
         let request = SFSpeechURLRecognitionRequest(url: url)
         
         await withCheckedContinuation { continuation in
@@ -48,7 +52,7 @@ actor SpeechRecognizer : ObservableObject {
                 }
                 
                 if result.isFinal {
-                    recording.transcript = result.bestTranscription.formattedString
+                    recording!.transcript = result.bestTranscription.formattedString
                     print(result.bestTranscription.formattedString)
                     continuation.resume()
                 }
@@ -57,7 +61,7 @@ actor SpeechRecognizer : ObservableObject {
     }
 }
 
-func transcribeRecordings(recordings: [Recording], recognizer: SpeechRecognizer) async {
+/*func transcribeRecordings(recordings: [Recording], recognizer: SpeechRecognizer) async {
     await withTaskGroup(of: Void.self) { taskGroup in
         for recording in recordings {
             if recording.transcript == nil {
@@ -67,4 +71,4 @@ func transcribeRecordings(recordings: [Recording], recognizer: SpeechRecognizer)
             }
         }
     }
-}
+}*/

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-@Model class Recording {
+@Model final class Recording {
     var id: UUID?
     var name : String?
     var date : String?
