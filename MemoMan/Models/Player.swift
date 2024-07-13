@@ -19,9 +19,10 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     init(recording: Recording) {
         super.init()
         let path = recording.fileURL
+        print(path.path)
         if FileManager.default.fileExists(atPath: path.path) {
             do {
-                print("AVAudioPlayer initalized properly")
+                //print("AVAudioPlayer initalized properly")
                 self.player = try AVAudioPlayer(contentsOf: path)
                 player?.prepareToPlay()
                 self.player?.delegate = self

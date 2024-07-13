@@ -65,11 +65,11 @@ struct FilesListView: View {
                     }
                 }
             }
-            .task {
+            /*.task {
                 for recording in recordings {
                     await recognizer.transcribe(recordingID: recording.persistentModelID)
                 }
-            }
+            }*/
         }
     }
 }

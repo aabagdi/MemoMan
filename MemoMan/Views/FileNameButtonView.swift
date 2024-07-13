@@ -10,6 +10,7 @@ import SwiftUI
 
 struct FileNameButtonView : View {
     var recording : Recording
+    @Environment(\.modelContext) var modelContext
     
     @State private var showingAlert = false
     @State private var nameExistsAlert = false
@@ -35,6 +36,7 @@ struct FileNameButtonView : View {
         } message: { }
     }
     
+    @MainActor
     private func submit() {
         if newFilename.isEmpty {
             emptyNameAlert.toggle()
@@ -51,5 +53,11 @@ struct FileNameButtonView : View {
             return
         }
         recording.name = newFilename
+        do {
+            try modelContext.save()
+        } catch {
+            print("model context not saved")
+        }
+        print("model context saved")
     }
 }
