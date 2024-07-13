@@ -14,7 +14,6 @@ struct TranscriptionButtonView : View {
     var modelID : PersistentIdentifier
     @State private var showTranscription : Bool = false
     @State private var showCopyAlert : Bool = false
-    //@State private var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
     @StateObject private var recognizer : SpeechRecognizer
     
     init(modelContainer: ModelContainer, modelID: PersistentIdentifier) {
@@ -38,7 +37,7 @@ struct TranscriptionButtonView : View {
                         .lineLimit(nil)
                         .frame(maxWidth: .infinity)
                 }
-                HStack {
+                VStack {
                     Button("Cancel") {
                         showTranscription.toggle()
                     }

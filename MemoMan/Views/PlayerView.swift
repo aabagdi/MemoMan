@@ -67,7 +67,6 @@ struct PlayerView: View {
                     HStack {
                         FileNameButtonView(recording: recording)
                         TranscriptionButtonView(modelContainer: try! ModelContainer(for: Recording.self), modelID: recording.persistentModelID)
-                        //transcription: recording.transcript ?? "No transcription available. Either it's still loading or no speech was detected."
                     }
                     Text("Created on \(recording.date ?? "")")
                         .font(.footnote)

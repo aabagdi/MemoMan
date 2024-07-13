@@ -25,7 +25,6 @@ struct FilesListView: View {
             else {
                 return $0.name?.localizedStandardContains(searchString) ?? false
             }
-            
         })
     }
     
@@ -65,11 +64,6 @@ struct FilesListView: View {
                     }
                 }
             }
-            /*.task {
-                for recording in recordings {
-                    await recognizer.transcribe(recordingID: recording.persistentModelID)
-                }
-            }*/
         }
     }
 }
