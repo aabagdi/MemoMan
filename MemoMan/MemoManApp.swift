@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import AVFoundation
 
 @main
 struct MemoManApp: App {
@@ -14,6 +15,7 @@ struct MemoManApp: App {
     let container : ModelContainer
     
     init() {
+        UserDefaults.standard.register(defaults: ["sampleRate" : 44_100, "audioQuality" : AVAudioQuality.max.rawValue])
         do {
             container = try ModelContainer(for: Recording.self)
         } catch {
