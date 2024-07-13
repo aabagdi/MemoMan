@@ -36,7 +36,6 @@ struct FileNameButtonView : View {
         } message: { }
     }
     
-    @MainActor
     private func submit() {
         if newFilename.isEmpty {
             emptyNameAlert.toggle()

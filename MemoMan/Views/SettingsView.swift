@@ -28,7 +28,7 @@ struct SettingsView: View {
     
     private var sampleRateList: [Double] = [8_000, 11_025, 22_050, 44_100, 48_000]
     private var audioQualityList : [Int] = [AVAudioQuality.min.rawValue, AVAudioQuality.low.rawValue, AVAudioQuality.medium.rawValue, AVAudioQuality.high.rawValue, AVAudioQuality.max.rawValue]
-
+    
     
     var body: some View {
         List {
@@ -40,25 +40,33 @@ struct SettingsView: View {
             Picker("Sample rate", selection: $sampleRate) {
                 ForEach(sampleRateList, id: \.self) { sampleRate in
                     switch sampleRate {
-                        case 8_000: Text("8 kHz (space saver++)")
-                        case 11_025: Text("11 kHz (space saver+)")
-                        case 22_050: Text("22 kHz (space saver)")
-                        case 44_100: Text("44.1 kHz (CD quality)")
-                        case 48_000: Text("48 kHz (studio quality)")
-                        default: Text("44.1 kHz (CD quality)")
+                    case 8_000: Text("8 kHz (space saver++)")
+                    case 11_025: Text("11 kHz (space saver+)")
+                    case 22_050: Text("22 kHz (space saver)")
+                    case 44_100: Text("44.1 kHz (CD quality)")
+                    case 48_000: Text("48 kHz (studio quality)")
+                    default: Text("44.1 kHz (CD quality)")
                     }
                 }
             }
             Picker("Audio quality", selection: $audioQuality) {
                 ForEach(audioQualityList, id: \.self) { audioQuality in
                     switch audioQuality {
-                        case 0: Text("Minimum")
-                        case 32: Text("Low")
-                        case 64: Text("Medium")
-                        case 96: Text("High")
-                        case 127: Text("Maximum")
-                        default: Text("Maximum")
+                    case 0: Text("Minimum")
+                    case 32: Text("Low")
+                    case 64: Text("Medium")
+                    case 96: Text("High")
+                    case 127: Text("Maximum")
+                    default: Text("Maximum")
                     }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VStack {
+                    Text("Settings")
+                        .font(.headline)
                 }
             }
         }

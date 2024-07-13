@@ -6,5 +6,13 @@ struct FilesView: View {
     var body: some View {
         FilesListView(searchString: searchString, modelContainer: try! ModelContainer(for: Recording.self))
             .searchable(text: $searchString)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    VStack {
+                        Text("Recordings")
+                            .font(.headline)
+                    }
+                }
+            }
     }
 }

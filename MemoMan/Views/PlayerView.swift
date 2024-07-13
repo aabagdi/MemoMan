@@ -1,5 +1,6 @@
 import SwiftUI
 import AVFoundation
+import SwiftData
 
 struct PlayerView: View {
     var recording: Recording
@@ -65,7 +66,8 @@ struct PlayerView: View {
                     Spacer()
                     HStack {
                         FileNameButtonView(recording: recording)
-                        TranscriptionButtonView(transcription: recording.transcript ?? "No transcription available. Either it's still loading or no speech was detected.")
+                        TranscriptionButtonView(modelContainer: try! ModelContainer(for: Recording.self), modelID: recording.persistentModelID)
+                        //transcription: recording.transcript ?? "No transcription available. Either it's still loading or no speech was detected."
                     }
                     Text("Created on \(recording.date ?? "")")
                         .font(.footnote)

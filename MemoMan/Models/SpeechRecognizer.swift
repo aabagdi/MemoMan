@@ -8,10 +8,13 @@
 import Foundation
 import Speech
 import SwiftData
+import SwiftUI
 
-actor SpeechRecognizer : ObservableObject {
+@MainActor
+class SpeechRecognizer : ObservableObject {
     let recognizer : SFSpeechRecognizer?
     let modelContext : ModelContext
+    @Published var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
     
     init(modelContainer: ModelContainer) {
         self.recognizer = SFSpeechRecognizer()
@@ -51,8 +54,7 @@ actor SpeechRecognizer : ObservableObject {
                     }
                     
                     if result.isFinal {
-                        recording.transcript = result.bestTranscription.formattedString
-                        print(result.bestTranscription.formattedString)
+                        self.transcription = result.bestTranscription.formattedString
                         continuation.resume()
                     }
                 }

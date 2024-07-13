@@ -8,15 +8,19 @@
 import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
-import UIKit
+import SwiftData
 
 struct TranscriptionButtonView : View {
+    var modelID : PersistentIdentifier
     @State private var showTranscription : Bool = false
     @State private var showCopyAlert : Bool = false
-    @State private var transcription : String
+    //@State private var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
+    @StateObject private var recognizer : SpeechRecognizer
     
-    init(transcription: String) {
-        self.transcription = transcription
+    init(modelContainer: ModelContainer, modelID: PersistentIdentifier) {
+        self.modelID = modelID
+        self._recognizer = StateObject(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
+        
     }
     
     var body: some View {
@@ -29,20 +33,18 @@ struct TranscriptionButtonView : View {
                 Text("Transcription")
                     .font(.headline)
                     .padding()
-                TextEditor(text: .constant(transcription))
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .cornerRadius(10)
+                ScrollView {
+                    Text(recognizer.transcription)
+                        .lineLimit(nil)
+                        .frame(maxWidth: .infinity)
+                }
                 HStack {
                     Button("Cancel") {
                         showTranscription.toggle()
                     }
                     .buttonStyle(PurpleButtonStyle())
                     Button("Copy transcript") {
-                        if self.transcription != "No transcription available. Either it's still loading or no speech was detected." {
+                        if recognizer.transcription != "No transcription available. Either it's still loading or no speech was detected." {
                             copy()
                             showTranscription.toggle()
                         } else {
@@ -56,10 +58,13 @@ struct TranscriptionButtonView : View {
                 }
             }
         }
+        .task {
+            await recognizer.transcribe(recordingID: modelID)
+        }
     }
     
     func copy() {
-        UIPasteboard.general.setValue(self.transcription, forPasteboardType: UTType.plainText.identifier)
+        UIPasteboard.general.setValue(self.recognizer.transcription, forPasteboardType: UTType.plainText.identifier)
         return
     }
     
