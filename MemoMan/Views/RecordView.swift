@@ -46,7 +46,7 @@ struct RecordView: View {
                                 .imageScale(.medium)
                                 .frame(width: g.size.width/4, height: g.size.width/4)
                                 .foregroundColor(.white)
-                                .background(model.fadeInOut ? Color.red : Color(red: 166/255, green: 104/255, blue: 247/255))
+                                .background(model.fadeInOut ? Color.red : Color("MemoManPurple"))
                                 .clipShape(Circle())
                         }
                         .overlay(

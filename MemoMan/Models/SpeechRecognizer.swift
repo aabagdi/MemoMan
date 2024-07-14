@@ -10,7 +10,6 @@ import Speech
 import SwiftData
 import SwiftUI
 
-@MainActor
 class SpeechRecognizer : ObservableObject {
     let recognizer : SFSpeechRecognizer?
     let modelContext : ModelContext
@@ -21,6 +20,7 @@ class SpeechRecognizer : ObservableObject {
         self.modelContext = ModelContext(modelContainer)
     }
     
+    @MainActor
     func transcribe(recordingID: PersistentIdentifier) async {
         guard let recognizer = recognizer else {
             print("Recognizer not available")

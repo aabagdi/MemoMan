@@ -36,7 +36,7 @@ struct TranscriptionButtonView : View {
                     .padding()
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(red: 166/255, green: 104/255, blue: 247/255), lineWidth: 1)
+                            .stroke(Color("MemoManPurple"))
                             .padding()
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 10))

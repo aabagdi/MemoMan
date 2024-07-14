@@ -13,7 +13,7 @@ struct PurpleButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity)
             .padding(EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32))
             .foregroundStyle(.white)
-            .background(Color(red: 166/255, green: 104/255, blue: 247/255))
+            .background(Color("MemoManPurple"))
             .clipShape(Capsule())
             .scaleEffect(configuration.isPressed ? 0.90 : 1)
             .animation(.easeInOut, value: configuration.isPressed)
