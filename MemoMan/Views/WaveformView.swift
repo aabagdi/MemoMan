@@ -17,9 +17,9 @@ struct WaveformView: View {
     let minHeight: CGFloat = 2.5
     
     var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            let height = min(geometry.size.height, maxHeight)
+        GeometryReader { g in
+            let width = g.size.width
+            let height = min(g.size.height, maxHeight)
             let barWidth = width / CGFloat(samples.count)
             
             ZStack(alignment: .leading) {
@@ -32,9 +32,6 @@ struct WaveformView: View {
                     }
                 }
             }
-            .background(GeometryReader {
-                Color.clear.preference(key: SizePreferenceKey.self, value: $0.size)
-            })
             .gesture(DragGesture(minimumDistance: 0)
                         .onChanged { value in
                             let newProgress = max(0, min(Double(value.location.x / width), 1))
