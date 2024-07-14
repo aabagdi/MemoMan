@@ -18,7 +18,7 @@ struct FileNameButtonView : View {
     @State private var newFilename = ""
     
     var body: some View {
-        Button("Change file name") {
+        Button("Rename") {
             showingAlert.toggle()
         }
         .buttonStyle(PurpleButtonStyle())

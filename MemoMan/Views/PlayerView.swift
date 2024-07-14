@@ -33,6 +33,7 @@ struct PlayerView: View {
                 VStack {
                     if !viewModel.samples.isEmpty {
                         VStack {
+                            Spacer() // Spacer to push the waveform down
                             WaveformView(samples: viewModel.samples, progress: Binding(
                                 get: { sliderValue / viewModel.duration },
                                 set: { newValue in
@@ -45,9 +46,7 @@ struct PlayerView: View {
                                 } else {
                                     viewModel.play()
                                 }
-                            }, scaleFactor: 2.0)
-                            .frame(height: 200) // Adjust the height of the waveform
-                            .padding()
+                            }, scaleFactor: 2.0, maxHeight: 500.0)
                         }
                     }
 
@@ -70,11 +69,14 @@ struct PlayerView: View {
                             }
                         Spacer()
                     }
-                    Spacer()
+                    .padding(.top)
+
                     HStack {
                         FileNameButtonView(recording: recording)
                         TranscriptionButtonView(modelContainer: try! ModelContainer(for: Recording.self), modelID: recording.persistentModelID)
                     }
+                    .padding(.top)
+
                     Text("Created on \(recording.date ?? "")")
                         .font(.footnote)
                         .foregroundStyle(.gray)
@@ -111,5 +113,13 @@ struct PlayerView: View {
         } else {
             return String(format: "%02d:%02d", minutes, seconds)
         }
+    }
+}
+
+struct SizePreferenceKey: PreferenceKey {
+    typealias Value = CGSize
+    static let defaultValue = CGSize.zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = nextValue()
     }
 }

@@ -23,7 +23,7 @@ struct TranscriptionButtonView : View {
     }
     
     var body: some View {
-        Button("Recording transcript") {
+        Button("Transcript") {
             showTranscription.toggle()
         }
         .buttonStyle(PurpleButtonStyle())

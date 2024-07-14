@@ -13,11 +13,13 @@ struct WaveformView: View {
     let duration: TimeInterval
     let onEditingChanged: (Bool) -> Void
     let scaleFactor: CGFloat
+    let maxHeight: CGFloat
+    let minHeight: CGFloat = 2.5
     
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
-            let height = geometry.size.height
+            let height = min(geometry.size.height, maxHeight)
             let barWidth = width / CGFloat(samples.count)
             
             ZStack(alignment: .leading) {
@@ -26,10 +28,13 @@ struct WaveformView: View {
                         let sample = samples[index]
                         RoundedRectangle(cornerRadius: 10)
                             .fill(index < Int(CGFloat(samples.count) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
-                            .frame(width: barWidth, height: min(CGFloat(sample) * height * scaleFactor, height)) // Apply the scaling factor
+                            .frame(width: barWidth, height: max(min(CGFloat(sample) * height * scaleFactor, height), minHeight)) // Apply the scaling factor and ensure minimum height
                     }
                 }
             }
+            .background(GeometryReader {
+                Color.clear.preference(key: SizePreferenceKey.self, value: $0.size)
+            })
             .gesture(DragGesture(minimumDistance: 0)
                         .onChanged { value in
                             let newProgress = max(0, min(Double(value.location.x / width), 1))
@@ -41,7 +46,6 @@ struct WaveformView: View {
                         }
             )
         }
+        .frame(maxHeight: maxHeight)
     }
 }
-
-
