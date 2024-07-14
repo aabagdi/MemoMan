@@ -12,7 +12,6 @@ import SwiftData
     var id: UUID?
     var name : String?
     var date : String?
-    var transcript : String? = nil
     
     init(name: String) {
         self.id = UUID()

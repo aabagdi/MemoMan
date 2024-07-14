@@ -78,15 +78,26 @@ extension PlayerView {
                 print("Error reading audio file: \(error.localizedDescription)")
                 return []
             }
-            let channelData = buffer.floatChannelData![0]
+            let channelData1 = buffer.floatChannelData?[0]
+            let channelData2 = buffer.floatChannelData?[1]
             var samples: [Float] = []
             let sampleCount = min(frameCount, 100)
             let sampleStride = frameCount / sampleCount
             for i in stride(from: 0, to: frameCount, by: sampleStride) {
-                let sample = abs(channelData[i])
-                samples.append(sample)
+                if channelData2 != nil {
+                    let sample = abs(floatAverage(channelData1?[i] ?? 0.0, channelData2?[i] ?? 0.0))
+                    samples.append(sample)
+                }
+                else {
+                    let sample = abs(channelData1?[i] ?? 0.0)
+                    samples.append(sample)
+                }
             }
             return samples
+        }
+        
+        private func floatAverage(_ number1: Float, _ number2: Float) -> Float {
+            return (number1 + number2) / Float(2)
         }
     }
 }

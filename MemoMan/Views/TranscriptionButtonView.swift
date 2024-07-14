@@ -27,7 +27,7 @@ struct TranscriptionButtonView : View {
             showTranscription.toggle()
         }
         .buttonStyle(PurpleButtonStyle())
-        .sheet(isPresented: $showTranscription) {
+        .fullScreenCover(isPresented: $showTranscription) {
             VStack {
                 Text("Transcript")
                     .font(.headline)
@@ -36,7 +36,7 @@ struct TranscriptionButtonView : View {
                     .padding()
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color("MemoManPurple"))
+                            .stroke(Color.gray)
                             .padding()
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -45,8 +45,14 @@ struct TranscriptionButtonView : View {
                         .lineLimit(nil)
                         .frame(maxWidth: .infinity)
                 }*/
-                VStack {
-                    Button("Copy transcript") {
+                HStack {
+                    Button("Cancel") {
+                        showTranscription.toggle()
+                    }
+                    .padding()
+                    .buttonStyle(PurpleButtonStyle())
+                    
+                    Button("Copy") {
                         if recognizer.transcription != "No transcription available. Either it's still loading or no speech was detected." {
                             copy()
                             showTranscription.toggle()
@@ -59,11 +65,6 @@ struct TranscriptionButtonView : View {
                     .alert("No transcription available to copy!", isPresented: $showCopyAlert) {
                         Button("OK", role: .cancel) { showTranscription.toggle() }
                     }
-                    Button("Cancel") {
-                        showTranscription.toggle()
-                    }
-                    .padding()
-                    .buttonStyle(PurpleButtonStyle())
                 }
             }
         }
