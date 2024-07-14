@@ -6,6 +6,7 @@ struct FilesView: View {
     var body: some View {
         FilesListView(searchString: searchString, modelContainer: try! ModelContainer(for: Recording.self))
             .searchable(text: $searchString)
+            .autocorrectionDisabled()
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack {
