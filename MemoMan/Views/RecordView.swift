@@ -51,7 +51,7 @@ struct RecordView: View {
                         }
                         .overlay(
                             Circle()
-                                .stroke(model.isRecording ? Color.white : Color(red: 166/255, green: 104/255, blue: 247/255), lineWidth: 3)
+                                .stroke(model.isRecording ? Color.white : Color("MemoManPurple"), lineWidth: 3)
                                 .scaleEffect(model.isRecording ? 2.4 : model.animationAmount)
                                 .opacity(model.isRecording ? 0 : 2 - model.animationAmount)
                                 .animation(model.isRecording ? Animation.easeOut(duration: model.animationAmount)
