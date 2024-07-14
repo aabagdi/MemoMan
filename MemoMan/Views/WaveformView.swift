@@ -28,7 +28,7 @@ struct WaveformView: View {
                         let sample = samples[index]
                         RoundedRectangle(cornerRadius: 10)
                             .fill(index < Int(CGFloat(samples.count) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
-                            .frame(width: barWidth, height: max(min(CGFloat(sample) * height * scaleFactor, height), minHeight)) // Apply the scaling factor and ensure minimum height
+                            .frame(width: barWidth, height: max(min(CGFloat(sample) * height * scaleFactor, height), minHeight))
                     }
                 }
             }

@@ -46,7 +46,7 @@ struct PlayerView: View {
                                 } else {
                                     viewModel.play()
                                 }
-                            }, scaleFactor: 2.0, maxHeight: 500.0)
+                            }, scaleFactor: 5.0, maxHeight: 500.0)
                         }
                     }
 
