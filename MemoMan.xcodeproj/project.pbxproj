@@ -21,6 +21,7 @@
 		3951A91429E13F6200C80C26 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3951A91329E13F6200C80C26 /* Preview Assets.xcassets */; };
 		39573A5F2C251AB4008B13D8 /* FileNameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */; };
 		39573A612C2606DB008B13D8 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39573A602C2606DB008B13D8 /* PlayerViewModel.swift */; };
+		3989D9202C43B162005D77BA /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3989D91F2C43B162005D77BA /* WaveformView.swift */; };
 		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
 		398C8A072AF1F49B009848AF /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordViewModel.swift */; };
 		39A013FA2C31EB0400BE7BBF /* Recording++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A013F92C31EB0400BE7BBF /* Recording++.swift */; };
@@ -49,6 +50,7 @@
 		3951A91329E13F6200C80C26 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNameButtonView.swift; sourceTree = "<group>"; };
 		39573A602C2606DB008B13D8 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
+		3989D91F2C43B162005D77BA /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		39A013F92C31EB0400BE7BBF /* Recording++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording++.swift"; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				3951A90E29E13F6100C80C26 /* RecordView.swift */,
 				39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */,
 				39E55A0B2C3A403500FBA9C3 /* TranscriptionButtonView.swift */,
+				3989D91F2C43B162005D77BA /* WaveformView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3989D9202C43B162005D77BA /* WaveformView.swift in Sources */,
 				393E57AB2C372FD800690315 /* SettingsView.swift in Sources */,
 				39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */,
 				39E55A0E2C3A473600FBA9C3 /* PurpleButtonStyle.swift in Sources */,

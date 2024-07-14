@@ -1,16 +1,21 @@
 import Foundation
 import Combine
+import AVFoundation
 
 extension PlayerView {
     @MainActor
     class PlayerViewModel: ObservableObject {
         @Published var currentTime: TimeInterval = 0
+        @Published var samples: [Float] = []
+        
         var player: Player
+        var recording: Recording
         private var cancellables = Set<AnyCancellable>()
         private var seekingSubject = PassthroughSubject<TimeInterval, Never>()
         
-        init(player: Player) {
+        init(player: Player, recording: Recording) {
             self.player = player
+            self.recording = recording
             self.player.objectWillChange
                 .sink { [weak self] in
                     self?.currentTime = self?.player.currentTime ?? 0
@@ -23,6 +28,8 @@ extension PlayerView {
                     self?.player.seek(to: time)
                 }
                 .store(in: &cancellables)
+            
+            loadAudioSamples()
         }
         
         func play() {
@@ -43,6 +50,43 @@ extension PlayerView {
         
         var duration: TimeInterval {
             player.duration
+        }
+        
+        private func loadAudioSamples() {
+            let url = recording.fileURL
+            if let audioFile = loadAudioFile(url: url) {
+                samples = processSamples(from: audioFile)
+            }
+        }
+        
+        private func loadAudioFile(url: URL) -> AVAudioFile? {
+            do {
+                let audioFile = try AVAudioFile(forReading: url)
+                return audioFile
+            } catch {
+                print("Error loading audio file: \(error.localizedDescription)")
+                return nil
+            }
+        }
+        
+        private func processSamples(from audioFile: AVAudioFile) -> [Float] {
+            let frameCount = Int(audioFile.length)
+            let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCount))!
+            do {
+                try audioFile.read(into: buffer)
+            } catch {
+                print("Error reading audio file: \(error.localizedDescription)")
+                return []
+            }
+            let channelData = buffer.floatChannelData![0]
+            var samples: [Float] = []
+            let sampleCount = min(frameCount, 100)
+            let sampleStride = frameCount / sampleCount
+            for i in stride(from: 0, to: frameCount, by: sampleStride) {
+                let sample = abs(channelData[i])
+                samples.append(sample)
+            }
+            return samples
         }
     }
 }

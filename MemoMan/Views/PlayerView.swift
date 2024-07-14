@@ -13,7 +13,7 @@ struct PlayerView: View {
         self.recording = recording
         self._openedGroup = openedGroup
         let player = Player(recording: recording)
-        self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player))
+        self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player, recording: recording))
     }
 
     var body: some View {
@@ -31,17 +31,24 @@ struct PlayerView: View {
                 }
             )) {
                 VStack {
-                    Slider(value: $sliderValue, in: 0...viewModel.duration, onEditingChanged: { editing in
-                        if editing {
-                            viewModel.pause()
-                        } else {
-                            viewModel.seek(to: sliderValue)
-                            viewModel.play()
+                    if !viewModel.samples.isEmpty {
+                        VStack {
+                            WaveformView(samples: viewModel.samples, progress: Binding(
+                                get: { sliderValue / viewModel.duration },
+                                set: { newValue in
+                                    sliderValue = newValue * viewModel.duration
+                                    viewModel.seek(to: sliderValue)
+                                }
+                            ), duration: viewModel.duration, onEditingChanged: { isEditing in
+                                if isEditing {
+                                    viewModel.pause()
+                                } else {
+                                    viewModel.play()
+                                }
+                            }, scaleFactor: 2.0)
+                            .frame(height: 200) // Adjust the height of the waveform
+                            .padding()
                         }
-                    })
-                    .padding()
-                    .onChange(of: viewModel.currentTime) {
-                        sliderValue = viewModel.currentTime
                     }
 
                     HStack {
@@ -82,6 +89,9 @@ struct PlayerView: View {
                     viewModel.stop()
                     resetSlider()
                 }
+            }
+            .onReceive(viewModel.$currentTime) { newValue in
+                sliderValue = newValue
             }
         }
     }
