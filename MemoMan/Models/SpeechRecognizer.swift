@@ -10,17 +10,18 @@ import Speech
 import SwiftData
 import SwiftUI
 
-class SpeechRecognizer : ObservableObject {
+@MainActor
+@Observable
+class SpeechRecognizer {
     let recognizer : SFSpeechRecognizer?
     let modelContext : ModelContext
-    @Published var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
+    var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
     
     init(modelContainer: ModelContainer) {
         self.recognizer = SFSpeechRecognizer()
         self.modelContext = ModelContext(modelContainer)
     }
     
-    @MainActor
     func transcribe(recordingID: PersistentIdentifier) async {
         guard let recognizer = recognizer else {
             print("Recognizer not available")

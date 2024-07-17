@@ -10,13 +10,14 @@ import SwiftUI
 import Speech
 
 extension RecordView {
-    @MainActor 
-    class RecordViewModel : ObservableObject {
-        @Published var isRecording : Bool = false
-        @Published var fadeInOut : Bool = false
-        @Published var showFiles : Bool = false
-        @Published var showSettings : Bool = false
-        @Published var showAlert : Bool = false
-        @Published var animationAmount : Double = 1.0
+    @MainActor
+    @Observable
+    class RecordViewModel {
+        var isRecording : Bool = false
+        var fadeInOut : Bool = false
+        var showFiles : Bool = false
+        var showSettings : Bool = false
+        var showAlert : Bool = false
+        var animationAmount : Double = 1.0
     }
 }

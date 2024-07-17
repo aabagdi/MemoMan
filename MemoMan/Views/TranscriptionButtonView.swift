@@ -14,11 +14,11 @@ struct TranscriptionButtonView : View {
     var modelID : PersistentIdentifier
     @State private var showTranscription : Bool = false
     @State private var showCopyAlert : Bool = false
-    @StateObject private var recognizer : SpeechRecognizer
+    @State private var recognizer : SpeechRecognizer
     
     init(modelContainer: ModelContainer, modelID: PersistentIdentifier) {
         self.modelID = modelID
-        self._recognizer = StateObject(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
+        self._recognizer = State(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
         
     }
     

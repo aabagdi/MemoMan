@@ -12,11 +12,9 @@ struct FilesListView: View {
     var searchString : String
     @Query var recordings : [Recording]
     @State private var openedGroup : UUID? = nil
-    @StateObject private var recognizer : SpeechRecognizer
     @Environment(\.modelContext) var modelContext
     
     init(searchString: String, modelContainer: ModelContainer) {
-        self._recognizer = StateObject(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
         self.searchString = searchString
         _recordings = Query(filter: #Predicate {
             if searchString.isEmpty {

@@ -13,7 +13,7 @@ import UIKit
 
 struct RecordView: View {
     @StateObject var recorder : Recorder = Recorder()
-    @StateObject private var model : RecordViewModel = RecordViewModel()
+    @State private var model : RecordViewModel = RecordViewModel()
     
     @State private var deviceOrientation : UIInterfaceOrientation = .portrait
 
