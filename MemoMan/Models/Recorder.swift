@@ -2,9 +2,11 @@ import Foundation
 import UIKit
 import AVFoundation
 import SwiftData
+import SwiftUI
 
 @MainActor
-final class Recorder: NSObject, ObservableObject, @preconcurrency AVAudioRecorderDelegate {
+@Observable
+final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     // MARK: - Properties
     var startTime: Date?
     private var audioRecorder: AVAudioRecorder!
@@ -12,7 +14,7 @@ final class Recorder: NSObject, ObservableObject, @preconcurrency AVAudioRecorde
     private var recording: Recording?
     private var meteringWorkItem: DispatchWorkItem?
 
-    @Published var avgPower : Float = 0.0
+    var avgPower : Float = 0.0
     
     private var isStereoSupported: Bool = false {
         didSet {
