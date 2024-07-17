@@ -117,7 +117,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     }
     
     //MARK: update orientation
-    public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, interfaceOrientation: UIInterfaceOrientation) throws {
+    public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, interfaceOrientation: UIInterfaceOrientation) async throws {
         let session = AVAudioSession.sharedInstance()
         guard let preferredInput = session.preferredInput ?? session.availableInputs?.first,
               let dataSources = preferredInput.dataSources,

@@ -145,7 +145,7 @@ struct RecordView: View {
                     // Privacy & Security section of the Settings app.
                     model.showAlert.toggle()
                 }
-                try recorder.updateOrientation(interfaceOrientation: deviceOrientation)
+                try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
@@ -155,7 +155,7 @@ struct RecordView: View {
                         Task {
                             do {
                                 if !model.isRecording {
-                                    try recorder.updateOrientation(interfaceOrientation: deviceOrientation)
+                                    try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
                                 }
                             } catch {
                                 throw Errors.UnableToUpdateOrientation
