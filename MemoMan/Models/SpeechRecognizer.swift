@@ -44,7 +44,7 @@ class SpeechRecognizer {
                 var didResume = false
                 
                 recognizer.recognitionTask(with: request) { (result, error) in
-                    if let error = error {
+                    if let error {
                         print("Recognition error: \(error)")
                         if !didResume {
                             continuation.resume()
@@ -53,7 +53,7 @@ class SpeechRecognizer {
                         return
                     }
                     
-                    guard let result = result else {
+                    guard let result else {
                         print("No speech detected")
                         if !didResume {
                             continuation.resume()
