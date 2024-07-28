@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct WaveformView: View {
-    let samples: [Float]
+    let recording : Recording
     @Binding var progress: Double
-    let duration: TimeInterval
-    let onEditingChanged: (Bool) -> Void
-    let scaleFactor: CGFloat
-    let maxHeight: CGFloat
-    let minHeight: CGFloat = 2.5
+    let duration : TimeInterval
+    let onEditingChanged : (Bool) -> Void
+    let scaleFactor : CGFloat
+    let maxHeight : CGFloat
+    let minHeight : CGFloat = 2.5
     
     var body: some View {
         GeometryReader { g in
             let width = g.size.width
             let height = min(g.size.height, maxHeight)
-            let barWidth = width / CGFloat(samples.count)
+            let barWidth = width / CGFloat(recording.samples?.count ?? 0)
             
             ZStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 0) {
-                    ForEach(samples.indices, id: \.self) { index in
-                        let sample = samples[index]
+                    ForEach(recording.samples?.indices ?? 0..<1, id: \.self) { index in
+                        let sample = recording.samples?[index]
                         RoundedRectangle(cornerRadius: 3)
-                            .fill(index < Int(CGFloat(samples.count) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
-                            .frame(width: barWidth, height: max(min(CGFloat(sample) * height * scaleFactor, height), minHeight))
+                            .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
+                            .frame(width: barWidth, height: max(min(CGFloat(sample ?? 0.0) * height * scaleFactor, height), minHeight))
                     }
                 }
             }

@@ -31,10 +31,10 @@ struct PlayerView: View {
                 }
             )) {
                 VStack {
-                    if !viewModel.samples.isEmpty {
+                    if !(recording.samples?.isEmpty ?? false) {
                         VStack {
                             Spacer()
-                            WaveformView(samples: viewModel.samples, progress: Binding(
+                            WaveformView(recording: recording, progress: Binding(
                                 get: { sliderValue / viewModel.duration },
                                 set: { newValue in
                                     sliderValue = newValue * viewModel.duration

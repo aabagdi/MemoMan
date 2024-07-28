@@ -6,7 +6,6 @@ extension PlayerView {
     @MainActor
     class PlayerViewModel: ObservableObject {
         @Published var currentTime: TimeInterval = 0
-        @Published var samples: [Float] = []
         
         var player: Player
         var recording: Recording
@@ -55,7 +54,9 @@ extension PlayerView {
         private func loadAudioSamples() {
             let url = recording.fileURL
             if let audioFile = loadAudioFile(url: url) {
-                samples = processSamples(from: audioFile)
+                if recording.samples == nil {
+                    recording.samples = processSamples(from: audioFile)
+                }
             }
         }
         
