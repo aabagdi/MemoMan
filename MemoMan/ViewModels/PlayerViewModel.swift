@@ -70,32 +70,42 @@ extension PlayerView {
         }
         
         private func processSamples(from audioFile: AVAudioFile) -> [Float] {
+            let sampleCount = 128
             let frameCount = Int(audioFile.length)
-            let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCount))!
+            let sampleStride = frameCount / sampleCount
+            let frameCapacity = min(sampleStride, 1024)
+            var samples: [Float] = []
+
             do {
-                try audioFile.read(into: buffer)
+                if let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCapacity)) {
+                    while audioFile.framePosition < audioFile.length {
+                        try audioFile.read(into: buffer)
+                        let channelData1 = buffer.floatChannelData?[0]
+                        let channelData2 = buffer.floatChannelData?[1]
+                        let framesRead = Int(buffer.frameLength)
+                        
+                        for i in stride(from: 0, to: framesRead, by: sampleStride) {
+                            if channelData2 != nil {
+                                let sample = abs(floatAverage(channelData1?[i] ?? 0.0, channelData2?[i] ?? 0.0))
+                                samples.append(sample)
+                            } else {
+                                let sample = abs(channelData1?[i] ?? 0.0)
+                                samples.append(sample)
+                            }
+                        }
+                        
+                        if samples.count >= sampleCount {
+                            break
+                        }
+                    }
+                }
             } catch {
                 print("Error reading audio file: \(error.localizedDescription)")
-                return []
             }
-            let channelData1 = buffer.floatChannelData?[0]
-            let channelData2 = buffer.floatChannelData?[1]
-            var samples: [Float] = []
-            let sampleCount = min(frameCount, 100)
-            let sampleStride = frameCount / sampleCount
-            for i in stride(from: 0, to: frameCount, by: sampleStride) {
-                if channelData2 != nil {
-                    let sample = abs(floatAverage(channelData1?[i] ?? 0.0, channelData2?[i] ?? 0.0))
-                    samples.append(sample)
-                }
-                else {
-                    let sample = abs(channelData1?[i] ?? 0.0)
-                    samples.append(sample)
-                }
-            }
+
             return samples
         }
-        
+
         private func floatAverage(_ number1: Float, _ number2: Float) -> Float {
             return (number1 + number2) / Float(2)
         }

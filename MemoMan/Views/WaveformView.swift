@@ -26,7 +26,7 @@ struct WaveformView: View {
                 HStack(alignment: .center, spacing: 0) {
                     ForEach(samples.indices, id: \.self) { index in
                         let sample = samples[index]
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 3)
                             .fill(index < Int(CGFloat(samples.count) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
                             .frame(width: barWidth, height: max(min(CGFloat(sample) * height * scaleFactor, height), minHeight))
                     }

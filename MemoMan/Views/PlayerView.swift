@@ -33,7 +33,7 @@ struct PlayerView: View {
                 VStack {
                     if !viewModel.samples.isEmpty {
                         VStack {
-                            Spacer() // Spacer to push the waveform down
+                            Spacer()
                             WaveformView(samples: viewModel.samples, progress: Binding(
                                 get: { sliderValue / viewModel.duration },
                                 set: { newValue in

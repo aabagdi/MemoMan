@@ -41,22 +41,33 @@ class SpeechRecognizer {
             let request = SFSpeechURLRecognitionRequest(url: url)
             
             await withCheckedContinuation { continuation in
+                var didResume = false
+                
                 recognizer.recognitionTask(with: request) { (result, error) in
                     if let error = error {
                         print("Recognition error: \(error)")
-                        continuation.resume()
+                        if !didResume {
+                            continuation.resume()
+                            didResume = true
+                        }
                         return
                     }
                     
                     guard let result = result else {
                         print("No speech detected")
-                        continuation.resume()
+                        if !didResume {
+                            continuation.resume()
+                            didResume = true
+                        }
                         return
                     }
                     
                     if result.isFinal {
                         self.transcription = result.bestTranscription.formattedString
-                        continuation.resume()
+                        if !didResume {
+                            continuation.resume()
+                            didResume = true
+                        }
                     }
                 }
             }
