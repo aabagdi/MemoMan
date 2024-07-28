@@ -75,29 +75,37 @@ extension PlayerView {
             let frameCount = Int(audioFile.length)
             let sampleStride = frameCount / sampleCount
             let frameCapacity = min(sampleStride, 1024)
-            var samples: [Float] = []
+            var samples = [Float](repeating: 0, count: sampleCount)
+
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCapacity)) else {
+                print("Failed to create AVAudioPCMBuffer")
+                return samples
+            }
+
+            let channelCount = Int(buffer.format.channelCount)
+            let bytesPerFrame = buffer.format.streamDescription.pointee.mBytesPerFrame
 
             do {
-                if let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCapacity)) {
-                    while audioFile.framePosition < audioFile.length {
-                        try audioFile.read(into: buffer)
-                        let channelData1 = buffer.floatChannelData?[0]
-                        let channelData2 = buffer.floatChannelData?[1]
-                        let framesRead = Int(buffer.frameLength)
+                var sampleIndex = 0
+                while audioFile.framePosition < audioFile.length && sampleIndex < sampleCount {
+                    try audioFile.read(into: buffer)
+                    let framesRead = Int(buffer.frameLength)
+                    
+                    guard let rawBuffer = buffer.audioBufferList.pointee.mBuffers.mData else {
+                        print("Failed to access raw audio buffer")
+                        break
+                    }
+                    
+                    for i in stride(from: 0, to: framesRead, by: sampleStride) {
+                        guard sampleIndex < sampleCount else { break }
                         
-                        for i in stride(from: 0, to: framesRead, by: sampleStride) {
-                            if channelData2 != nil {
-                                let sample = abs(floatAverage(channelData1?[i] ?? 0.0, channelData2?[i] ?? 0.0))
-                                samples.append(sample)
-                            } else {
-                                let sample = abs(channelData1?[i] ?? 0.0)
-                                samples.append(sample)
-                            }
+                        var sample: Float = 0
+                        for channel in 0..<channelCount {
+                            let offset = i * Int(bytesPerFrame) + channel * MemoryLayout<Float>.size
+                            sample += abs(rawBuffer.load(fromByteOffset: offset, as: Float.self))
                         }
-                        
-                        if samples.count >= sampleCount {
-                            break
-                        }
+                        samples[sampleIndex] = sample / Float(channelCount)
+                        sampleIndex += 1
                     }
                 }
             } catch {
@@ -105,10 +113,6 @@ extension PlayerView {
             }
 
             return samples
-        }
-
-        private func floatAverage(_ number1: Float, _ number2: Float) -> Float {
-            return (number1 + number2) / Float(2)
         }
     }
 }
