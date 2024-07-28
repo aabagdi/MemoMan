@@ -15,8 +15,8 @@ struct RecordView: View {
     @State var recorder : Recorder = Recorder()
     @State private var model : RecordViewModel = RecordViewModel()
     
-    @State private var deviceOrientation : UIInterfaceOrientation = .portrait
-
+    @State private var deviceOrientation : UIDeviceOrientation = .portrait
+    
     @Environment(\.modelContext) var modelContext
     
     var body: some View {
@@ -27,17 +27,14 @@ struct RecordView: View {
                         Circle()
                             .fill(Color(red: 255 / 255, green: 160 / 255, blue: 69 / 255))
                             .opacity(model.fadeInOut ? 0.2 : 0.0)
-                        //.frame(width: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width)/2.1 : g.size.width/4)
                             .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width), height: circleSize(for: recorder.avgPower, maxWidth: g.size.width))
                         Circle()
                             .fill(Color(red: 255 / 255, green: 157 / 255, blue: 115 / 255))
                             .opacity(model.fadeInOut ? 0.3 : 0.0)
-                        //.frame(width: model.fadeInOut ? (g.size.width)/2.50384615384: g.size.width/4, height: model.fadeInOut ? (g.size.width)/2.50384615384: g.size.width/4)
                             .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.9)
                         Circle()
                             .fill(Color(red: 255 / 255, green: 167 / 255, blue: 61 / 255))
                             .opacity(model.fadeInOut ? 0.5 : 0.0)
-                        //.frame(width: model.fadeInOut ? (g.size.width)/3.1 : g.size.width/4, height: model.fadeInOut ? (g.size.width)/3.1 : g.size.width/4)
                             .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.8, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.8)
                         
                         Button(action: {}) {
@@ -145,24 +142,22 @@ struct RecordView: View {
                     // Privacy & Security section of the Settings app.
                     model.showAlert.toggle()
                 }
-                try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
+                try await recorder.updateOrientation(deviceOrientation: deviceOrientation)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let orientation = windowScene.windows.first?.windowScene?.interfaceOrientation {
-                        deviceOrientation = orientation
-                        Task {
-                            do {
-                                if !model.isRecording {
-                                    try await recorder.updateOrientation(interfaceOrientation: deviceOrientation)
-                                }
-                            } catch {
-                                throw Errors.UnableToUpdateOrientation
-                            }
-                        }
+            let orientation = UIDevice.current.orientation
+            deviceOrientation = orientation
+            Task {
+                do {
+                    if !model.isRecording {
+                        try await recorder.updateOrientation(deviceOrientation: deviceOrientation)
                     }
+                } catch {
+                    throw Errors.UnableToUpdateOrientation
                 }
+            }
+        }
         .environment(\.modelContext, modelContext)
     }
 }

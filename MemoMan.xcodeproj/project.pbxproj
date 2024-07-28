@@ -10,7 +10,6 @@
 		390D49502AF5D2960033C879 /* FilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D494F2AF5D2960033C879 /* FilesView.swift */; };
 		390D49532AFB53460033C879 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D49522AFB53460033C879 /* PlayerView.swift */; };
 		390D49552AFB5ACE0033C879 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D49542AFB5ACE0033C879 /* Player.swift */; };
-		393E579D2C3367F700690315 /* UIInterfaceOrientation++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */; };
 		393E57AB2C372FD800690315 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57AA2C372FD800690315 /* SettingsView.swift */; };
 		393E57B12C38675800690315 /* FilesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57B02C38675800690315 /* FilesListView.swift */; };
 		393E57B92C39D9CA00690315 /* RecordView++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393E57B82C39D9CA00690315 /* RecordView++.swift */; };
@@ -24,6 +23,7 @@
 		3989D9202C43B162005D77BA /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3989D91F2C43B162005D77BA /* WaveformView.swift */; };
 		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
 		398C8A072AF1F49B009848AF /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordViewModel.swift */; };
+		399CEEA42C56DEF40012A712 /* UIDeviceOrientation++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */; };
 		39A013FA2C31EB0400BE7BBF /* Recording++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A013F92C31EB0400BE7BBF /* Recording++.swift */; };
 		39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */; };
 		39D7DBFE2BB73FD800EECAD9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7DBFD2BB73FD800EECAD9 /* Errors.swift */; };
@@ -37,7 +37,6 @@
 		390D494F2AF5D2960033C879 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
 		390D49522AFB53460033C879 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		390D49542AFB5ACE0033C879 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIInterfaceOrientation++.swift"; sourceTree = "<group>"; };
 		393E57AA2C372FD800690315 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		393E57B02C38675800690315 /* FilesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesListView.swift; sourceTree = "<group>"; };
 		393E57B82C39D9CA00690315 /* RecordView++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecordView++.swift"; sourceTree = "<group>"; };
@@ -53,6 +52,7 @@
 		3989D91F2C43B162005D77BA /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
+		399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDeviceOrientation++.swift"; sourceTree = "<group>"; };
 		39A013F92C31EB0400BE7BBF /* Recording++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording++.swift"; sourceTree = "<group>"; };
 		39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording+Transferable.swift"; sourceTree = "<group>"; };
 		39D7DBFD2BB73FD800EECAD9 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 			children = (
 				393E57B82C39D9CA00690315 /* RecordView++.swift */,
 				39A013F92C31EB0400BE7BBF /* Recording++.swift */,
-				393E579C2C3367F700690315 /* UIInterfaceOrientation++.swift */,
+				399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */,
 				39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */,
 				39E55A092C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift */,
 			);
@@ -260,11 +260,11 @@
 				393E57B12C38675800690315 /* FilesListView.swift in Sources */,
 				390D49552AFB5ACE0033C879 /* Player.swift in Sources */,
 				3951A90F29E13F6100C80C26 /* RecordView.swift in Sources */,
+				399CEEA42C56DEF40012A712 /* UIDeviceOrientation++.swift in Sources */,
 				393E57B92C39D9CA00690315 /* RecordView++.swift in Sources */,
 				3951A90D29E13F6100C80C26 /* MemoManApp.swift in Sources */,
 				39D7DBFE2BB73FD800EECAD9 /* Errors.swift in Sources */,
 				393EAA232AF48FFF0042C085 /* RecordingModel.swift in Sources */,
-				393E579D2C3367F700690315 /* UIInterfaceOrientation++.swift in Sources */,
 				39E55A0A2C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift in Sources */,
 				39573A612C2606DB008B13D8 /* PlayerViewModel.swift in Sources */,
 			);

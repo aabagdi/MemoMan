@@ -117,7 +117,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     }
     
     //MARK: update orientation
-    public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, interfaceOrientation: UIInterfaceOrientation) async throws {
+    public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, deviceOrientation: UIDeviceOrientation) async throws {
         let session = AVAudioSession.sharedInstance()
         guard let preferredInput = session.preferredInput ?? session.availableInputs?.first,
               let dataSources = preferredInput.dataSources,
@@ -130,7 +130,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
             try newDataSource.setPreferredPolarPattern(.stereo)
         }
         try preferredInput.setPreferredDataSource(newDataSource)
-        try session.setPreferredInputOrientation(interfaceOrientation.inputOrientation)
+        try session.setPreferredInputOrientation(deviceOrientation.inputOrientation)
     }
     
     //MARK: Audio metering
