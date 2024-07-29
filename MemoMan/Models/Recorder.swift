@@ -129,7 +129,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
             ?? dataSources.first { $0.orientation == .bottom }
             ?? dataSources.first
         
-        guard let newDataSource = newDataSource,
+        guard let newDataSource,
               let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
             throw Errors.UnableToUpdateOrientation
         }
@@ -151,7 +151,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     private func startMetering() {
         stopMetering()
         meteringWorkItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.updateMeters()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: self.meteringWorkItem!)
         }
