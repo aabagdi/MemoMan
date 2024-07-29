@@ -77,7 +77,7 @@ struct PlayerView: View {
                     }
                     .padding(.top)
 
-                    Text("Created on \(recording.date ?? "")")
+                    Text("Created on \(recording.getDateString())")
                         .font(.footnote)
                         .foregroundStyle(.gray)
                         .padding()

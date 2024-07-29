@@ -24,7 +24,7 @@
 		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
 		398C8A072AF1F49B009848AF /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordViewModel.swift */; };
 		399CEEA42C56DEF40012A712 /* UIDeviceOrientation++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */; };
-		39A013FA2C31EB0400BE7BBF /* Recording++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A013F92C31EB0400BE7BBF /* Recording++.swift */; };
+		39A013FA2C31EB0400BE7BBF /* RecordingModel++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A013F92C31EB0400BE7BBF /* RecordingModel++.swift */; };
 		39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */; };
 		39D7DBFE2BB73FD800EECAD9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7DBFD2BB73FD800EECAD9 /* Errors.swift */; };
 		39E55A082C3A345900FBA9C3 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E55A072C3A345900FBA9C3 /* SpeechRecognizer.swift */; };
@@ -53,7 +53,7 @@
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDeviceOrientation++.swift"; sourceTree = "<group>"; };
-		39A013F92C31EB0400BE7BBF /* Recording++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording++.swift"; sourceTree = "<group>"; };
+		39A013F92C31EB0400BE7BBF /* RecordingModel++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecordingModel++.swift"; sourceTree = "<group>"; };
 		39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording+Transferable.swift"; sourceTree = "<group>"; };
 		39D7DBFD2BB73FD800EECAD9 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		39E55A072C3A345900FBA9C3 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				393E57B82C39D9CA00690315 /* RecordView++.swift */,
-				39A013F92C31EB0400BE7BBF /* Recording++.swift */,
+				39A013F92C31EB0400BE7BBF /* RecordingModel++.swift */,
 				399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */,
 				39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */,
 				39E55A092C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift */,
@@ -254,7 +254,7 @@
 				398C8A052AF1F46F009848AF /* Recorder.swift in Sources */,
 				39E55A082C3A345900FBA9C3 /* SpeechRecognizer.swift in Sources */,
 				390D49532AFB53460033C879 /* PlayerView.swift in Sources */,
-				39A013FA2C31EB0400BE7BBF /* Recording++.swift in Sources */,
+				39A013FA2C31EB0400BE7BBF /* RecordingModel++.swift in Sources */,
 				390D49502AF5D2960033C879 /* FilesView.swift in Sources */,
 				39E55A0C2C3A403500FBA9C3 /* TranscriptionButtonView.swift in Sources */,
 				393E57B12C38675800690315 /* FilesListView.swift in Sources */,

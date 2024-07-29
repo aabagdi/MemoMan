@@ -4,7 +4,7 @@ import SwiftUI
 import Combine
 
 class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
-    var player: AVAudioPlayer?
+    var player : AVAudioPlayer?
     let objectWillChange = PassthroughSubject<Void, Never>()
     
     var isPlaying = false {

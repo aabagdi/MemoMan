@@ -8,15 +8,15 @@ import SwiftUI
 @Observable
 final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     // MARK: - Properties
-    var startTime: Date?
-    private var audioRecorder: AVAudioRecorder!
-    private var currentURL: URL?
-    private var recording: Recording?
-    private var meteringWorkItem: DispatchWorkItem?
+    var startTime : Date?
+    private var audioRecorder : AVAudioRecorder!
+    private var currentURL : URL?
+    private var recording : Recording?
+    private var meteringWorkItem : DispatchWorkItem?
 
     var avgPower : Float = 0.0
     
-    private var isStereoSupported: Bool = false {
+    private var isStereoSupported : Bool = false {
         didSet {
             try? setupAudioRecorder()
         }
@@ -26,7 +26,6 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     
     override init() {
         super.init()
-        
         do {
             try configureAudioSession()
             try enableMicrophone()
@@ -43,7 +42,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     private func enableMicrophone() throws {
         let audioSession = AVAudioSession.sharedInstance()
         let portName = UserDefaults.standard.string(forKey: "inputSource") ?? "iPhone Microphone"
-        let preferredInput = getAVAudioPortDesc(portName: portName)
+        let preferredInput = getAVAudioPortDescription(portName: portName)
         
         do {
             try audioSession.setPreferredInput(preferredInput)
@@ -117,20 +116,38 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     }
     
     //MARK: update orientation
-    public func updateOrientation(withDataSourceOrientation orientation: AVAudioSession.Orientation = .front, deviceOrientation: UIDeviceOrientation) async throws {
+    public func updateOrientation(deviceOrientation: UIDeviceOrientation) async throws {
         let session = AVAudioSession.sharedInstance()
         guard let preferredInput = session.preferredInput ?? session.availableInputs?.first,
-              let dataSources = preferredInput.dataSources,
-              let newDataSource = dataSources.first(where: { $0.orientation == orientation }),
-              let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
-            return
+              let dataSources = preferredInput.dataSources else {
+            throw Errors.UnableToUpdateOrientation
         }
+        
+        let microphoneOrientation = deviceOrientation.microphoneOrientation
+        
+        // Try to find the exact match first, then fall back to other orientations
+        let newDataSource = dataSources.first { $0.orientation == microphoneOrientation }
+            ?? dataSources.first { $0.orientation == .front }
+            ?? dataSources.first { $0.orientation == .back }
+            ?? dataSources.first { $0.orientation == .bottom }
+            ?? dataSources.first
+        
+        guard let newDataSource = newDataSource,
+              let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
+            throw Errors.UnableToUpdateOrientation
+        }
+        
         isStereoSupported = supportedPolarPatterns.contains(.stereo)
         if isStereoSupported {
             try newDataSource.setPreferredPolarPattern(.stereo)
+        } else {
+            try newDataSource.setPreferredPolarPattern(.omnidirectional)
         }
+        
         try preferredInput.setPreferredDataSource(newDataSource)
-        try session.setPreferredInputOrientation(deviceOrientation.inputOrientation)
+        
+        let inputOrientation = deviceOrientation.inputOrientation
+        try session.setPreferredInputOrientation(inputOrientation)
     }
     
     //MARK: Audio metering
@@ -179,7 +196,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     }
     
     //MARK: Audio input functions
-    private func getAVAudioPortDesc(portName: String) -> AVAudioSessionPortDescription? {
+    private func getAVAudioPortDescription(portName: String) -> AVAudioSessionPortDescription? {
         let session = AVAudioSession.sharedInstance()
         let inputList = session.availableInputs ?? []
         for input in inputList {

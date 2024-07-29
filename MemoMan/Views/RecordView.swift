@@ -147,14 +147,15 @@ struct RecordView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             let orientation = UIDevice.current.orientation
-            deviceOrientation = orientation
+            guard orientation.isValidInterfaceOrientation else { return }
+            self.deviceOrientation = orientation
             Task {
                 do {
                     if !model.isRecording {
                         try await recorder.updateOrientation(deviceOrientation: deviceOrientation)
                     }
                 } catch {
-                    throw Errors.UnableToUpdateOrientation
+                    print("Failed to update orientation: \(error)")
                 }
             }
         }

@@ -22,4 +22,19 @@ extension UIDeviceOrientation {
             return .portrait
         }
     }
+    
+    var microphoneOrientation: AVAudioSession.Orientation {
+        switch self {
+        case .portrait:
+            return .front
+        case .portraitUpsideDown:
+            return .back
+        case .landscapeLeft:
+            return .right
+        case .landscapeRight:
+            return .left
+        default:
+            return .front
+        }
+    }
 }
