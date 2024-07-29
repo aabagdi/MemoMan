@@ -73,7 +73,6 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
             fatalError("Failed to create file URL")
         }
         self.currentURL = fileURL
-        print("Recording URL: \(fileURL)")
         
         do {
             let audioSettings: [String: Any] = [
@@ -99,7 +98,6 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
         guard audioRecorder != nil else {
             fatalError("Audio Recorder is not initialized")
         }
-        print("Starting recording...")
         startTime = Date()
         audioRecorder.record()
         startMetering()
@@ -111,7 +109,6 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
         }
         audioRecorder.stop()
         stopMetering()
-        print("Stopping recording...")
         saveRecording(modelContext: modelContext)
     }
     
@@ -182,14 +179,12 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     //MARK: save recording functions
     private func saveRecording(modelContext: ModelContext) {
         guard let newRecording = recording else {
-            print("Recording is nil")
             return
         }
         
         do {
             modelContext.insert(newRecording)
             try modelContext.save()
-            print("Recording saved: \(newRecording.name ?? "")")
         } catch {
             print("Failed to save recording: \(error)")
         }

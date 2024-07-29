@@ -23,8 +23,7 @@ class SpeechRecognizer {
     }
     
     func transcribe(recordingID: PersistentIdentifier) async {
-        guard let recognizer = recognizer else {
-            print("Recognizer not available")
+        guard let recognizer else {
             return
         }
         

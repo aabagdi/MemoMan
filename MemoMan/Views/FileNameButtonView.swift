@@ -46,7 +46,6 @@ struct FileNameButtonView : View {
         do {
             try FileManager.default.moveItem(at: oldURL, to: newURL)
         } catch {
-            print("\(error.localizedDescription)")
             newFilename = ""
             nameExistsAlert.toggle()
             return
@@ -57,6 +56,5 @@ struct FileNameButtonView : View {
         } catch {
             print("model context not saved")
         }
-        print("model context saved")
     }
 }

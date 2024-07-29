@@ -62,10 +62,8 @@ struct RecordView: View {
                             switch model.isRecording {
                             case true:
                                 try? recorder.record()
-                                print("recording")
                             case false:
                                 recorder.stop(modelContext: modelContext)
-                                print("stopped")
                             }
                         }))
                         .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)

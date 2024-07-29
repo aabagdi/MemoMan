@@ -65,7 +65,6 @@ extension PlayerView {
                 let audioFile = try AVAudioFile(forReading: url)
                 return audioFile
             } catch {
-                print("Error loading audio file: \(error.localizedDescription)")
                 return nil
             }
         }
@@ -78,7 +77,6 @@ extension PlayerView {
             var samples = [Float](repeating: 0, count: sampleCount)
 
             guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCapacity)) else {
-                print("Failed to create AVAudioPCMBuffer")
                 return samples
             }
 
@@ -92,7 +90,6 @@ extension PlayerView {
                     let framesRead = Int(buffer.frameLength)
                     
                     guard let rawBuffer = buffer.audioBufferList.pointee.mBuffers.mData else {
-                        print("Failed to access raw audio buffer")
                         break
                     }
                     

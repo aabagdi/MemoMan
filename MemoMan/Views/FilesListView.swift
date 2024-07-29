@@ -37,7 +37,6 @@ struct FilesListView: View {
                         PlayerView(openedGroup: $openedGroup, recording: recording)
                             .swipeActions(edge: .trailing) {
                                 Button("Delete", systemImage: "trash", role: .destructive) {
-                                    print("deleting recording")
                                     modelContext.delete(recording)
                                     do {
                                         try FileManager.default.removeItem(at: recording.fileURL)
