@@ -5,21 +5,20 @@
 //  Created by Aadit Bagdi on 7/6/24.
 //
 
-import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
 import SwiftData
 
-struct TranscriptionButtonView : View {
-    var modelID : PersistentIdentifier
-    @State private var showTranscription : Bool = false
-    @State private var showCopyAlert : Bool = false
-    @State private var recognizer : SpeechRecognizer
+struct TranscriptionButtonView: View {
+    let modelID: PersistentIdentifier
+    @State private var showTranscription = false
+    @State private var showCopyAlert = false
+    @State private var showNoCopyAlert = false
+    @State private var recognizer: SpeechRecognizer
     
     init(modelContainer: ModelContainer, modelID: PersistentIdentifier) {
         self.modelID = modelID
-        self._recognizer = State(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
-        
+        _recognizer = State(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
     }
     
     var body: some View {
@@ -28,54 +27,60 @@ struct TranscriptionButtonView : View {
         }
         .buttonStyle(PurpleButtonStyle())
         .fullScreenCover(isPresented: $showTranscription) {
-            VStack {
-                Text("Transcript")
-                    .font(.headline)
-                    .padding()
-                TextEditor(text: .constant(recognizer.transcription))
-                    .padding()
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray)
-                            .padding()
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                /*ScrollView {
-                    Text(recognizer.transcription)
-                        .lineLimit(nil)
-                        .frame(maxWidth: .infinity)
-                }*/
-                HStack {
-                    Button("Cancel") {
-                        showTranscription.toggle()
-                    }
-                    .padding()
-                    .buttonStyle(PurpleButtonStyle())
-                    
-                    Button("Copy") {
-                        if recognizer.transcription != "No transcription available. Either it's still loading or no speech was detected." {
-                            copy()
-                            showTranscription.toggle()
-                        } else {
-                            showCopyAlert.toggle()
-                        }
-                    }
-                    .buttonStyle(PurpleButtonStyle())
-                    .padding()
-                    .alert("No transcription available to copy!", isPresented: $showCopyAlert) {
-                        Button("OK", role: .cancel) { showTranscription.toggle() }
-                    }
-                }
-            }
+            TranscriptionView(
+                transcription: recognizer.transcription,
+                onDismiss: { showTranscription = false },
+                onCopy: copyTranscription
+            )
+        }
+        .alert("Transcript copied to clipboard!", isPresented: $showCopyAlert) {
+            Button("OK", role: .cancel) { }
+        }
+        .alert("No transcription available to copy!", isPresented: $showNoCopyAlert) {
+            Button("OK", role: .cancel) { }
         }
         .task {
             await recognizer.transcribe(recordingID: modelID)
         }
     }
     
-    func copy() {
-        UIPasteboard.general.setValue(self.recognizer.transcription, forPasteboardType: UTType.plainText.identifier)
-        return
+    private func copyTranscription() {
+        let noTranscriptionMessage = "No transcription available. Either it's still loading or no speech was detected."
+        
+        if recognizer.transcription != noTranscriptionMessage {
+            UIPasteboard.general.string = recognizer.transcription
+            showCopyAlert = true
+            showTranscription = false
+        } else {
+            showNoCopyAlert = true
+        }
     }
+}
+
+struct TranscriptionView: View {
+    let transcription: String
+    let onDismiss: () -> Void
+    let onCopy: () -> Void
     
+    var body: some View {
+        VStack {
+            Text("Transcript")
+                .font(.headline)
+                .padding()
+            TextEditor(text: .constant(transcription))
+                .padding()
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray)
+                        .padding()
+                }
+            HStack {
+                Button("Cancel", action: onDismiss)
+                    .buttonStyle(PurpleButtonStyle())
+                Button("Copy", action: onCopy)
+                    .buttonStyle(PurpleButtonStyle())
+            }
+            .padding()
+        }
+    }
 }

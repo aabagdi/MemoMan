@@ -6,8 +6,8 @@ struct PlayerView: View {
     var recording: Recording
     @Binding var openedGroup: UUID?
 
-    @StateObject private var viewModel: PlayerViewModel
-    @State private var sliderValue: TimeInterval = 0
+    @StateObject private var viewModel : PlayerViewModel
+    @State private var sliderValue : TimeInterval = 0
 
     init(openedGroup: Binding<UUID?>, recording: Recording) {
         self.recording = recording

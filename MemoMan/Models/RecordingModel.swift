@@ -17,7 +17,6 @@ import SwiftData
     init(name: String) {
         self.id = UUID()
         self.name = name
-        let now = Date.now
-        self.date = now
+        self.date = Date.now
     }
 }

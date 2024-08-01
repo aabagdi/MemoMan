@@ -13,7 +13,7 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     private var currentURL : URL?
     private var recording : Recording?
     private var meteringWorkItem : DispatchWorkItem?
-
+    
     var avgPower : Float = 0.0
     
     private var isStereoSupported : Bool = false {
@@ -103,13 +103,14 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
         startMetering()
     }
     
-    func stop(modelContext: ModelContext) {
-        guard audioRecorder != nil else {
-            fatalError("Audio Recorder is not initialized")
-        }
+    func stop(modelContext: ModelContext) throws {
         audioRecorder.stop()
         stopMetering()
-        saveRecording(modelContext: modelContext)
+        do {
+            try saveRecording(modelContext: modelContext)
+        } catch {
+            throw Errors.SaveFailed
+        }
     }
     
     //MARK: update orientation
@@ -124,10 +125,10 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
         
         // Try to find the exact match first, then fall back to other orientations
         let newDataSource = dataSources.first { $0.orientation == microphoneOrientation }
-            ?? dataSources.first { $0.orientation == .front }
-            ?? dataSources.first { $0.orientation == .back }
-            ?? dataSources.first { $0.orientation == .bottom }
-            ?? dataSources.first
+        ?? dataSources.first { $0.orientation == .front }
+        ?? dataSources.first { $0.orientation == .back }
+        ?? dataSources.first { $0.orientation == .bottom }
+        ?? dataSources.first
         
         guard let newDataSource,
               let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
@@ -177,17 +178,12 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
     
     
     //MARK: save recording functions
-    private func saveRecording(modelContext: ModelContext) {
-        guard let newRecording = recording else {
-            return
+    private func saveRecording(modelContext: ModelContext) throws {
+        guard let recording else {
+            throw Errors.InvalidRecording
         }
-        
-        do {
-            modelContext.insert(newRecording)
-            try modelContext.save()
-        } catch {
-            print("Failed to save recording: \(error)")
-        }
+        modelContext.insert(recording)
+        try modelContext.save()
     }
     
     //MARK: Audio input functions

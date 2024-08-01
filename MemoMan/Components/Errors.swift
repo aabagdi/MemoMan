@@ -7,18 +7,21 @@
 
 import Foundation
 
-enum Errors : Error {
-    case FailedToInitSessionError
-    case FailedToRecordError
+enum Errors: Error {
     case FailedToInitPlayer
+    case FailedToInitSessionError
     case FailedToPlayURL
+    case FailedToRecordError
     case FileDeletionError
     case FileRenameError
-    case UnableToCreateAudioRecorder
-    case UnableToSetMicrophone
-    case UnableToSelectDataSource
-    case UnableToUpdateOrientation
+    case InvalidModelContext
+    case InvalidRecording
     case NilSpeechRecognizer
-    case NotAuthorizedToRecognize
     case NotAuthorizedToRecord
+    case NotAuthorizedToRecognize
+    case SaveFailed
+    case UnableToCreateAudioRecorder
+    case UnableToSelectDataSource
+    case UnableToSetMicrophone
+    case UnableToUpdateOrientation
 }

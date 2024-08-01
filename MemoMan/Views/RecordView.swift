@@ -63,14 +63,14 @@ struct RecordView: View {
                             case true:
                                 try? recorder.record()
                             case false:
-                                recorder.stop(modelContext: modelContext)
+                                try? recorder.stop(modelContext: modelContext)
                             }
                         }))
                         .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
                             .onEnded({_ in
                                 if model.isRecording {
                                     model.isRecording.toggle()
-                                    recorder.stop(modelContext: modelContext)
+                                    try? recorder.stop(modelContext: modelContext)
                                 }
                                 try? recorder.record()
                                 model.isRecording.toggle()
@@ -78,7 +78,7 @@ struct RecordView: View {
                                 .sequenced(before: DragGesture(minimumDistance: 0)
                                     .onEnded({_ in
                                         model.isRecording.toggle()
-                                        recorder.stop(modelContext: modelContext)
+                                        try? recorder.stop(modelContext: modelContext)
                                     }))
                         )
                     }
@@ -99,7 +99,7 @@ struct RecordView: View {
                     Button {
                         if model.isRecording {
                             model.isRecording.toggle()
-                            recorder.stop(modelContext: modelContext)
+                            try? recorder.stop(modelContext: modelContext)
                         }
                         model.showFiles.toggle()
                     } label: {
@@ -113,7 +113,7 @@ struct RecordView: View {
                     Button {
                         if model.isRecording {
                             model.isRecording.toggle()
-                            recorder.stop(modelContext: modelContext)
+                            try? recorder.stop(modelContext: modelContext)
                         }
                         model.showSettings.toggle()
                         

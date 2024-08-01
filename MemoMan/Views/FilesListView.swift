@@ -9,58 +9,51 @@ import SwiftUI
 import SwiftData
 
 struct FilesListView: View {
-    var searchString : String
-    @Query var recordings : [Recording]
-    @State private var openedGroup : UUID? = nil
-    @Environment(\.modelContext) var modelContext
-    
-    init(searchString: String, modelContainer: ModelContainer) {
+    var searchString: String
+    @Query private var recordings: [Recording]
+    @State private var openedGroup: UUID? = nil
+    @Environment(\.modelContext) private var modelContext
+
+    init(searchString: String) {
         self.searchString = searchString
         _recordings = Query(filter: #Predicate {
-            if searchString.isEmpty {
-                return true
-            }
-            else {
-                return $0.name?.localizedStandardContains(searchString) ?? false
-            }
-        })
+            searchString.isEmpty || ($0.name?.localizedStandardContains(searchString) ?? false)
+        }, sort: [SortDescriptor(\Recording.date, order: .reverse)])
     }
-    
+
     var body: some View {
-        if recordings.isEmpty {
-            Text("No recordings found!")
-        }
-        else {
-            VStack {
+        Group {
+            if recordings.isEmpty {
+                Text("No recordings found!")
+            } else {
                 List {
-                    ForEach(recordings.sorted { $0.date! > $1.date! }, id: \.self) { recording in
+                    ForEach(recordings) { recording in
                         PlayerView(openedGroup: $openedGroup, recording: recording)
                             .swipeActions(edge: .trailing) {
-                                Button("Delete", systemImage: "trash", role: .destructive) {
-                                    modelContext.delete(recording)
-                                    do {
-                                        try FileManager.default.removeItem(at: recording.fileURL)
-                                    } catch {
-                                        print("Error removing item URL")
-                                    }
-                                    do {
-                                        try modelContext.save()
-                                    } catch {
-                                        print("Model Context not saving correctly")
-                                    }
+                                Button(role: .destructive) {
+                                    deleteRecording(recording)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                             .swipeActions(edge: .leading) {
                                 ShareLink(item: recording.fileURL) {
-                                    VStack {
-                                        Image(systemName: "square.and.arrow.up")
-                                        Text("Share")
-                                    }
+                                    Label("Share", systemImage: "square.and.arrow.up")
                                 }
                             }
                     }
                 }
             }
+        }
+    }
+
+    private func deleteRecording(_ recording: Recording) {
+        modelContext.delete(recording)
+        do {
+            try FileManager.default.removeItem(at: recording.fileURL)
+            try modelContext.save()
+        } catch {
+            print("Error deleting recording: \(error.localizedDescription)")
         }
     }
 }

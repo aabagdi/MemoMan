@@ -4,7 +4,7 @@ import SwiftData
 struct FilesView: View {
     @State private var searchString : String = ""
     var body: some View {
-        FilesListView(searchString: searchString, modelContainer: try! ModelContainer(for: Recording.self))
+        FilesListView(searchString: searchString)
             .searchable(text: $searchString)
             .autocorrectionDisabled()
             .toolbar {
