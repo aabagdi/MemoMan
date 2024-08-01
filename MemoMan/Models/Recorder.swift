@@ -6,11 +6,10 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
+final class Recorder: NSObject, AVAudioRecorderDelegate {
     // MARK: - Properties
     var startTime : Date?
     private var audioRecorder : AVAudioRecorder!
-    private var currentURL : URL?
     private var recording : Recording?
     private var meteringWorkItem : DispatchWorkItem?
     
@@ -72,7 +71,6 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
         guard let fileURL = recording?.fileURL else {
             fatalError("Failed to create file URL")
         }
-        self.currentURL = fileURL
         
         do {
             let audioSettings: [String: Any] = [
@@ -198,14 +196,15 @@ final class Recorder: NSObject, @preconcurrency AVAudioRecorderDelegate {
         return nil
     }
     
-    
     //MARK: Audio delegate functions
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if flag {
-            print("Recording finished.")
-        } else {
-            print("Recording failed.")
+    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        Task { @MainActor in
+            if flag {
+                print("Recording finished.")
+            } else {
+                print("Recording failed.")
+            }
+            self.recording = nil
         }
-        self.recording = nil
     }
 }

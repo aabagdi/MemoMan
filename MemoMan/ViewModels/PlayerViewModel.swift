@@ -6,7 +6,6 @@ extension PlayerView {
     @MainActor
     class PlayerViewModel: ObservableObject {
         @Published var currentTime : TimeInterval = 0
-        
         var player : Player
         var recording : Recording
         private var cancellables = Set<AnyCancellable>()

@@ -3,8 +3,8 @@ import AVFoundation
 import SwiftUI
 import Combine
 
-class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
-    var player : AVAudioPlayer?
+final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
+    private var player : AVAudioPlayer?
     let objectWillChange = PassthroughSubject<Void, Never>()
     
     var isPlaying = false {
