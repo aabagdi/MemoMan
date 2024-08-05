@@ -25,10 +25,12 @@ struct WaveformView: View {
             ZStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 0) {
                     ForEach(recording.samples?.indices ?? 0..<1, id: \.self) { index in
-                        let sample = recording.samples?[index]
+                        let sampleValue = recording.samples?[index] ?? 0.0
+                        let sampleHeight = max(min(CGFloat(sampleValue).isFinite ? CGFloat(sampleValue) * height * scaleFactor : minHeight, height), minHeight)
+                        
                         RoundedRectangle(cornerRadius: 3)
                             .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
-                            .frame(width: barWidth, height: max(min(CGFloat(sample ?? 0.0) * height * scaleFactor, height), minHeight))
+                            .frame(width: barWidth, height: sampleHeight)
                     }
                 }
             }
