@@ -7,11 +7,10 @@
 
 import Foundation
 import SwiftUI
-import Speech
 
 extension RecordView {
-    @MainActor
     @Observable
+    @MainActor
     class RecordViewModel {
         var isRecording : Bool = false
         var fadeInOut : Bool = false

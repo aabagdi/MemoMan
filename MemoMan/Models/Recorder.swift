@@ -101,11 +101,11 @@ final class Recorder: NSObject, AVAudioRecorderDelegate {
         startMetering()
     }
     
-    func stop(modelContext: ModelContext) throws {
+    func stop(modelContainer: ModelContainer) throws {
         audioRecorder.stop()
         stopMetering()
         do {
-            try saveRecording(modelContext: modelContext)
+            try saveRecording(modelContainer: modelContainer)
         } catch {
             throw Errors.SaveFailed
         }
@@ -176,7 +176,8 @@ final class Recorder: NSObject, AVAudioRecorderDelegate {
     
     
     //MARK: save recording functions
-    private func saveRecording(modelContext: ModelContext) throws {
+    private func saveRecording(modelContainer: ModelContainer) throws {
+        let modelContext = ModelContext(modelContainer)
         guard let recording else {
             throw Errors.InvalidRecording
         }

@@ -16,18 +16,23 @@ struct FilesListView: View {
 
     init(searchString: String) {
         self.searchString = searchString
-        _recordings = Query(filter: #Predicate {
-            searchString.isEmpty || ($0.name?.localizedStandardContains(searchString) ?? false)
+        _recordings = Query(filter: #Predicate<Recording> { recording in
+            if searchString.isEmpty {
+                return true
+            } else {
+                return recording.name?.localizedStandardContains(searchString) ?? false
+            }
         }, sort: [SortDescriptor(\Recording.date, order: .reverse)])
     }
 
     var body: some View {
-        Group {
-            if recordings.isEmpty {
-                Text("No recordings found!")
-            } else {
-                List {
-                    ForEach(recordings) { recording in
+        if recordings.isEmpty {
+            Text("No recordings available!")
+        }
+        else {
+            List {
+                ForEach(recordings) { recording in
+                    LazyVStack {
                         PlayerView(openedGroup: $openedGroup, recording: recording)
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {

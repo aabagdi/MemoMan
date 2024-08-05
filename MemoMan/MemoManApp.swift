@@ -26,6 +26,7 @@ struct MemoManApp: App {
     var body: some Scene {
         WindowGroup {
             RecordView()
+            
         }
         .modelContainer(container)
     }

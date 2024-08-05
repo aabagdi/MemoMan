@@ -12,5 +12,5 @@ extension RecordView {
         let minSize: CGFloat = maxWidth / 4
         let maxSize: CGFloat = maxWidth * 0.90
         return minSize + (maxSize - minSize) * CGFloat(power)
-    }
+    } 
 }
