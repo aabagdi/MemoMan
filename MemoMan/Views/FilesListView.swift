@@ -13,7 +13,7 @@ struct FilesListView: View {
     @Query private var recordings: [Recording]
     @State private var openedGroup: UUID? = nil
     @Environment(\.modelContext) private var modelContext
-
+    
     init(searchString: String) {
         self.searchString = searchString
         _recordings = Query(filter: #Predicate<Recording> { recording in
@@ -24,34 +24,32 @@ struct FilesListView: View {
             }
         }, sort: [SortDescriptor(\Recording.date, order: .reverse)])
     }
-
+    
     var body: some View {
         if recordings.isEmpty {
             Text("No recordings available!")
         }
         else {
-            List {
-                ForEach(recordings) { recording in
-                    LazyVStack {
-                        PlayerView(openedGroup: $openedGroup, recording: recording)
-                            .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
-                                    deleteRecording(recording)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
+            List(recordings) { recording in
+                LazyVStack {
+                    PlayerView(openedGroup: $openedGroup, recording: recording)
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                deleteRecording(recording)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
-                            .swipeActions(edge: .leading) {
-                                ShareLink(item: recording.fileURL) {
-                                    Label("Share", systemImage: "square.and.arrow.up")
-                                }
+                        }
+                        .swipeActions(edge: .leading) {
+                            ShareLink(item: recording.fileURL) {
+                                Label("Share", systemImage: "square.and.arrow.up")
                             }
-                    }
+                        }
                 }
             }
         }
     }
-
+    
     private func deleteRecording(_ recording: Recording) {
         modelContext.delete(recording)
         do {

@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct WaveformView: View {
-    let recording : Recording
     @Binding var progress: Double
+    
+    let recording : Recording
     let duration : TimeInterval
     let onEditingChanged : (Bool) -> Void
     let scaleFactor : CGFloat

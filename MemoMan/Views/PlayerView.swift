@@ -34,13 +34,13 @@ struct PlayerView: View {
                     if !(recording.samples?.isEmpty ?? false) {
                         VStack {
                             Spacer()
-                            WaveformView(recording: recording, progress: Binding(
+                            WaveformView(progress: Binding(
                                 get: { sliderValue / viewModel.duration },
                                 set: { newValue in
                                     sliderValue = newValue * viewModel.duration
                                     viewModel.seek(to: sliderValue)
                                 }
-                            ), duration: viewModel.duration, onEditingChanged: { isEditing in
+                            ), recording: recording, duration: viewModel.duration, onEditingChanged: { isEditing in
                                 if isEditing {
                                     viewModel.pause()
                                 } else {
