@@ -17,12 +17,8 @@ struct FilesListView: View {
     
     init(searchString: String) {
         self.searchString = searchString
-        _recordings = Query(filter: #Predicate<Recording> { recording in
-            if searchString.isEmpty {
-                return true
-            } else {
-                return recording.name?.localizedStandardContains(searchString) ?? false
-            }
+        _recordings = Query(filter: searchString.isEmpty ? nil : #Predicate<Recording> { recording in
+            recording.name?.localizedStandardContains(searchString) ?? false
         }, sort: [SortDescriptor(\Recording.date, order: .reverse)])
     }
     
