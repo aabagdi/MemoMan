@@ -104,6 +104,7 @@ struct RecordView: View {
                         model.showFiles.toggle()
                     } label: {
                         Image(systemName: "folder.fill")
+                            .foregroundStyle(Color("MemoManPurple"))
                     }
                     .navigationDestination(isPresented: $model.showFiles) {
                         FilesView()
@@ -119,6 +120,7 @@ struct RecordView: View {
                         
                     } label: {
                         Image(systemName: "gearshape.2.fill")
+                            .foregroundStyle(Color("MemoManPurple"))
                     }
                     .navigationDestination(isPresented: $model.showSettings) {
                         SettingsView()

@@ -10,8 +10,9 @@ import SwiftData
 
 struct FilesListView: View {
     var searchString: String
-    @Query private var recordings: [Recording]
-    @State private var openedGroup: UUID? = nil
+    @Query private var recordings : [Recording]
+    @State private var openedGroup : UUID? = nil
+    
     @Environment(\.modelContext) private var modelContext
     
     init(searchString: String) {
