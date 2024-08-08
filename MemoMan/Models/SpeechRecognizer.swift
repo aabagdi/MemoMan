@@ -22,53 +22,26 @@ class SpeechRecognizer {
         self.modelContext = ModelContext(modelContainer)
     }
     
-    func transcribe(recordingID: PersistentIdentifier) async {
+    func transcribe(recordingID: PersistentIdentifier) async throws {
         guard let recognizer else {
-            return
+            throw Errors.NilSpeechRecognizer
         }
         
-        do {
-            guard await SFSpeechRecognizer.hasAuthorizationToRecognize() else {
-                throw Errors.NotAuthorizedToRecognize
-            }
-        } catch {
-            print("Authorization error: \(error)")
-            return
+        guard await SFSpeechRecognizer.hasAuthorizationToRecognize() else {
+            throw Errors.NotAuthorizedToRecognize
         }
-        if let recording = modelContext.model(for: recordingID) as? Recording {
-            let url = recording.fileURL
-            let request = SFSpeechURLRecognitionRequest(url: url)
-            
-            await withCheckedContinuation { continuation in
-                var didResume = false
-                
-                recognizer.recognitionTask(with: request) { (result, error) in
-                    if let error {
-                        print("Recognition error: \(error)")
-                        if !didResume {
-                            continuation.resume()
-                            didResume = true
-                        }
-                        return
-                    }
-                    
-                    guard let result else {
-                        print("No speech detected")
-                        if !didResume {
-                            continuation.resume()
-                            didResume = true
-                        }
-                        return
-                    }
-                    
-                    if result.isFinal {
-                        self.transcription = result.bestTranscription.formattedString
-                        if !didResume {
-                            continuation.resume()
-                            didResume = true
-                        }
-                    }
-                }
+        
+        guard let recording = modelContext.model(for: recordingID) as? Recording else {
+            throw Errors.InvalidRecording
+        }
+        
+        let url = recording.fileURL
+        let request = SFSpeechURLRecognitionRequest(url: url)
+        
+        for try await result in recognizer.results(for: request) {
+            transcription = result.transcription
+            if result.isFinal {
+                break
             }
         }
     }

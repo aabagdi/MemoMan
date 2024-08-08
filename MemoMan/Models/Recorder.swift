@@ -4,9 +4,8 @@ import AVFoundation
 import SwiftData
 import SwiftUI
 
-@MainActor
 @Observable
-final class Recorder: NSObject, AVAudioRecorderDelegate {
+final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
     // MARK: - Properties
     var startTime : Date?
     private var audioRecorder : AVAudioRecorder!
@@ -90,7 +89,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate {
     }
     
     // MARK: recording controls
-    func record() throws {
+    @MainActor func record() throws {
         try configureAudioSession()
         try setupAudioRecorder()
         guard audioRecorder != nil else {
@@ -147,7 +146,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate {
     }
     
     //MARK: Audio metering
-    private func startMetering() {
+    @MainActor private func startMetering() {
         stopMetering()
         meteringWorkItem = DispatchWorkItem { [weak self] in
             guard let self else { return }
@@ -162,7 +161,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate {
         meteringWorkItem = nil
     }
     
-    func updateMeters() {
+    @MainActor func updateMeters() {
         audioRecorder.updateMeters()
         if isStereoSupported {
             let averagePower = max(audioRecorder.averagePower(forChannel: 0), audioRecorder.averagePower(forChannel: 1))

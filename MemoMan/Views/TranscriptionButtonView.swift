@@ -40,7 +40,11 @@ struct TranscriptionButtonView: View {
             Button("OK", role: .cancel) { }
         }
         .task {
-            await recognizer.transcribe(recordingID: modelID)
+            do {
+                try await recognizer.transcribe(recordingID: modelID)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
