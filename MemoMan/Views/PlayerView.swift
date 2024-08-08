@@ -46,7 +46,8 @@ struct PlayerView: View {
                                 } else {
                                     viewModel.play()
                                 }
-                            }, scaleFactor: 5.0, maxHeight: 500.0)
+                            }, scaleFactor: 1.0, waveformHeight: 60)
+                            .padding()
                         }
                     }
 

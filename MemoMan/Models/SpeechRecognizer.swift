@@ -39,7 +39,7 @@ class SpeechRecognizer {
         let request = SFSpeechURLRecognitionRequest(url: url)
         
         for try await result in recognizer.results(for: request) {
-            transcription = result.transcription
+            transcription = result.transcription.isEmpty ? "No transcription available. Either it's still loading or no speech was detected." : result.transcription
             if result.isFinal {
                 break
             }
