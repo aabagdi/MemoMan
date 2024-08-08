@@ -20,7 +20,7 @@ struct WaveformView: View {
     var body: some View {
         GeometryReader { g in
             let width = g.size.width
-            let height = waveformHeight // Use the new waveformHeight property
+            let height = waveformHeight
             let barWidth = width / CGFloat(recording.samples?.count ?? 0)
             
             ZStack(alignment: .leading) {
