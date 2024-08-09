@@ -17,6 +17,6 @@ extension RecordView {
         var showFiles : Bool = false
         var showSettings : Bool = false
         var showAlert : Bool = false
-        var animationAmount : Double = 1.0
+        var animationAmount : CGFloat = 1.0
     }
 }

@@ -48,14 +48,27 @@ struct RecordView: View {
                         }
                         .overlay(
                             Circle()
-                                .stroke(model.isRecording ? Color.white : Color("MemoManPurple"), lineWidth: 3)
-                                .scaleEffect(model.isRecording ? 2.4 : model.animationAmount)
-                                .opacity(model.isRecording ? 0 : 2 - model.animationAmount)
-                                .animation(model.isRecording ? Animation.easeOut(duration: model.animationAmount)
-                                    .repeatForever(autoreverses: false) : .default, value: model.isRecording)
+                                .stroke(model.isRecording ? Color.red : Color("MemoManPurple"), lineWidth: 3)
+                                .scaleEffect(model.animationAmount)
+                                .opacity(2 - model.animationAmount)
+                                .animation(
+                                    model.isRecording ?
+                                        Animation.easeOut(duration: 1)
+                                            .repeatForever(autoreverses: false) :
+                                        Animation.easeOut(duration: 0.3),
+                                    value: model.animationAmount
+                                )
                         )
-                        .onChange(of: model.isRecording){
-                            model.animationAmount = model.isRecording ? 2.0 : 1.0
+                        .onChange(of: model.isRecording) {
+                            if model.isRecording {
+                                withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                                    model.animationAmount = 2.0
+                                }
+                            } else {
+                                withAnimation(.easeOut(duration: 0.3)) {
+                                    model.animationAmount = 1.0
+                                }
+                            }
                         }
                         .simultaneousGesture(TapGesture(count: 2).onEnded({
                             model.isRecording.toggle()

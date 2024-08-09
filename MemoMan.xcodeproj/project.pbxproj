@@ -406,6 +406,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MemoMan/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MicMan;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MemoMan requires access to the device's microphone.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a transcription of your audio recording in the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -445,6 +447,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MemoMan/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MicMan;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MemoMan requires access to the device's microphone.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a transcription of your audio recording in the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
