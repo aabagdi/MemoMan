@@ -28,21 +28,19 @@ struct FilesListView: View {
         }
         else {
             List(recordings) { recording in
-                LazyVStack {
-                    PlayerView(openedGroup: $openedGroup, recording: recording)
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                deleteRecording(recording)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
+                PlayerView(openedGroup: $openedGroup, recording: recording)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            deleteRecording(recording)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
                         }
-                        .swipeActions(edge: .leading) {
-                            ShareLink(item: recording.fileURL) {
-                                Label("Share", systemImage: "square.and.arrow.up")
-                            }
+                    }
+                    .swipeActions(edge: .leading) {
+                        ShareLink(item: recording.fileURL) {
+                            Label("Share", systemImage: "square.and.arrow.up")
                         }
-                }
+                    }
             }
         }
     }
