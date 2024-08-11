@@ -5,6 +5,7 @@ import SwiftData
 struct PlayerView: View {
     var recording: Recording
     @Binding var openedGroup: UUID?
+    @State var isOpened : Bool = false
 
     @StateObject private var viewModel : PlayerViewModel
     @State private var sliderValue : TimeInterval = 0
@@ -18,23 +19,12 @@ struct PlayerView: View {
 
     var body: some View {
         VStack {
-            DisclosureGroup(isExpanded: Binding(
-                get: { self.openedGroup == self.recording.id },
-                set: { newValue in
-                    if newValue {
-                        self.openedGroup = self.recording.id
-                    } else if self.openedGroup == self.recording.id {
-                        self.openedGroup = nil
-                        viewModel.stop()
-                        resetSlider()
-                    }
-                }
-            )) {
+            DisclosureGroup(isExpanded: isExpandedBinding()) {
                 VStack {
                     if !(recording.samples?.isEmpty ?? false) {
                         VStack {
                             Spacer()
-                            WaveformView(progress: Binding(
+                                WaveformView(progress: Binding(
                                 get: { sliderValue / viewModel.duration },
                                 set: { newValue in
                                     sliderValue = newValue * viewModel.duration
@@ -106,13 +96,25 @@ struct PlayerView: View {
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {
-        let hours = Int(timeInterval) / 3600
-        let minutes = (Int(timeInterval) % 3600) / 60
-        let seconds = Int(timeInterval) % 60
-        if hours > 0 {
-            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            return String(format: "%02d:%02d", minutes, seconds)
-        }
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.zeroFormattingBehavior = .pad
+        return formatter.string(from: timeInterval) ?? "00:00"
+    }
+    
+    
+    private func isExpandedBinding() -> Binding<Bool> {
+        Binding(
+            get: { self.openedGroup == self.recording.id },
+            set: { newValue in
+                if newValue {
+                    self.openedGroup = self.recording.id
+                } else if self.openedGroup == self.recording.id {
+                    self.openedGroup = nil
+                    viewModel.stop()
+                    resetSlider()
+                }
+            }
+        )
     }
 }

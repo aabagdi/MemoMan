@@ -79,17 +79,17 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         timer = nil
     }
     
+    private func resetPlayback() {
+        currentTime = 0
+        player?.currentTime = 0
+        objectWillChange.send()
+    }
+    
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if flag {
             isPlaying = false
             stopTimer()
             resetPlayback()
         }
-    }
-    
-    private func resetPlayback() {
-        currentTime = 0
-        player?.currentTime = 0
-        objectWillChange.send()
     }
 }
