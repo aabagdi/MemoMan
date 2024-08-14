@@ -23,18 +23,16 @@ struct WaveformView: View {
             let height = waveformHeight
             let barWidth = width / CGFloat(recording.samples?.count ?? 0)
             
-            ZStack(alignment: .leading) {
-                HStack(alignment: .center, spacing: 0) {
-                    ForEach(recording.samples?.indices ?? 0..<1, id: \.self) { index in
-                        let sampleValue = recording.samples?[index] ?? 0.0
-                        let normalizedValue = CGFloat(sampleValue).isFinite ? CGFloat(sampleValue) : 0
-                        let scaledValue = scaleSample(normalizedValue)
-                        let sampleHeight = max(scaledValue * height, minHeight)
-                        
-                        RoundedRectangle(cornerRadius: 2)
-                            .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
-                            .frame(width: barWidth, height: sampleHeight)
-                    }
+            HStack(alignment: .center, spacing: 0) {
+                ForEach(recording.samples?.indices ?? 0..<1, id: \.self) { index in
+                    let sampleValue = recording.samples?[index] ?? 0.0
+                    let normalizedValue = CGFloat(sampleValue).isFinite ? CGFloat(sampleValue) : 0
+                    let scaledValue = scaleSample(normalizedValue)
+                    let sampleHeight = max(scaledValue * height, minHeight)
+                    
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
+                        .frame(width: barWidth, height: sampleHeight)
                 }
             }
             .gesture(DragGesture(minimumDistance: 0)
