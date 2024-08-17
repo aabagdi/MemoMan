@@ -4,49 +4,43 @@ import SwiftUI
 import Combine
 
 final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
+    @Published private(set) var isPlaying = false
+    @Published private(set) var currentTime : TimeInterval = 0
+    
     private var player : AVAudioPlayer?
-    let objectWillChange = PassthroughSubject<Void, Never>()
+    private var timer : AnyCancellable?
     
-    var isPlaying = false {
-        didSet {
-            objectWillChange.send()
-        }
-    }
-    
-    @Published var currentTime: TimeInterval = 0
-    private var timer: AnyCancellable?
-    
-    init(recording: Recording) {
+    init?(recording: Recording) {
         super.init()
-        let path = recording.fileURL
-        if FileManager.default.fileExists(atPath: path.path) {
-            do {
-                self.player = try AVAudioPlayer(contentsOf: path)
-                player?.prepareToPlay()
-                self.player?.delegate = self
-                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.allowAirPlay])
-                try AVAudioSession.sharedInstance().setActive(true)
-            } catch {
-                print("AVAudioPlayer failed to initialise")
-            }
+        guard FileManager.default.fileExists(atPath: recording.fileURL.path),
+              let player = try? AVAudioPlayer(contentsOf: recording.fileURL) else {
+            print("Failed to initialize AVAudioPlayer")
+            return nil
         }
-        else {
-            print("File not found")
+        
+        self.player = player
+        player.delegate = self
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.allowAirPlay])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to set up audio session: \(error)")
         }
     }
     
     func play() {
-        self.player?.play()
+        guard let player = player, !isPlaying else { return }
+        player.play()
         isPlaying = true
         startTimer()
     }
     
     func pause() {
-        if isPlaying {
-            self.player?.pause()
-            isPlaying = false
-            stopTimer()
-        }
+        guard isPlaying else { return }
+        player?.pause()
+        isPlaying = false
+        stopTimer()
     }
     
     func stop() {
@@ -68,9 +62,7 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         timer = Timer.publish(every: 0.1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                guard let self = self else { return }
-                self.currentTime = self.player?.currentTime ?? 0
-                self.objectWillChange.send()
+                self?.currentTime = self?.player?.currentTime ?? 0
             }
     }
     
@@ -82,7 +74,6 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     private func resetPlayback() {
         currentTime = 0
         player?.currentTime = 0
-        objectWillChange.send()
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

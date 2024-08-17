@@ -17,6 +17,8 @@ enum Errors: Error {
     case InvalidModelContainer
     case InvalidModelContext
     case InvalidRecording
+    case InvalidViewModel
+    case NilPlayer
     case NilSpeechRecognizer
     case NotAuthorizedToRecord
     case NotAuthorizedToRecognize

@@ -11,7 +11,10 @@ extension PlayerView {
         private var cancellables = Set<AnyCancellable>()
         private var seekingSubject = PassthroughSubject<TimeInterval, Never>()
         
-        init(player: Player, recording: Recording) {
+        init(player: Player?, recording: Recording) throws {
+            guard let player else {
+                throw Errors.NilPlayer
+            }
             self.player = player
             self.recording = recording
             self.player.objectWillChange

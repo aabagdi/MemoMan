@@ -28,7 +28,7 @@ struct FilesListView: View {
         }
         else {
             List(recordings) { recording in
-                PlayerView(openedGroup: $openedGroup, recording: recording)
+                try? PlayerView(openedGroup: $openedGroup, recording: recording)
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             deleteRecording(recording)

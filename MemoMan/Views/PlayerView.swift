@@ -11,11 +11,16 @@ struct PlayerView: View {
     @State private var modelContainer : ModelContainer?
 
     
-    init(openedGroup: Binding<UUID?>, recording: Recording) {
+    init(openedGroup: Binding<UUID?>, recording: Recording) throws {
         self.recording = recording
         self._openedGroup = openedGroup
         let player = Player(recording: recording)
-        self._viewModel = StateObject(wrappedValue: PlayerViewModel(player: player, recording: recording))
+        do {
+            let defaultViewModel = try PlayerViewModel(player: player, recording: recording)
+            self._viewModel = StateObject(wrappedValue: defaultViewModel)
+        } catch {
+            throw Errors.InvalidViewModel
+        }
     }
     
     var body: some View {
