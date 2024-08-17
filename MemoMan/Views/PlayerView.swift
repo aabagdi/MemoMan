@@ -41,8 +41,7 @@ struct PlayerView: View {
     private var expandedContent: some View {
         VStack {
             waveformSection
-            timeLabels
-            playPauseButton
+            timeLabelsAndPlayButton
             fileNameAndTranscriptionButtons
             creationDateLabel
         }
@@ -72,18 +71,9 @@ struct PlayerView: View {
     }
     
     @ViewBuilder
-    private var timeLabels: some View {
+    private var timeLabelsAndPlayButton: some View {
         HStack {
             Text(timeString(from: viewModel.currentTime))
-            Spacer()
-            Text(timeString(from: viewModel.duration))
-        }
-        .padding(.horizontal)
-    }
-    
-    @ViewBuilder
-    private var playPauseButton: some View {
-        HStack {
             Spacer()
             Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
                 .onTapGesture {
@@ -94,8 +84,9 @@ struct PlayerView: View {
                     }
                 }
             Spacer()
+            Text(timeString(from: viewModel.duration))
         }
-        .padding(.top)
+        .padding(.horizontal)
     }
     
     @ViewBuilder
