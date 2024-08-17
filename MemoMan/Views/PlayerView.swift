@@ -5,7 +5,6 @@ import SwiftData
 struct PlayerView: View {
     var recording: Recording
     @Binding var openedGroup: UUID?
-    @State var isOpened: Bool = false
 
     @StateObject private var viewModel: PlayerViewModel
     @State private var sliderValue: TimeInterval = 0
@@ -35,11 +34,12 @@ struct PlayerView: View {
                 sliderValue = newValue
             }
         }
+        .tint(Color("MemoManPurple"))
     }
     
     @ViewBuilder
     private var expandedContent: some View {
-        VStack {
+        LazyVStack {
             waveformSection
             timeLabelsAndPlayButton
             fileNameAndTranscriptionButtons
