@@ -62,7 +62,7 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         timer = Timer.publish(every: 0.1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.currentTime = self?.player?.currentTime ?? 0
+                self?.updateCurrentTime()
             }
     }
     
@@ -72,8 +72,12 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     private func resetPlayback() {
-        currentTime = 0
         player?.currentTime = 0
+        updateCurrentTime()
+    }
+    
+    private func updateCurrentTime() {
+        currentTime = player?.currentTime ?? 0
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

@@ -7,10 +7,8 @@ struct PlayerView: View {
     @Binding var openedGroup : UUID?
     
     @StateObject private var viewModel : PlayerViewModel
-    @State private var sliderValue : TimeInterval = 0
     @State private var modelContainer : ModelContainer?
 
-    
     init(openedGroup: Binding<UUID?>, recording: Recording) throws {
         self.recording = recording
         self._openedGroup = openedGroup
@@ -34,7 +32,6 @@ struct PlayerView: View {
                         } else if self.openedGroup == self.recording.id {
                             self.openedGroup = nil
                             viewModel.stop()
-                            resetSlider()
                         }
                     }
                 )
@@ -47,11 +44,7 @@ struct PlayerView: View {
             .onChange(of: openedGroup) {
                 if openedGroup != self.recording.id {
                     viewModel.stop()
-                    resetSlider()
                 }
-            }
-            .onReceive(viewModel.$currentTime) { newValue in
-                sliderValue = newValue
             }
         }
         .tint(Color("MemoManPurple"))
@@ -76,10 +69,9 @@ struct PlayerView: View {
             VStack {
                 Spacer()
                 WaveformView(progress: Binding(
-                    get: { sliderValue / viewModel.duration },
+                    get: { viewModel.player.currentTime / viewModel.duration },
                     set: { newValue in
-                        sliderValue = newValue * viewModel.duration
-                        viewModel.seek(to: sliderValue)
+                        viewModel.seek(to: newValue * viewModel.duration)
                     }
                 ), recording: recording, duration: viewModel.duration, onEditingChanged: { isEditing in
                     if isEditing {
@@ -96,7 +88,7 @@ struct PlayerView: View {
     @ViewBuilder
     private var timeLabelsAndPlayButton: some View {
         HStack {
-            Text(timeString(from: viewModel.currentTime))
+            Text(timeString(from: viewModel.player.currentTime))
             Spacer()
             Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
                 .onTapGesture {
@@ -116,7 +108,9 @@ struct PlayerView: View {
     private var fileNameAndTranscriptionButtons: some View {
         HStack {
             FileNameButtonView(recording: recording)
-            try? TranscriptionButtonView(modelContainer: modelContainer, modelID: recording.persistentModelID)
+            if let container = modelContainer {
+                try? TranscriptionButtonView(modelContainer: container, modelID: recording.persistentModelID)
+            }
         }
         .padding(.top)
     }
@@ -127,12 +121,6 @@ struct PlayerView: View {
             .font(.footnote)
             .foregroundStyle(.gray)
             .padding()
-    }
-    
-    @MainActor
-    private func resetSlider() {
-        sliderValue = 0
-        viewModel.seek(to: 0)
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {
@@ -147,7 +135,6 @@ struct PlayerView: View {
             modelContainer = try ModelContainer(for: Recording.self)
         } catch {
             print("Error creating ModelContainer: \(error)")
-            
         }
     }
 }
