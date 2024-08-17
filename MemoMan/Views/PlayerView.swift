@@ -8,6 +8,8 @@ struct PlayerView: View {
     
     @StateObject private var viewModel : PlayerViewModel
     @State private var sliderValue : TimeInterval = 0
+    @State private var modelContainer : ModelContainer?
+
     
     init(openedGroup: Binding<UUID?>, recording: Recording) {
         self.recording = recording
@@ -48,6 +50,9 @@ struct PlayerView: View {
             }
         }
         .tint(Color("MemoManPurple"))
+        .onAppear {
+            initializeModelContainer()
+        }
     }
     
     @ViewBuilder
@@ -106,7 +111,7 @@ struct PlayerView: View {
     private var fileNameAndTranscriptionButtons: some View {
         HStack {
             FileNameButtonView(recording: recording)
-            TranscriptionButtonView(modelContainer: try! ModelContainer(for: Recording.self), modelID: recording.persistentModelID)
+            try? TranscriptionButtonView(modelContainer: modelContainer, modelID: recording.persistentModelID)
         }
         .padding(.top)
     }
@@ -130,5 +135,14 @@ struct PlayerView: View {
         formatter.allowedUnits = [.hour, .minute, .second]
         formatter.zeroFormattingBehavior = .pad
         return formatter.string(from: timeInterval) ?? "00:00:00"
+    }
+    
+    private func initializeModelContainer() {
+        do {
+            modelContainer = try ModelContainer(for: Recording.self)
+        } catch {
+            print("Error creating ModelContainer: \(error)")
+            
+        }
     }
 }

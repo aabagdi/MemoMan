@@ -10,15 +10,18 @@ import UniformTypeIdentifiers
 import SwiftData
 
 struct TranscriptionButtonView: View {
-    let modelID: PersistentIdentifier
+    let modelID : PersistentIdentifier
     @State private var showTranscription = false
     @State private var showCopyAlert = false
     @State private var showNoCopyAlert = false
     @State private var recognizer: SpeechRecognizer
     
-    init(modelContainer: ModelContainer, modelID: PersistentIdentifier) {
+    init(modelContainer: ModelContainer?, modelID: PersistentIdentifier) throws {
         self.modelID = modelID
-        _recognizer = State(wrappedValue: SpeechRecognizer(modelContainer: modelContainer))
+        guard let recognizer = try? SpeechRecognizer(modelContainer: modelContainer) else {
+            throw Errors.NilSpeechRecognizer
+        }
+        _recognizer = State(wrappedValue: recognizer)
     }
     
     var body: some View {

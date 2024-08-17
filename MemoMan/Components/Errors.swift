@@ -14,6 +14,7 @@ enum Errors: Error {
     case FailedToRecordError
     case FileDeletionError
     case FileRenameError
+    case InvalidModelContainer
     case InvalidModelContext
     case InvalidRecording
     case NilSpeechRecognizer

@@ -17,7 +17,10 @@ class SpeechRecognizer {
     let modelContext : ModelContext
     var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
     
-    init(modelContainer: ModelContainer) {
+    init(modelContainer: ModelContainer?) throws {
+        guard let modelContainer else {
+            throw Errors.InvalidModelContainer
+        }
         self.recognizer = SFSpeechRecognizer()
         self.modelContext = ModelContext(modelContainer)
     }
