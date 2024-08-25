@@ -24,7 +24,7 @@ struct FilesListView: View {
     
     var body: some View {
         if recordings.isEmpty {
-            Text("No recordings available!")
+            Text("No recordings found!")
         }
         else {
             List(recordings) { recording in
