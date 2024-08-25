@@ -10,7 +10,7 @@ import Foundation
 
 extension SFSpeechRecognizer {
     static func hasAuthorizationToRecognize() async -> Bool {
-        await withUnsafeContinuation { continuation in
+        await withCheckedContinuation { continuation in
             requestAuthorization { status in
                 continuation.resume(returning: status == .authorized)
             }
