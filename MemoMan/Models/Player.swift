@@ -1,16 +1,17 @@
 import Foundation
 import AVFoundation
-import SwiftUI
 import Combine
 
-final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
+class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published private(set) var isPlaying = false
-    @Published private(set) var currentTime : TimeInterval = 0
+    @Published private(set) var currentTime: TimeInterval = 0
     
-    private var player : AVAudioPlayer?
-    private var timer : AnyCancellable?
+    private var player: AVAudioPlayer?
+    private var timer: AnyCancellable?
+    let recording: Recording
     
     init?(recording: Recording) {
+        self.recording = recording
         super.init()
         guard FileManager.default.fileExists(atPath: recording.fileURL.path),
               let player = try? AVAudioPlayer(contentsOf: recording.fileURL) else {
@@ -29,29 +30,33 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
     }
     
-    func play() {
+    nonisolated func play() {
         guard let player = player, !isPlaying else { return }
         player.play()
         isPlaying = true
         startTimer()
+        AudioManager.shared.setCurrentPlayer(self)
     }
     
-    func pause() {
+    nonisolated func pause() {
         guard isPlaying else { return }
         player?.pause()
         isPlaying = false
         stopTimer()
+        AudioManager.shared.updateNowPlayingInfo()
     }
     
-    func stop() {
+    @MainActor func stop() {
         player?.stop()
         isPlaying = false
         resetPlayback()
+        AudioManager.shared.updateNowPlayingInfo()
     }
     
-    func seek(to time: TimeInterval) {
+    @MainActor func seek(to time: TimeInterval) {
         player?.currentTime = time
         currentTime = time
+        AudioManager.shared.updateNowPlayingInfo()
     }
     
     var duration: TimeInterval {
@@ -63,6 +68,7 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
             .autoconnect()
             .sink { [weak self] _ in
                 self?.updateCurrentTime()
+                AudioManager.shared.updateNowPlayingInfo()
             }
     }
     
@@ -85,6 +91,7 @@ final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
             isPlaying = false
             stopTimer()
             resetPlayback()
+            AudioManager.shared.updateNowPlayingInfo()
         }
     }
 }
