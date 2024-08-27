@@ -11,8 +11,10 @@ import Combine
 
 final class AudioManager: ObservableObject, @unchecked Sendable {
     static let shared = AudioManager()
-    
+
     @Published private(set) var currentPlayer: Player?
+    
+    private let seekInterval: TimeInterval = 15.0
     
     private init() {
         setupRemoteTransportControls()
@@ -42,6 +44,41 @@ final class AudioManager: ObservableObject, @unchecked Sendable {
             player.pause()
             return .success
         }
+        
+        commandCenter.seekForwardCommand.addTarget { [weak self] event in
+            guard let self = self,
+                  let player = self.currentPlayer,
+                  let seekEvent = event as? MPSeekCommandEvent else { return .commandFailed }
+            
+            let seekTime = player.currentTime + (seekEvent.type == .beginSeeking ? self.seekInterval : 0)
+            self.seek(to: seekTime)
+            return .success
+        }
+        
+        commandCenter.seekBackwardCommand.addTarget { [weak self] event in
+            guard let self = self,
+                  let player = self.currentPlayer,
+                  let seekEvent = event as? MPSeekCommandEvent else { return .commandFailed }
+            
+            let seekTime = max(0, player.currentTime - (seekEvent.type == .beginSeeking ? self.seekInterval : 0))
+            self.seek(to: seekTime)
+            return .success
+        }
+        
+        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
+            guard let self = self,
+                  let positionEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+            
+            self.seek(to: positionEvent.positionTime)
+            return .success
+        }
+    }
+    
+    func seek(to time: TimeInterval) {
+        guard let player = currentPlayer else { return }
+        let clampedTime = max(0, min(time, player.duration))
+        player.seek(to: clampedTime)
+        updateNowPlayingInfo()
     }
     
     func updateNowPlayingInfo() {
