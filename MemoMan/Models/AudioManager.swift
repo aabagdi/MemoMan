@@ -7,8 +7,6 @@
 
 import Foundation
 import MediaPlayer
-import Combine
-import UIKit
 
 @MainActor
 final class AudioManager: ObservableObject {
