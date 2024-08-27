@@ -9,7 +9,7 @@ import Foundation
 import MediaPlayer
 import Combine
 
-class AudioManager: ObservableObject, @unchecked Sendable {
+final class AudioManager: ObservableObject, @unchecked Sendable {
     static let shared = AudioManager()
     
     @Published private(set) var currentPlayer: Player?
