@@ -30,7 +30,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
     }
     
-    nonisolated func play() {
+    func play() {
         guard let player = player, !isPlaying else { return }
         player.play()
         isPlaying = true
@@ -38,7 +38,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         AudioManager.shared.setCurrentPlayer(self)
     }
     
-    nonisolated func pause() {
+    func pause() {
         guard isPlaying else { return }
         player?.pause()
         isPlaying = false
@@ -46,14 +46,14 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         AudioManager.shared.updateNowPlayingInfo()
     }
     
-    @MainActor func stop() {
+    func stop() {
         player?.stop()
         isPlaying = false
         resetPlayback()
         AudioManager.shared.updateNowPlayingInfo()
     }
     
-    @MainActor func seek(to time: TimeInterval) {
+    func seek(to time: TimeInterval) {
         player?.currentTime = time
         currentTime = time
         AudioManager.shared.updateNowPlayingInfo()
