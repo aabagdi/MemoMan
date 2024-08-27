@@ -13,7 +13,6 @@ final class AudioManager: ObservableObject, @unchecked Sendable {
     static let shared = AudioManager()
     
     @Published private(set) var currentPlayer: Player?
-    private var players: [Player] = []
     
     private init() {
         setupRemoteTransportControls()
@@ -21,9 +20,6 @@ final class AudioManager: ObservableObject, @unchecked Sendable {
     
     func createPlayer(for recording: Recording) -> Player? {
         let player = Player(recording: recording)
-        if let player = player {
-            players.append(player)
-        }
         return player
     }
     
