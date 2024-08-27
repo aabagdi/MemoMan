@@ -8,6 +8,7 @@
 import Foundation
 import MediaPlayer
 import Combine
+import UIKit
 
 @MainActor
 final class AudioManager: ObservableObject {
@@ -90,6 +91,10 @@ final class AudioManager: ObservableObject {
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.isPlaying ? 1.0 : 0.0
+        
+        guard let image = UIImage(named: "MemoMan") else { return }
+        
+        nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
