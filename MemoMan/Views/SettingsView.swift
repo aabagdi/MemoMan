@@ -11,7 +11,7 @@ import AVFoundation
 struct SettingsView: View {
     @AppStorage("sampleRate") var sampleRate : Double = 44_100
     @AppStorage("audioQuality") var audioQuality : Int = AVAudioQuality.max.rawValue
-    @AppStorage("inputSource") var inputSource: String = {
+    @AppStorage("inputSource") var inputSource : String = {
         let availableInputs = AVAudioSession.sharedInstance().availableInputs
         return availableInputs?.first!.portName ?? "iPhone Microphone"
     }()

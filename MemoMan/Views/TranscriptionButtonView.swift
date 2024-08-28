@@ -14,7 +14,7 @@ struct TranscriptionButtonView: View {
     @State private var showTranscription = false
     @State private var showCopyAlert = false
     @State private var showNoCopyAlert = false
-    @State private var recognizer: SpeechRecognizer
+    @State private var recognizer : SpeechRecognizer
     
     init(modelContainer: ModelContainer?, modelID: PersistentIdentifier) throws {
         self.modelID = modelID

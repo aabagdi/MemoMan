@@ -10,12 +10,12 @@ import SwiftUI
 struct WaveformView: View {
     @Binding var progress: Double
     
-    let recording: Recording
-    let duration: TimeInterval
-    let onEditingChanged: (Bool) -> Void
-    let scaleFactor: CGFloat
-    let waveformHeight: CGFloat
-    let minHeight: CGFloat = 1.0
+    let recording : Recording
+    let duration : TimeInterval
+    let onEditingChanged : (Bool) -> Void
+    let scaleFactor : CGFloat
+    let waveformHeight : CGFloat
+    let minHeight : CGFloat = 1.0
     
     var body: some View {
         GeometryReader { geometry in
