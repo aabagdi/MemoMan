@@ -12,9 +12,9 @@ import MediaPlayer
 final class AudioManager: ObservableObject {
     static let shared = AudioManager()
 
-    @Published private(set) var currentPlayer: Player?
+    @Published private(set) var currentPlayer : Player?
     
-    private let seekInterval: TimeInterval = 15.0
+    private let seekInterval : TimeInterval = 15.0
     
     private init() {
         setupRemoteTransportControls()
@@ -84,7 +84,7 @@ final class AudioManager: ObservableObject {
     func updateNowPlayingInfo() {
         guard let player = currentPlayer else { return }
         
-        var nowPlayingInfo = [String: Any]()
+        var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = player.recording.name
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player.duration

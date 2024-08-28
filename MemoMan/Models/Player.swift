@@ -4,11 +4,11 @@ import Combine
 
 class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published private(set) var isPlaying = false
-    @Published private(set) var currentTime: TimeInterval = 0
+    @Published private(set) var currentTime : TimeInterval = 0
     
-    private var player: AVAudioPlayer?
-    private var timer: AnyCancellable?
-    let recording: Recording
+    private var player : AVAudioPlayer?
+    private var timer : AnyCancellable?
+    let recording : Recording
     
     init?(recording: Recording) {
         self.recording = recording
@@ -32,7 +32,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     @MainActor
     func play() {
-        guard let player = player, !isPlaying else { return }
+        guard let player, !isPlaying else { return }
         player.play()
         isPlaying = true
         startTimer()
