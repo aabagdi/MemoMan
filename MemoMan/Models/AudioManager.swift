@@ -14,8 +14,6 @@ final class AudioManager: ObservableObject {
 
     @Published private(set) var currentPlayer : Player?
     
-    private let seekInterval : TimeInterval = 15.0
-    
     private init() {
         setupRemoteTransportControls()
     }
@@ -42,26 +40,6 @@ final class AudioManager: ObservableObject {
         commandCenter.pauseCommand.addTarget { [weak self] _ in
             guard let self = self, let player = self.currentPlayer else { return .commandFailed }
             player.pause()
-            return .success
-        }
-        
-        commandCenter.seekForwardCommand.addTarget { [weak self] event in
-            guard let self = self,
-                  let player = self.currentPlayer,
-                  let seekEvent = event as? MPSeekCommandEvent else { return .commandFailed }
-            
-            let seekTime = player.currentTime + (seekEvent.type == .beginSeeking ? self.seekInterval : 0)
-            self.seek(to: seekTime)
-            return .success
-        }
-        
-        commandCenter.seekBackwardCommand.addTarget { [weak self] event in
-            guard let self = self,
-                  let player = self.currentPlayer,
-                  let seekEvent = event as? MPSeekCommandEvent else { return .commandFailed }
-            
-            let seekTime = max(0, player.currentTime - (seekEvent.type == .beginSeeking ? self.seekInterval : 0))
-            self.seek(to: seekTime)
             return .success
         }
         
