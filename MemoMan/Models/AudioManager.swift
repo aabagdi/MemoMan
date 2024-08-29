@@ -31,20 +31,37 @@ final class AudioManager: ObservableObject {
     private func setupRemoteTransportControls() {
         let commandCenter = MPRemoteCommandCenter.shared()
         
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.isEnabled = true
+        
         commandCenter.playCommand.addTarget { [weak self] _ in
-            guard let self = self, let player = self.currentPlayer else { return .commandFailed }
+            guard let self, let player = self.currentPlayer else { return .commandFailed }
             player.play()
             return .success
         }
         
         commandCenter.pauseCommand.addTarget { [weak self] _ in
-            guard let self = self, let player = self.currentPlayer else { return .commandFailed }
+            guard let self, let player = self.currentPlayer else { return .commandFailed }
             player.pause()
             return .success
         }
         
+        commandCenter.skipForwardCommand.addTarget{ [weak self] _ in
+            guard let self, let player = self.currentPlayer else { return .commandFailed }
+            self.seek(to: player.currentTime + 10)
+            return .success
+        }
+        
+        commandCenter.skipBackwardCommand.addTarget{ [weak self] _ in
+            guard let self, let player = self.currentPlayer else { return .commandFailed }
+            self.seek(to: player.currentTime - 10)
+            return .success
+        }
+        
         commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
-            guard let self = self,
+            guard let self,
                   let positionEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
             
             self.seek(to: positionEvent.positionTime)
