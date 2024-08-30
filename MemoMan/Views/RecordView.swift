@@ -14,8 +14,8 @@ import UIKit
 struct RecordView: View {
     @State private var recorder : Recorder = Recorder()
     @State private var model : RecordViewModel = RecordViewModel()
-    @State private var originalBrightness: CGFloat = UIScreen.main.brightness
-    @State var brightnessTimer: Timer?
+    
+    private var originalBrightness: CGFloat = UIScreen.main.brightness
     
     @State private var deviceOrientation : UIDeviceOrientation = .portrait
     
