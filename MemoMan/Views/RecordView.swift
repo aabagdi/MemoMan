@@ -14,6 +14,8 @@ import UIKit
 struct RecordView: View {
     @State private var recorder : Recorder = Recorder()
     @State private var model : RecordViewModel = RecordViewModel()
+    @State private var originalBrightness: CGFloat = UIScreen.main.brightness
+    @State var brightnessTimer: Timer?
     
     @State private var deviceOrientation : UIDeviceOrientation = .portrait
     
@@ -75,8 +77,12 @@ struct RecordView: View {
                             switch model.isRecording {
                             case true:
                                 try? recorder.record()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                     UIScreen.main.brightness = 0.25
+                                }
                             case false:
                                 try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
+                                UIScreen.main.brightness = originalBrightness
                             }
                         }))
                         .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)

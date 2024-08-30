@@ -12,7 +12,7 @@ import MediaPlayer
 final class AudioManager: ObservableObject {
     static let shared = AudioManager()
 
-    @Published private(set) var currentPlayer : Player?
+    private(set) var currentPlayer : Player?
     
     private init() {
         setupRemoteTransportControls()
