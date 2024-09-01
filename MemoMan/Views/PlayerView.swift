@@ -51,6 +51,9 @@ struct PlayerView: View {
         .onAppear {
             initializeModelContainer()
         }
+        .onDisappear {
+            viewModel.stop()
+        }
     }
     
     @ViewBuilder

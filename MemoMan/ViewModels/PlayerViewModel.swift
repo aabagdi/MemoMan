@@ -74,45 +74,49 @@ extension PlayerView {
         
         private func processSamples(from audioFile: AVAudioFile) -> [Float] {
             let sampleCount = 128
-            let frameCount = AVAudioFrameCount(audioFile.length)
-            let frameCapacity = AVAudioFrameCount(min(4096, Int(frameCount)))
+            let frameCount = Int(audioFile.length)
+            let samplesPerSegment = frameCount / sampleCount
             var samples = [Float](repeating: 0, count: sampleCount)
             
-            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: frameCapacity) else {
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(samplesPerSegment)) else {
                 return samples
             }
             
             let channelCount = Int(buffer.format.channelCount)
-            let samplesPerSegment = Int(frameCount) / sampleCount
-            var maxSample: Float = 0.001
+            let noiseFloor : Float = 0.01
+            var maxSample : Float = 0.001
             
             do {
-                var tempBuffer = [Float](repeating: 0, count: Int(frameCapacity) * channelCount)
+                var squaredBuffer = [Float](repeating: 0, count: samplesPerSegment * channelCount)
+                var rmsBuffer = [Float](repeating: 0, count: sampleCount)
                 
                 for segment in 0..<sampleCount {
                     let segmentStart = AVAudioFramePosition(segment * samplesPerSegment)
-                    let segmentLength = AVAudioFrameCount(min(samplesPerSegment, Int(frameCount) - segment * samplesPerSegment))
-                    let readFrameCount = min(segmentLength, frameCapacity)
-                    
                     audioFile.framePosition = segmentStart
-                    try audioFile.read(into: buffer, frameCount: readFrameCount)
+                    try audioFile.read(into: buffer)
                     
                     if let channelData = buffer.floatChannelData {
-                        let dataCount = Int(readFrameCount) * channelCount
-                        vDSP_mmov(channelData.pointee, &tempBuffer, vDSP_Length(readFrameCount), vDSP_Length(channelCount), vDSP_Length(channelCount), vDSP_Length(1))
+                        let dataCount = samplesPerSegment * channelCount
                         
-                        vDSP_vabs(tempBuffer, 1, &tempBuffer, 1, vDSP_Length(dataCount))
+                        vDSP_vsq(channelData.pointee, 1, &squaredBuffer, 1, vDSP_Length(dataCount))
                         
-                        var maxValue: Float = 0
-                        vDSP_maxv(tempBuffer, 1, &maxValue, vDSP_Length(dataCount))
+                        var rms : Float = 0
+                        vDSP_meanv(squaredBuffer, 1, &rms, vDSP_Length(dataCount))
                         
-                        samples[segment] = maxValue
-                        maxSample = max(maxSample, maxValue)
+                        rms = sqrt(rms)
+                        rms = max(0, rms - noiseFloor)
+                        
+                        rmsBuffer[segment] = rms
+                        maxSample = max(maxSample, rms)
                     }
                 }
-                
-                var scale = 1.0 / maxSample
-                vDSP_vsmul(samples, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
+
+                if maxSample > noiseFloor {
+                    var scale = 1.0 / maxSample
+                    vDSP_vsmul(rmsBuffer, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
+                } else {
+                    samples = [Float](repeating: 0, count: sampleCount)
+                }
                 
             } catch {
                 print("Error reading audio file: \(error.localizedDescription)")
