@@ -125,6 +125,11 @@ struct RecordView: View {
                         if model.isRecording {
                             model.isRecording.toggle()
                             try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
+                            UIScreen.main.brightness = originalBrightness
+                            if model.brightnessTask != nil {
+                                model.brightnessTask?.cancel()
+                                model.brightnessTask = nil
+                            }
                         }
                         model.showFiles.toggle()
                     } label: {
@@ -140,6 +145,11 @@ struct RecordView: View {
                         if model.isRecording {
                             model.isRecording.toggle()
                             try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
+                            UIScreen.main.brightness = originalBrightness
+                            if model.brightnessTask != nil {
+                                model.brightnessTask?.cancel()
+                                model.brightnessTask = nil
+                            }
                         }
                         model.showSettings.toggle()
                         
