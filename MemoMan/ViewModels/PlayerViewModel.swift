@@ -84,7 +84,7 @@ extension PlayerView {
             
             let channelCount = Int(buffer.format.channelCount)
             let samplesPerSegment = Int(frameCount) / sampleCount
-            var maxSample: Float = 0.001  // Small non-zero value to avoid division by zero
+            var maxSample: Float = 0.001
             
             do {
                 var tempBuffer = [Float](repeating: 0, count: Int(frameCapacity) * channelCount)
@@ -97,13 +97,10 @@ extension PlayerView {
                     try audioFile.read(into: buffer, frameCount: segmentLength)
                     
                     if let channelData = buffer.floatChannelData {
-                        // Interleave channel data
                         vDSP_mmov(channelData.pointee, &tempBuffer, vDSP_Length(segmentLength), vDSP_Length(channelCount), vDSP_Length(channelCount), vDSP_Length(1))
                         
-                        // Compute absolute values
                         vDSP_vabs(tempBuffer, 1, &tempBuffer, 1, vDSP_Length(segmentLength) * vDSP_Length(channelCount))
                         
-                        // Compute max value
                         var maxValue: Float = 0
                         vDSP_maxv(tempBuffer, 1, &maxValue, vDSP_Length(segmentLength) * vDSP_Length(channelCount))
                         
@@ -112,7 +109,6 @@ extension PlayerView {
                     }
                 }
                 
-                // Normalize samples
                 var scale = 1.0 / maxSample
                 vDSP_vsmul(samples, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
                 
