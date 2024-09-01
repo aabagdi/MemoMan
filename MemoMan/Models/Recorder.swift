@@ -161,18 +161,19 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
         meteringWorkItem = nil
     }
     
-    @MainActor func updateMeters() {
+    @MainActor
+    func updateMeters() {
         audioRecorder.updateMeters()
-        if isStereoSupported {
-            let averagePower = max(audioRecorder.averagePower(forChannel: 0), audioRecorder.averagePower(forChannel: 1))
-            self.avgPower = pow(10, (0.05 * averagePower))
-        }
-        else {
-            let averagePower = audioRecorder.averagePower(forChannel: 0)
-            self.avgPower = pow(10, (0.05 * averagePower))
-        }
+        let averagePowerLeft = audioRecorder.averagePower(forChannel: 0)
+        let averagePowerRight = audioRecorder.averagePower(forChannel: 1)
+        
+        let linearAvgPowerLeft = pow(10, (0.05 * averagePowerLeft))
+        let linearAvgPowerRight = pow(10, (0.05 * averagePowerRight))
+        
+        let maxLinearAvgPower = max(linearAvgPowerLeft, linearAvgPowerRight)
+        
+        self.avgPower = maxLinearAvgPower
     }
-    
     
     //MARK: save recording functions
     private func saveRecording(modelContainer: ModelContainer) throws {

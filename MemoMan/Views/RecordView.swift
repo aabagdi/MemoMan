@@ -77,12 +77,18 @@ struct RecordView: View {
                             switch model.isRecording {
                             case true:
                                 try? recorder.record()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                     UIScreen.main.brightness = 0.25
-                                }
+                                let brightnessWorkItem = DispatchWorkItem {
+                                     if model.isRecording {
+                                         UIScreen.main.brightness = 0.25
+                                     }
+                                 }
+                                model.brightnessTask = brightnessWorkItem
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: brightnessWorkItem)
                             case false:
                                 try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
                                 UIScreen.main.brightness = originalBrightness
+                                model.brightnessTask?.cancel()
+                                model.brightnessTask = nil
                             }
                         }))
                         .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)

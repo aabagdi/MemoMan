@@ -68,17 +68,16 @@ struct WaveformView: View {
     }
     
     private func scaleSample(_ sample: CGFloat) -> CGFloat {
-        let logBase: CGFloat = 10
-        let minLog = log(0.01) / log(logBase)
-        let maxLog = log(1) / log(logBase)
+        let clampedSample = max(0, min(sample, 1))
         
-        let logScale = (log(max(sample, 0.01)) / log(logBase) - minLog) / (maxLog - minLog)
+        let power: CGFloat = 0.6
+        let emphasizedSample = pow(clampedSample, power)
         
-        let blendFactor: CGFloat = 0.7
-        let linearScale = sample
+        let contrastFactor: CGFloat = 1.2
+        let contrastedSample = (emphasizedSample - 0.5) * contrastFactor + 0.5
         
-        let blendedScale = blendFactor * logScale + (1 - blendFactor) * linearScale
+        let finalSample = max(0, min(contrastedSample, 1))
         
-        return blendedScale * scaleFactor
+        return finalSample * scaleFactor * 0.8
     }
 }

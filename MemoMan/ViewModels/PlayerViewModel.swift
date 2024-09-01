@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import AVFoundation
+import Accelerate
 
 extension PlayerView {
     @MainActor
@@ -73,44 +74,52 @@ extension PlayerView {
         
         private func processSamples(from audioFile: AVAudioFile) -> [Float] {
             let sampleCount = 128
-            let frameCount = Int(audioFile.length)
-            let sampleStride = frameCount / sampleCount
-            let frameCapacity = min(sampleStride, 1024)
+            let frameCount = AVAudioFrameCount(audioFile.length)
+            let frameCapacity = AVAudioFrameCount(min(4096, Int(frameCount)))
             var samples = [Float](repeating: 0, count: sampleCount)
-
-            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(frameCapacity)) else {
+            
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: frameCapacity) else {
                 return samples
             }
-
+            
             let channelCount = Int(buffer.format.channelCount)
-            let bytesPerFrame = buffer.format.streamDescription.pointee.mBytesPerFrame
-
+            let samplesPerSegment = Int(frameCount) / sampleCount
+            var maxSample: Float = 0.001  // Small non-zero value to avoid division by zero
+            
             do {
-                var sampleIndex = 0
-                while audioFile.framePosition < audioFile.length && sampleIndex < sampleCount {
-                    try audioFile.read(into: buffer)
-                    let framesRead = Int(buffer.frameLength)
+                var tempBuffer = [Float](repeating: 0, count: Int(frameCapacity) * channelCount)
+                
+                for segment in 0..<sampleCount {
+                    let segmentStart = AVAudioFramePosition(segment * samplesPerSegment)
+                    let segmentLength = AVAudioFrameCount(min(samplesPerSegment, Int(frameCount) - segment * samplesPerSegment))
                     
-                    guard let rawBuffer = buffer.audioBufferList.pointee.mBuffers.mData else {
-                        break
-                    }
+                    audioFile.framePosition = segmentStart
+                    try audioFile.read(into: buffer, frameCount: segmentLength)
                     
-                    for i in stride(from: 0, to: framesRead, by: sampleStride) {
-                        guard sampleIndex < sampleCount else { break }
+                    if let channelData = buffer.floatChannelData {
+                        // Interleave channel data
+                        vDSP_mmov(channelData.pointee, &tempBuffer, vDSP_Length(segmentLength), vDSP_Length(channelCount), vDSP_Length(channelCount), vDSP_Length(1))
                         
-                        var sample: Float = 0
-                        for channel in 0..<channelCount {
-                            let offset = i * Int(bytesPerFrame) + channel * MemoryLayout<Float>.size
-                            sample += abs(rawBuffer.load(fromByteOffset: offset, as: Float.self))
-                        }
-                        samples[sampleIndex] = sample / Float(channelCount)
-                        sampleIndex += 1
+                        // Compute absolute values
+                        vDSP_vabs(tempBuffer, 1, &tempBuffer, 1, vDSP_Length(segmentLength) * vDSP_Length(channelCount))
+                        
+                        // Compute max value
+                        var maxValue: Float = 0
+                        vDSP_maxv(tempBuffer, 1, &maxValue, vDSP_Length(segmentLength) * vDSP_Length(channelCount))
+                        
+                        samples[segment] = maxValue
+                        maxSample = max(maxSample, maxValue)
                     }
                 }
+                
+                // Normalize samples
+                var scale = 1.0 / maxSample
+                vDSP_vsmul(samples, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
+                
             } catch {
                 print("Error reading audio file: \(error.localizedDescription)")
             }
-
+            
             return samples
         }
     }
