@@ -92,17 +92,19 @@ extension PlayerView {
                 for segment in 0..<sampleCount {
                     let segmentStart = AVAudioFramePosition(segment * samplesPerSegment)
                     let segmentLength = AVAudioFrameCount(min(samplesPerSegment, Int(frameCount) - segment * samplesPerSegment))
+                    let readFrameCount = min(segmentLength, frameCapacity)
                     
                     audioFile.framePosition = segmentStart
-                    try audioFile.read(into: buffer, frameCount: segmentLength)
+                    try audioFile.read(into: buffer, frameCount: readFrameCount)
                     
                     if let channelData = buffer.floatChannelData {
-                        vDSP_mmov(channelData.pointee, &tempBuffer, vDSP_Length(segmentLength), vDSP_Length(channelCount), vDSP_Length(channelCount), vDSP_Length(1))
+                        let dataCount = Int(readFrameCount) * channelCount
+                        vDSP_mmov(channelData.pointee, &tempBuffer, vDSP_Length(readFrameCount), vDSP_Length(channelCount), vDSP_Length(channelCount), vDSP_Length(1))
                         
-                        vDSP_vabs(tempBuffer, 1, &tempBuffer, 1, vDSP_Length(segmentLength) * vDSP_Length(channelCount))
+                        vDSP_vabs(tempBuffer, 1, &tempBuffer, 1, vDSP_Length(dataCount))
                         
                         var maxValue: Float = 0
-                        vDSP_maxv(tempBuffer, 1, &maxValue, vDSP_Length(segmentLength) * vDSP_Length(channelCount))
+                        vDSP_maxv(tempBuffer, 1, &maxValue, vDSP_Length(dataCount))
                         
                         samples[segment] = maxValue
                         maxSample = max(maxSample, maxValue)
