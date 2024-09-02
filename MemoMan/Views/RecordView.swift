@@ -15,8 +15,6 @@ struct RecordView: View {
     @State private var recorder : Recorder = Recorder()
     @State private var model : RecordViewModel = RecordViewModel()
     
-    private var originalBrightness: CGFloat = UIScreen.main.brightness
-    
     @State private var deviceOrientation : UIDeviceOrientation = .portrait
     
     @Environment(\.modelContext) var modelContext
@@ -77,18 +75,8 @@ struct RecordView: View {
                             switch model.isRecording {
                             case true:
                                 try? recorder.record()
-                                let brightnessWorkItem = DispatchWorkItem {
-                                     if model.isRecording {
-                                         UIScreen.main.brightness = 0.25
-                                     }
-                                 }
-                                model.brightnessTask = brightnessWorkItem
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: brightnessWorkItem)
                             case false:
                                 try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
-                                UIScreen.main.brightness = originalBrightness
-                                model.brightnessTask?.cancel()
-                                model.brightnessTask = nil
                             }
                         }))
                         .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
@@ -125,11 +113,6 @@ struct RecordView: View {
                         if model.isRecording {
                             model.isRecording.toggle()
                             try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
-                            UIScreen.main.brightness = originalBrightness
-                            if model.brightnessTask != nil {
-                                model.brightnessTask?.cancel()
-                                model.brightnessTask = nil
-                            }
                         }
                         model.showFiles.toggle()
                     } label: {
@@ -145,11 +128,6 @@ struct RecordView: View {
                         if model.isRecording {
                             model.isRecording.toggle()
                             try? recorder.stop(modelContainer: ModelContainer(for: Recording.self))
-                            UIScreen.main.brightness = originalBrightness
-                            if model.brightnessTask != nil {
-                                model.brightnessTask?.cancel()
-                                model.brightnessTask = nil
-                            }
                         }
                         model.showSettings.toggle()
                         

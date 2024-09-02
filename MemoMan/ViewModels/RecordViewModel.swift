@@ -18,6 +18,5 @@ extension RecordView {
         var showSettings : Bool = false
         var showAlert : Bool = false
         var animationAmount : CGFloat = 1.0
-        var brightnessTask: DispatchWorkItem?
     }
 }
