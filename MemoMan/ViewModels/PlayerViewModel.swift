@@ -83,12 +83,15 @@ extension PlayerView {
             }
             
             let channelCount = Int(buffer.format.channelCount)
-            let noiseFloor : Float = 0.01
-            var maxSample : Float = 0.001
+            let noiseFloor: Float = 0.01
+            var maxSample: Float = 0.001
             
             do {
                 var squaredBuffer = [Float](repeating: 0, count: samplesPerSegment * channelCount)
                 var rmsBuffer = [Float](repeating: 0, count: sampleCount)
+                
+                var lowerBounds = [Float](repeating: noiseFloor, count: sampleCount)
+                var upperBounds = [Float](repeating: Float.greatestFiniteMagnitude, count: sampleCount)
                 
                 for segment in 0..<sampleCount {
                     let segmentStart = AVAudioFramePosition(segment * samplesPerSegment)
@@ -100,23 +103,24 @@ extension PlayerView {
                         
                         vDSP_vsq(channelData.pointee, 1, &squaredBuffer, 1, vDSP_Length(dataCount))
                         
-                        var rms : Float = 0
+                        var rms: Float = 0
                         vDSP_meanv(squaredBuffer, 1, &rms, vDSP_Length(dataCount))
                         
                         rms = sqrt(rms)
-                        rms = max(0, rms - noiseFloor)
-                        
                         rmsBuffer[segment] = rms
-                        maxSample = max(maxSample, rms)
                     }
                 }
 
-                if maxSample > noiseFloor {
-                    var scale = 1.0 / maxSample
-                    vDSP_vsmul(rmsBuffer, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
-                } else {
-                    samples = [Float](repeating: 0, count: sampleCount)
-                }
+                vDSP_vclip(rmsBuffer, 1, &lowerBounds, &upperBounds, &rmsBuffer, 1, vDSP_Length(sampleCount))
+
+                var noiseFloorArray = [Float](repeating: noiseFloor, count: sampleCount)
+                vDSP_vsub(noiseFloorArray, 1, rmsBuffer, 1, &rmsBuffer, 1, vDSP_Length(sampleCount))
+
+                vDSP_maxv(rmsBuffer, 1, &maxSample, vDSP_Length(sampleCount))
+                maxSample = max(maxSample, 0.001)
+
+                var scale = 1.0 / maxSample
+                vDSP_vsmul(rmsBuffer, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
                 
             } catch {
                 print("Error reading audio file: \(error.localizedDescription)")
