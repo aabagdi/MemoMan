@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WaveformView: View {
     @Binding var progress: Double
+    @Environment(\.colorScheme) var colorScheme
     
     let recording : Recording
     let duration : TimeInterval
@@ -53,6 +54,10 @@ struct WaveformView: View {
         RoundedRectangle(cornerRadius: 2)
             .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
             .frame(width: barWidth, height: sampleHeight)
+            .overlay(
+                RoundedRectangle(cornerRadius: 2)
+                    .stroke(colorScheme == .dark ? .black : .white, lineWidth: 0.3)
+            )
     }
     
     private func dragGesture(width: CGFloat) -> some Gesture {
