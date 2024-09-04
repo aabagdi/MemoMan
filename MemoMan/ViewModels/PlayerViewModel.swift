@@ -113,7 +113,7 @@ extension PlayerView {
 
                 vDSP_vclip(rmsBuffer, 1, &lowerBounds, &upperBounds, &rmsBuffer, 1, vDSP_Length(sampleCount))
 
-                var noiseFloorArray = [Float](repeating: noiseFloor, count: sampleCount)
+                let noiseFloorArray = [Float](repeating: noiseFloor, count: sampleCount)
                 vDSP_vsub(noiseFloorArray, 1, rmsBuffer, 1, &rmsBuffer, 1, vDSP_Length(sampleCount))
 
                 vDSP_maxv(rmsBuffer, 1, &maxSample, vDSP_Length(sampleCount))
