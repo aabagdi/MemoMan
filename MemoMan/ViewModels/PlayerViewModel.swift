@@ -4,7 +4,6 @@ import AVFoundation
 import Accelerate
 
 extension PlayerView {
-    @MainActor
     class PlayerViewModel: ObservableObject {
         @Published var currentTime : TimeInterval = 0
         var player : Player
@@ -12,6 +11,7 @@ extension PlayerView {
         private var cancellables = Set<AnyCancellable>()
         private var seekingSubject = PassthroughSubject<TimeInterval, Never>()
         
+        @MainActor
         init(player: Player?, recording: Recording) throws {
             guard let player else {
                 throw Errors.NilPlayer
@@ -31,17 +31,22 @@ extension PlayerView {
                 }
                 .store(in: &cancellables)
             
-            loadAudioSamples()
+            Task {
+                await loadAudioSamples()
+            }
         }
         
+        @MainActor
         func play() {
             player.play()
         }
         
+        @MainActor
         func pause() {
             player.pause()
         }
         
+        @MainActor
         func stop() {
             player.stop()
         }
@@ -54,11 +59,11 @@ extension PlayerView {
             player.duration
         }
         
-        private func loadAudioSamples() {
+        private func loadAudioSamples() async {
             let url = recording.fileURL
             if let audioFile = loadAudioFile(url: url) {
                 if recording.samples == nil {
-                    recording.samples = processSamples(from: audioFile)
+                    recording.samples = try? await processSamples(from: audioFile)
                 }
             }
         }
@@ -71,8 +76,8 @@ extension PlayerView {
                 return nil
             }
         }
-        
-        private func processSamples(from audioFile: AVAudioFile) -> [Float] {
+
+        private func processSamples(from audioFile: AVAudioFile) async throws -> [Float] {
             let sampleCount = 128
             let frameCount = Int(audioFile.length)
             let samplesPerSegment = frameCount / sampleCount
@@ -86,46 +91,60 @@ extension PlayerView {
             let noiseFloor: Float = 0.01
             var maxSample: Float = 0.001
             
-            do {
-                var squaredBuffer = [Float](repeating: 0, count: samplesPerSegment * channelCount)
-                var rmsBuffer = [Float](repeating: 0, count: sampleCount)
+            var audioData = [[Float]](repeating: [Float](repeating: 0, count: samplesPerSegment * channelCount), count: sampleCount)
+            
+            for segment in 0..<sampleCount {
+                let segmentStart = AVAudioFramePosition(segment * samplesPerSegment)
+                audioFile.framePosition = segmentStart
+                try audioFile.read(into: buffer)
                 
-                var lowerBounds = [Float](repeating: noiseFloor, count: sampleCount)
-                var upperBounds = [Float](repeating: Float.greatestFiniteMagnitude, count: sampleCount)
-                
+                if let channelData = buffer.floatChannelData {
+                    let dataCount = samplesPerSegment * channelCount
+                    audioData[segment] = Array(UnsafeBufferPointer(start: channelData[0], count: dataCount))
+                }
+            }
+
+            let processedResults = try await withThrowingTaskGroup(of: (Int, Float).self) { taskGroup in
                 for segment in 0..<sampleCount {
-                    let segmentStart = AVAudioFramePosition(segment * samplesPerSegment)
-                    audioFile.framePosition = segmentStart
-                    try audioFile.read(into: buffer)
+                    let segmentData = audioData[segment]
                     
-                    if let channelData = buffer.floatChannelData {
-                        let dataCount = samplesPerSegment * channelCount
-                        
-                        vDSP_vsq(channelData.pointee, 1, &squaredBuffer, 1, vDSP_Length(dataCount))
-                        
+                    taskGroup.addTask {
+                        var squaredBuffer = [Float](repeating: 0, count: samplesPerSegment * channelCount)
                         var rms: Float = 0
-                        vDSP_meanv(squaredBuffer, 1, &rms, vDSP_Length(dataCount))
-                        
+
+                        vDSP_vsq(segmentData, 1, &squaredBuffer, 1, vDSP_Length(samplesPerSegment * channelCount))
+                        vDSP_meanv(squaredBuffer, 1, &rms, vDSP_Length(samplesPerSegment * channelCount))
                         rms = sqrt(rms)
-                        rmsBuffer[segment] = rms
+
+                        return (segment, rms)
                     }
                 }
 
-                vDSP_vclip(rmsBuffer, 1, &lowerBounds, &upperBounds, &rmsBuffer, 1, vDSP_Length(sampleCount))
-
-                let noiseFloorArray = [Float](repeating: noiseFloor, count: sampleCount)
-                vDSP_vsub(noiseFloorArray, 1, rmsBuffer, 1, &rmsBuffer, 1, vDSP_Length(sampleCount))
-
-                vDSP_maxv(rmsBuffer, 1, &maxSample, vDSP_Length(sampleCount))
-                maxSample = max(maxSample, 0.001)
-
-                var scale = 1.0 / maxSample
-                vDSP_vsmul(rmsBuffer, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
-                
-            } catch {
-                print("Error reading audio file: \(error.localizedDescription)")
+                var results = [(Int, Float)]()
+                for try await result in taskGroup {
+                    results.append(result)
+                }
+                return results
             }
-            
+
+            for (segment, rms) in processedResults {
+                samples[segment] = rms
+            }
+
+            let noiseFloorArray = [Float](repeating: noiseFloor, count: sampleCount)
+            var lowerBounds = [Float](repeating: noiseFloor, count: sampleCount)
+            var upperBounds = [Float](repeating: Float.greatestFiniteMagnitude, count: sampleCount)
+
+            vDSP_vclip(samples, 1, &lowerBounds, &upperBounds, &samples, 1, vDSP_Length(sampleCount))
+
+            vDSP_vsub(noiseFloorArray, 1, samples, 1, &samples, 1, vDSP_Length(sampleCount))
+
+            vDSP_maxv(samples, 1, &maxSample, vDSP_Length(sampleCount))
+            maxSample = max(maxSample, 0.001)
+
+            var scale = 1.0 / maxSample
+            vDSP_vsmul(samples, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
+
             return samples
         }
     }
