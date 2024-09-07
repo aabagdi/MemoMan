@@ -12,7 +12,7 @@ struct PlayerView: View {
     init(openedGroup: Binding<UUID?>, recording: Recording) throws {
         self.recording = recording
         self._openedGroup = openedGroup
-        let player = AudioManager.shared.createPlayer(for: recording) ?? Player(recording: recording)
+        let player = LockScreenControlManager.shared.createPlayer(for: recording) ?? Player(recording: recording)
         do {
             let defaultViewModel = try PlayerViewModel(player: player, recording: recording)
             self._viewModel = StateObject(wrappedValue: defaultViewModel)

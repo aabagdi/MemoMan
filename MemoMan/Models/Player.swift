@@ -36,7 +36,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         player.play()
         isPlaying = true
         startTimer()
-        AudioManager.shared.setCurrentPlayer(self)
+        LockScreenControlManager.shared.setCurrentPlayer(self)
     }
     
     @MainActor
@@ -45,7 +45,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         player?.pause()
         isPlaying = false
         stopTimer()
-        AudioManager.shared.updateNowPlayingInfo()
+        LockScreenControlManager.shared.updateNowPlayingInfo()
     }
     
     @MainActor
@@ -53,28 +53,27 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
         player?.stop()
         isPlaying = false
         resetPlayback()
-        AudioManager.shared.updateNowPlayingInfo()
+        LockScreenControlManager.shared.updateNowPlayingInfo()
     }
     
     @MainActor
     func seek(to time: TimeInterval) {
         player?.currentTime = time
         currentTime = time
-        AudioManager.shared.updateNowPlayingInfo()
+        LockScreenControlManager.shared.updateNowPlayingInfo()
     }
     
     var duration: TimeInterval {
         player?.duration ?? 0
     }
     
+    @MainActor
     private func startTimer() {
         timer = Timer.publish(every: 0.1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.updateCurrentTime()
-                Task {
-                    await AudioManager.shared.updateNowPlayingInfo()
-                }
+                LockScreenControlManager.shared.updateNowPlayingInfo()
             }
     }
     
@@ -98,7 +97,7 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
             stopTimer()
             resetPlayback()
             Task {
-                await AudioManager.shared.updateNowPlayingInfo()
+                await LockScreenControlManager.shared.updateNowPlayingInfo()
             }
         }
     }
