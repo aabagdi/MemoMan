@@ -48,13 +48,13 @@ final class LockScreenControlManager: ObservableObject {
             return .success
         }
         
-        commandCenter.skipForwardCommand.addTarget{ [weak self] _ in
+        commandCenter.skipForwardCommand.addTarget { [weak self] _ in
             guard let self, let player = self.currentPlayer else { return .commandFailed }
             self.seek(to: player.currentTime + 10)
             return .success
         }
         
-        commandCenter.skipBackwardCommand.addTarget{ [weak self] _ in
+        commandCenter.skipBackwardCommand.addTarget { [weak self] _ in
             guard let self, let player = self.currentPlayer else { return .commandFailed }
             self.seek(to: player.currentTime - 10)
             return .success
