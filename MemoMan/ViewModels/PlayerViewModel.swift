@@ -54,7 +54,11 @@ extension PlayerView {
         func seek(to time: TimeInterval) {
             seekingSubject.send(time)
         }
-                
+        
+        var duration: TimeInterval {
+            player.duration
+        }
+        
         @MainActor
         private func loadAudioSamples() {
             let url = recording.fileURL
