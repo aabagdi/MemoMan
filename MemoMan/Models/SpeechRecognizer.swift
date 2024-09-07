@@ -12,7 +12,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class SpeechRecognizer {
+final class SpeechRecognizer {
     let recognizer : SFSpeechRecognizer?
     let modelContext : ModelContext
     var transcription : String = "No transcription available. Either it's still loading or no speech was detected."

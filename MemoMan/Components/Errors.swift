@@ -8,6 +8,7 @@
 import Foundation
 
 enum Errors: Error {
+    case AudioProcessingError
     case FailedToInitPlayer
     case FailedToInitSessionError
     case FailedToPlayURL

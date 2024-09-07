@@ -11,7 +11,7 @@ import SwiftUI
 extension RecordView {
     @Observable
     @MainActor
-    class RecordViewModel {
+    final class RecordViewModel {
         var isRecording : Bool = false
         var fadeInOut : Bool = false
         var showFiles : Bool = false

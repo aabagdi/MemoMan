@@ -4,10 +4,12 @@ import AVFoundation
 import Accelerate
 
 extension PlayerView {
-    class PlayerViewModel: ObservableObject {
+    final class PlayerViewModel: ObservableObject {
         @Published var currentTime : TimeInterval = 0
+        
         var player : Player
         var recording : Recording
+        
         private var cancellables = Set<AnyCancellable>()
         private var seekingSubject = PassthroughSubject<TimeInterval, Never>()
         
@@ -30,10 +32,7 @@ extension PlayerView {
                     self?.player.seek(to: time)
                 }
                 .store(in: &cancellables)
-            
-            Task {
-                await loadAudioSamples()
-            }
+            loadAudioSamples()
         }
         
         @MainActor
@@ -51,19 +50,19 @@ extension PlayerView {
             player.stop()
         }
         
+        @MainActor
         func seek(to time: TimeInterval) {
             seekingSubject.send(time)
         }
-        
-        var duration: TimeInterval {
-            player.duration
-        }
-        
-        private func loadAudioSamples() async {
+                
+        @MainActor
+        private func loadAudioSamples() {
             let url = recording.fileURL
             if let audioFile = loadAudioFile(url: url) {
                 if recording.samples == nil {
-                    recording.samples = try? await processSamples(from: audioFile)
+                    Task {
+                        recording.samples = try? await processSamples(from: audioFile)
+                    }
                 }
             }
         }
@@ -76,21 +75,35 @@ extension PlayerView {
                 return nil
             }
         }
-
-        private func processSamples(from audioFile: AVAudioFile) async throws -> [Float] {
+        
+        private func processSamples(from audioFile: AVAudioFile)  async throws -> [Float] {
             let sampleCount = 128
             let frameCount = Int(audioFile.length)
             let samplesPerSegment = frameCount / sampleCount
-            var samples = [Float](repeating: 0, count: sampleCount)
             
-            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(samplesPerSegment)) else {
-                return samples
-            }
-            
+            let buffer = try createAudioBuffer(for: audioFile, frameCapacity: AVAudioFrameCount(samplesPerSegment))
             let channelCount = Int(buffer.format.channelCount)
-            let noiseFloor: Float = 0.01
-            var maxSample: Float = 0.001
             
+            let audioData = try readAudioData(from: audioFile, into: buffer, sampleCount: sampleCount, samplesPerSegment: samplesPerSegment, channelCount: channelCount)
+            
+            let processedResults = try await processAudioSegments(audioData: audioData, sampleCount: sampleCount, samplesPerSegment: samplesPerSegment, channelCount: channelCount)
+            
+            var samples = createSamplesArray(from: processedResults, sampleCount: sampleCount)
+            
+            samples = applyNoiseFloor(to: samples, noiseFloor: 0.01)
+            samples = normalizeSamples(samples)
+            
+            return samples
+        }
+        
+        private func createAudioBuffer(for audioFile: AVAudioFile, frameCapacity: AVAudioFrameCount) throws -> AVAudioPCMBuffer {
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: frameCapacity) else {
+                throw Errors.AudioProcessingError
+            }
+            return buffer
+        }
+        
+        private func readAudioData(from audioFile: AVAudioFile, into buffer: AVAudioPCMBuffer, sampleCount: Int, samplesPerSegment: Int, channelCount: Int) throws -> [[Float]] {
             var audioData = [[Float]](repeating: [Float](repeating: 0, count: samplesPerSegment * channelCount), count: sampleCount)
             
             for segment in 0..<sampleCount {
@@ -103,49 +116,64 @@ extension PlayerView {
                     audioData[segment] = Array(UnsafeBufferPointer(start: channelData[0], count: dataCount))
                 }
             }
-
-            let processedResults = try await withThrowingTaskGroup(of: (Int, Float).self) { taskGroup in
+            
+            return audioData
+        }
+        
+        private func processAudioSegments(audioData: [[Float]], sampleCount: Int, samplesPerSegment: Int, channelCount: Int) async throws -> [(Int, Float)] {
+            try await withThrowingTaskGroup(of: (Int, Float).self) { taskGroup in
                 for segment in 0..<sampleCount {
                     let segmentData = audioData[segment]
                     
                     taskGroup.addTask {
-                        var squaredBuffer = [Float](repeating: 0, count: samplesPerSegment * channelCount)
                         var rms: Float = 0
-
-                        vDSP_vsq(segmentData, 1, &squaredBuffer, 1, vDSP_Length(samplesPerSegment * channelCount))
-                        vDSP_meanv(squaredBuffer, 1, &rms, vDSP_Length(samplesPerSegment * channelCount))
-                        rms = sqrt(rms)
-
+                        vDSP_rmsqv(segmentData, 1, &rms, vDSP_Length(samplesPerSegment * channelCount))
                         return (segment, rms)
                     }
                 }
-
+                
                 var results = [(Int, Float)]()
                 for try await result in taskGroup {
                     results.append(result)
                 }
                 return results
             }
-
+        }
+        
+        private func createSamplesArray(from processedResults: [(Int, Float)], sampleCount: Int) -> [Float] {
+            var samples = [Float](repeating: 0, count: sampleCount)
+            vDSP_vfill([0], &samples, 1, vDSP_Length(sampleCount))
+            
             for (segment, rms) in processedResults {
                 samples[segment] = rms
             }
-
-            let noiseFloorArray = [Float](repeating: noiseFloor, count: sampleCount)
-            var lowerBounds = [Float](repeating: noiseFloor, count: sampleCount)
-            var upperBounds = [Float](repeating: Float.greatestFiniteMagnitude, count: sampleCount)
-
-            vDSP_vclip(samples, 1, &lowerBounds, &upperBounds, &samples, 1, vDSP_Length(sampleCount))
-
-            vDSP_vsub(noiseFloorArray, 1, samples, 1, &samples, 1, vDSP_Length(sampleCount))
-
-            vDSP_maxv(samples, 1, &maxSample, vDSP_Length(sampleCount))
-            maxSample = max(maxSample, 0.001)
-
-            var scale = 1.0 / maxSample
-            vDSP_vsmul(samples, 1, &scale, &samples, 1, vDSP_Length(sampleCount))
-
+            
             return samples
+        }
+        
+        private func applyNoiseFloor(to samples: [Float], noiseFloor: Float) -> [Float] {
+            var result = samples
+            let noiseFloorArray = [Float](repeating: noiseFloor, count: samples.count)
+            vDSP_vsub(noiseFloorArray, 1, samples, 1, &result, 1, vDSP_Length(samples.count))
+            return result
+        }
+        
+        private func normalizeSamples(_ samples: [Float]) -> [Float] {
+            var result = samples
+            var min: Float = 0
+            var max: Float = 0
+            vDSP_minv(samples, 1, &min, vDSP_Length(samples.count))
+            vDSP_maxv(samples, 1, &max, vDSP_Length(samples.count))
+            
+            if max > min {
+                var a: Float = 1.0 / (max - min)
+                var b: Float = -min / (max - min)
+                vDSP_vsmsa(samples, 1, &a, &b, &result, 1, vDSP_Length(samples.count))
+            } else {
+                vDSP_vfill([0.5], &result, 1, vDSP_Length(samples.count))
+            }
+            
+            return result
         }
     }
 }
