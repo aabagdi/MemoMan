@@ -92,10 +92,10 @@ extension PlayerView {
             
             let processedResults = try await processAudioSegments(audioData: audioData, sampleCount: sampleCount, samplesPerSegment: samplesPerSegment, channelCount: channelCount)
             
-            var samples = createSamplesArray(from: processedResults, sampleCount: sampleCount)
+            var samples = await createSamplesArray(from: processedResults, sampleCount: sampleCount)
             
-            samples = applyNoiseFloor(to: samples, noiseFloor: 0.01)
-            samples = normalizeSamples(samples)
+            samples = await applyNoiseFloor(to: samples, noiseFloor: 0.01)
+            samples = await normalizeSamples(samples)
             
             return samples
         }
@@ -144,7 +144,7 @@ extension PlayerView {
             }
         }
         
-        private func createSamplesArray(from processedResults: [(Int, Float)], sampleCount: Int) -> [Float] {
+        private func createSamplesArray(from processedResults: [(Int, Float)], sampleCount: Int) async -> [Float] {
             var samples = [Float](repeating: 0, count: sampleCount)
             vDSP_vfill([0], &samples, 1, vDSP_Length(sampleCount))
             
@@ -155,14 +155,14 @@ extension PlayerView {
             return samples
         }
         
-        private func applyNoiseFloor(to samples: [Float], noiseFloor: Float) -> [Float] {
+        private func applyNoiseFloor(to samples: [Float], noiseFloor: Float) async -> [Float] {
             var result = samples
             let noiseFloorArray = [Float](repeating: noiseFloor, count: samples.count)
             vDSP_vsub(noiseFloorArray, 1, samples, 1, &result, 1, vDSP_Length(samples.count))
             return result
         }
         
-        private func normalizeSamples(_ samples: [Float]) -> [Float] {
+        private func normalizeSamples(_ samples: [Float]) async -> [Float] {
             var result = samples
             var min: Float = 0
             var max: Float = 0
