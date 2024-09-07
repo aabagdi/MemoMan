@@ -13,7 +13,7 @@ struct SettingsView: View {
     @AppStorage("audioQuality") var audioQuality : Int = AVAudioQuality.max.rawValue
     @AppStorage("inputSource") var inputSource : String = {
         let availableInputs = AVAudioSession.sharedInstance().availableInputs
-        return availableInputs?.first!.portName ?? "iPhone Microphone"
+        return availableInputs?.first?.portName ?? "iPhone Microphone"
     }()
     
     private var inputSourceList : [String] {
