@@ -198,14 +198,12 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
     }
     
     //MARK: Audio delegate functions
-    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        Task { @MainActor in
-            if flag {
-                print("Recording finished.")
-            } else {
-                print("Recording failed.")
-            }
-            self.recording = nil
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        if flag {
+            print("Recording finished.")
+        } else {
+            print("Recording failed.")
         }
+        self.recording = nil
     }
 }
