@@ -93,7 +93,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
         try configureAudioSession()
         try setupAudioRecorder()
         guard audioRecorder != nil else {
-            fatalError("Audio Recorder is not initialized")
+            throw Errors.NilPlayer
         }
         startTime = Date()
         audioRecorder.record()
@@ -120,7 +120,6 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
         
         let microphoneOrientation = deviceOrientation.microphoneOrientation
         
-        // Try to find the exact match first, then fall back to other orientations
         let newDataSource = dataSources.first { $0.orientation == microphoneOrientation }
         ?? dataSources.first { $0.orientation == .front }
         ?? dataSources.first { $0.orientation == .back }
@@ -146,7 +145,8 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
     }
     
     //MARK: Audio metering
-    @MainActor private func startMetering() {
+    @MainActor
+    private func startMetering() {
         stopMetering()
         meteringWorkItem = DispatchWorkItem { [weak self] in
             guard let self else { return }

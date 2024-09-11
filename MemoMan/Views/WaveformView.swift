@@ -52,7 +52,7 @@ struct WaveformView: View {
         let sampleHeight = max(scaledValue * height, minHeight)
         
         RoundedRectangle(cornerRadius: 2)
-            .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress)) ? Color("MemoManPurple") : Color.gray)
+            .fill(index < Int(CGFloat(recording.samples?.count ?? 0) * CGFloat(progress.isFinite ? progress : 0.0)) ? Color("MemoManPurple") : Color.gray)
             .frame(width: barWidth, height: sampleHeight)
             .overlay(
                 RoundedRectangle(cornerRadius: 2)

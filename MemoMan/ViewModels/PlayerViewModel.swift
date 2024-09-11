@@ -123,24 +123,51 @@ extension PlayerView {
             
             return audioData
         }
-        
+
         private func processAudioSegments(audioData: [[Float]], sampleCount: Int, samplesPerSegment: Int, channelCount: Int) async throws -> [(Int, Float)] {
-            try await withThrowingTaskGroup(of: (Int, Float).self) { taskGroup in
-                for segment in 0..<sampleCount {
-                    let segmentData = audioData[segment]
+            let batchSize = 16 // Process 16 segments at once
+            let dataCount = samplesPerSegment * channelCount
+
+            return try await withThrowingTaskGroup(of: [(Int, Float)].self) { taskGroup in
+                for batchStart in stride(from: 0, to: sampleCount, by: batchSize) {
+                    let batchEnd = min(batchStart + batchSize, sampleCount)
                     
                     taskGroup.addTask {
-                        var rms: Float = 0
-                        vDSP_rmsqv(segmentData, 1, &rms, vDSP_Length(samplesPerSegment * channelCount))
-                        return (segment, rms)
+                        // Allocate a buffer for the entire batch
+                        var batchBuffer = [Float](repeating: 0, count: dataCount * (batchEnd - batchStart))
+                        var results = [(Int, Float)]()
+
+                        // Copy batch data into contiguous memory
+                        for (index, segment) in audioData[batchStart..<batchEnd].enumerated() {
+                            batchBuffer.replaceSubrange(index * dataCount..<(index + 1) * dataCount, with: segment)
+                        }
+
+                        // Process the entire batch at once
+                        var squaredBuffer = [Float](repeating: 0, count: batchBuffer.count)
+                        vDSP_vsq(batchBuffer, 1, &squaredBuffer, 1, vDSP_Length(batchBuffer.count))
+
+                        for segmentIndex in batchStart..<batchEnd {
+                            let startIndex = (segmentIndex - batchStart) * dataCount
+                            let endIndex = startIndex + dataCount
+
+                            var mean: Float = 0
+                            squaredBuffer.withUnsafeBufferPointer { bufferPointer in
+                                vDSP_meanv(bufferPointer.baseAddress! + startIndex, 1, &mean, vDSP_Length(dataCount))
+                            }
+                            let rms = sqrt(mean)
+                            results.append((segmentIndex, rms))
+                        }
+
+                        return results
                     }
                 }
-                
-                var results = [(Int, Float)]()
-                for try await result in taskGroup {
-                    results.append(result)
+
+                var allResults = [(Int, Float)]()
+                for try await batchResults in taskGroup {
+                    allResults.append(contentsOf: batchResults)
                 }
-                return results
+
+                return allResults.sorted(by: { $0.0 < $1.0 })
             }
         }
         
