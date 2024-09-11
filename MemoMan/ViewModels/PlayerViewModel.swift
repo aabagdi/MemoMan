@@ -148,7 +148,6 @@ extension PlayerView {
 
                         for segmentIndex in batchStart..<batchEnd {
                             let startIndex = (segmentIndex - batchStart) * dataCount
-                            let endIndex = startIndex + dataCount
 
                             var mean: Float = 0
                             squaredBuffer.withUnsafeBufferPointer { bufferPointer in
