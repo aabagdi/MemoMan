@@ -12,7 +12,7 @@ import SwiftData
     var id : UUID?
     var name : String?
     var date : Date?
-    var samples : [Float]?
+    var samples : [Float]? = nil
     
     init(name: String) {
         self.id = UUID()
