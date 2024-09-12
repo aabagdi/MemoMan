@@ -22,34 +22,39 @@ struct PlayerView: View {
     }
     
     var body: some View {
-        VStack {
-            DisclosureGroup(isExpanded:
-                Binding(
-                    get: { self.openedGroup == self.recording.id },
-                    set: { newValue in
-                        if newValue {
-                            self.openedGroup = self.recording.id
-                        } else if self.openedGroup == self.recording.id {
-                            self.openedGroup = nil
-                            viewModel.stop()
-                        }
+        if recording.samples == nil {
+            ProgressView("Loading")
+        }
+        else {
+            VStack {
+                DisclosureGroup(isExpanded:
+                                    Binding(
+                                        get: { self.openedGroup == self.recording.id },
+                                        set: { newValue in
+                                            if newValue {
+                                                self.openedGroup = self.recording.id
+                                            } else if self.openedGroup == self.recording.id {
+                                                self.openedGroup = nil
+                                                viewModel.stop()
+                                            }
+                                        }
+                                    )
+                ) {
+                    expandedContent
+                } label: {
+                    Text(recording.name ?? "")
+                        .padding()
+                }
+                .onChange(of: openedGroup) {
+                    if openedGroup != self.recording.id {
+                        viewModel.stop()
                     }
-                )
-            ) {
-                expandedContent
-            } label: {
-                Text(recording.name ?? "")
-                    .padding()
-            }
-            .onChange(of: openedGroup) {
-                if openedGroup != self.recording.id {
-                    viewModel.stop()
                 }
             }
-        }
-        .tint(Color("MemoManPurple"))
-        .onAppear {
-            initializeModelContainer()
+            .tint(Color("MemoManPurple"))
+            .onAppear {
+                initializeModelContainer()
+            }
         }
     }
     
