@@ -36,11 +36,13 @@ struct FilesListView: View {
                             Label("Delete", systemImage: "trash")
                         }
                     }
+                    .disabled(recording.samples == nil)
                     .swipeActions(edge: .leading) {
                         ShareLink(item: recording.fileURL) {
                             Label("Share", systemImage: "square.and.arrow.up")
                         }
                     }
+                    .disabled(recording.samples == nil)
             }
         }
     }
