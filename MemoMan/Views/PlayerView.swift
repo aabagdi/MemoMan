@@ -23,7 +23,11 @@ struct PlayerView: View {
     
     var body: some View {
         if recording.samples == nil {
-            ProgressView("Loading")
+            HStack {
+                Spacer()
+                ProgressView("Loading")
+                Spacer()
+            }
         }
         else {
             VStack {
