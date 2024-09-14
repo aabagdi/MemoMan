@@ -61,8 +61,7 @@ final class LockScreenControlManager: ObservableObject {
         }
         
         commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
-            guard let self,
-                  let positionEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+            guard let self, let positionEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
             
             self.seek(to: positionEvent.positionTime)
             return .success
@@ -77,15 +76,13 @@ final class LockScreenControlManager: ObservableObject {
     }
     
     func updateNowPlayingInfo() {
-        guard let player = currentPlayer else { return }
+        guard let player = currentPlayer, let image = UIImage(named: "MemoMan") else { return }
         
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = player.recording.name
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.isPlaying ? 1.0 : 0.0
-        
-        guard let image = UIImage(named: "MemoMan") else { return }
         
         nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
         

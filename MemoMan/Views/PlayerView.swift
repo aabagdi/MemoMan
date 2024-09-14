@@ -13,12 +13,8 @@ struct PlayerView: View {
         self.recording = recording
         self._openedGroup = openedGroup
         let player = LockScreenControlManager.shared.createPlayer(for: recording) ?? Player(recording: recording)
-        do {
-            let defaultViewModel = try PlayerViewModel(player: player, recording: recording)
-            self._viewModel = StateObject(wrappedValue: defaultViewModel)
-        } catch {
-            throw Errors.InvalidViewModel
-        }
+        let defaultViewModel = try PlayerViewModel(player: player, recording: recording)
+        self._viewModel = StateObject(wrappedValue: defaultViewModel)
     }
     
     var body: some View {

@@ -45,7 +45,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
         do {
             try audioSession.setPreferredInput(preferredInput)
         } catch {
-            throw Errors.UnableToSetMicrophone
+            print(error.localizedDescription)
         }
     }
     
@@ -55,7 +55,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
             try audioSession.setCategory(.record, mode: .default, options: [.allowBluetooth])
             try audioSession.setActive(true)
         } catch {
-            throw Errors.FailedToInitSessionError
+            print(error.localizedDescription)
         }
     }
     
@@ -81,7 +81,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
             audioRecorder = try AVAudioRecorder(url: fileURL, settings: audioSettings)
             audioRecorder.isMeteringEnabled = true
         } catch {
-            throw Errors.UnableToCreateAudioRecorder
+            print(error.localizedDescription)
         }
         
         audioRecorder.delegate = self
@@ -106,7 +106,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
         do {
             try saveRecording(modelContainer: modelContainer)
         } catch {
-            throw Errors.SaveFailed
+            print(error.localizedDescription)
         }
     }
     

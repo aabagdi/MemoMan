@@ -53,8 +53,8 @@ struct RecordView: View {
                                 .opacity(2 - model.animationAmount)
                                 .animation(
                                     model.isRecording ?
-                                        Animation.easeOut(duration: 1)
-                                            .repeatForever(autoreverses: false) :
+                                    Animation.easeOut(duration: 1)
+                                        .repeatForever(autoreverses: false) :
                                         Animation.easeOut(duration: 0.3),
                                     value: model.animationAmount
                                 )
@@ -144,8 +144,8 @@ struct RecordView: View {
         .alert("Microphone permissions not enabled, you can change this in Privacy & Security settings", isPresented: $model.showAlert) {
             Button("OK", role: .cancel) { }
         }
-        .onAppear {
-            Task {
+        .task {
+            do {
                 if await AVAudioApplication.requestRecordPermission() {
                     // The user grants access. Present recording interface.
                     print("Permission granted")
@@ -156,6 +156,8 @@ struct RecordView: View {
                     model.showAlert.toggle()
                 }
                 try await recorder.updateOrientation(deviceOrientation: deviceOrientation)
+            } catch {
+                print(error.localizedDescription)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
