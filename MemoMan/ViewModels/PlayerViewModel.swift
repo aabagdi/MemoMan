@@ -64,8 +64,14 @@ extension PlayerView {
             let url = recording.fileURL
             if let audioFile = loadAudioFile(url: url) {
                 if recording.samples == nil {
-                    Task {
-                        recording.samples = try? await processSamples(from: audioFile)
+                    Task { [weak self] in
+                        guard let self else { return }
+                        do {
+                            self.recording.samples = try await self.processSamples(from: audioFile)
+                        } catch {
+                            self.recording.samples = nil
+                            print("Error processing audio samples: \(error)")
+                        }
                     }
                 }
             }
