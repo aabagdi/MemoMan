@@ -30,7 +30,7 @@ struct MemoManApp: App {
             RecordView()
             .task {
                 do {
-                    try Tips.configure([ .displayFrequency(.immediate),
+                    try Tips.configure([.displayFrequency(.immediate),
                                         .datastoreLocation(.applicationDefault)
                                         ])
                 } catch {
