@@ -12,6 +12,8 @@ import SwiftData
 import UIKit
 
 struct RecordView: View {
+    private let recordViewTip = RecordViewTip()
+    
     @State private var recorder : Recorder = Recorder()
     @State private var model : RecordViewModel = RecordViewModel()
     
@@ -46,6 +48,7 @@ struct RecordView: View {
                                 .background(model.fadeInOut ? Color.red : Color("MemoManPurple"))
                                 .clipShape(Circle())
                         }
+                        .popoverTip(recordViewTip)
                         .overlay(
                             Circle()
                                 .stroke(model.isRecording ? Color.red : Color("MemoManPurple"), lineWidth: 3)

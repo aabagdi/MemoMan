@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import AVFoundation
+import TipKit
 
 @main
 struct MemoManApp: App {
@@ -25,8 +26,17 @@ struct MemoManApp: App {
     }
     
     var body: some Scene {
-        WindowGroup {
+    WindowGroup {
             RecordView()
+            .task {
+                do {
+                    try Tips.configure([ .displayFrequency(.immediate),
+                                        .datastoreLocation(.applicationDefault)
+                                        ])
+                } catch {
+                    print("Error initializing TipKit \(error.localizedDescription)")
+                }
+            }
         }
         .modelContainer(container)
     }

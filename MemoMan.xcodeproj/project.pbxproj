@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3909184E2C9DF82E00E487F9 /* RecordViewTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3909184D2C9DF82E00E487F9 /* RecordViewTip.swift */; };
 		390D49502AF5D2960033C879 /* FilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D494F2AF5D2960033C879 /* FilesView.swift */; };
 		390D49532AFB53460033C879 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D49522AFB53460033C879 /* PlayerView.swift */; };
 		390D49552AFB5ACE0033C879 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D49542AFB5ACE0033C879 /* Player.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3909184D2C9DF82E00E487F9 /* RecordViewTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewTip.swift; sourceTree = "<group>"; };
 		390D494F2AF5D2960033C879 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
 		390D49522AFB53460033C879 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		390D49542AFB5ACE0033C879 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */,
 				39E55A0B2C3A403500FBA9C3 /* TranscriptionButtonView.swift */,
 				3989D91F2C43B162005D77BA /* WaveformView.swift */,
+				3909184D2C9DF82E00E487F9 /* RecordViewTip.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 			files = (
 				3989D9202C43B162005D77BA /* WaveformView.swift in Sources */,
 				3932BC7E2C6481770023DDC1 /* TranscriptionResult.swift in Sources */,
+				3909184E2C9DF82E00E487F9 /* RecordViewTip.swift in Sources */,
 				393E57AB2C372FD800690315 /* SettingsView.swift in Sources */,
 				39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */,
 				39E55A0E2C3A473600FBA9C3 /* PurpleButtonStyle.swift in Sources */,
@@ -417,8 +421,8 @@
 				INFOPLIST_FILE = MemoMan/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MicMan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MemoMan requires access to the device's microphone.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a transcription of your audio recording in the app.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MicMan requires access to the microphone in order to capture recordings.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "MicMan requires voice transcription permissions to use transcription features.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -458,8 +462,8 @@
 				INFOPLIST_FILE = MemoMan/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MicMan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MemoMan requires access to the device's microphone.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a transcription of your audio recording in the app.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MicMan requires access to the microphone in order to capture recordings.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "MicMan requires voice transcription permissions to use transcription features.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
