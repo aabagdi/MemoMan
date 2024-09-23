@@ -9,7 +9,7 @@ import Foundation
 import MediaPlayer
 
 @MainActor
-final class LockScreenControlManager: ObservableObject {
+final class LockScreenControlManager {
     static let shared = LockScreenControlManager()
 
     private var currentPlayer : Player?

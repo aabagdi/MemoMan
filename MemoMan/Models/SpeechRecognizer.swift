@@ -21,7 +21,9 @@ final class SpeechRecognizer {
         guard let modelContainer else {
             throw Errors.InvalidModelContainer
         }
-        self.recognizer = SFSpeechRecognizer()
+        
+        let locale = Locale.current
+        self.recognizer = SFSpeechRecognizer(locale: locale)
         self.modelContext = ModelContext(modelContainer)
     }
     
