@@ -10,7 +10,7 @@ import TipKit
 
 struct RecordViewTip: Tip {
     var title: Text {
-        Text("Hi!!")
+        Text("Hi!")
     }
     
     var message: Text? {
