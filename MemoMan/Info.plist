@@ -24,5 +24,9 @@ iCloud.com.aabagdi.MemoManContainer</key>
 			<string>ANY</string>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 </dict>
 </plist>
