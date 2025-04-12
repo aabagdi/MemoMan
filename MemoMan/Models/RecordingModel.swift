@@ -9,14 +9,14 @@ import Foundation
 import SwiftData
 
 @Model final class Recording {
-    var id : UUID?
-    var name : String?
-    var date : Date?
-    var samples : [Float]? = nil
-    
-    init(name: String) {
-        self.id = UUID()
-        self.name = name
-        self.date = Date.now
-    }
+  var id : UUID?
+  var name : String?
+  var date : Date?
+  var samples : [Float]? = nil
+  
+  init(name: String) {
+    self.id = UUID()
+    self.name = name
+    self.date = Date.now
+  }
 }

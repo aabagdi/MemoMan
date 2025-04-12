@@ -8,24 +8,24 @@
 import Foundation
 
 enum Errors: Error {
-    case AudioProcessingError
-    case FailedToInitPlayer
-    case FailedToInitSessionError
-    case FailedToPlayURL
-    case FailedToRecordError
-    case FileDeletionError
-    case FileRenameError
-    case InvalidModelContainer
-    case InvalidModelContext
-    case InvalidRecording
-    case InvalidViewModel
-    case NilPlayer
-    case NilSpeechRecognizer
-    case NotAuthorizedToRecord
-    case NotAuthorizedToRecognize
-    case SaveFailed
-    case UnableToCreateAudioRecorder
-    case UnableToSelectDataSource
-    case UnableToSetMicrophone
-    case UnableToUpdateOrientation
+  case AudioProcessingError
+  case FailedToInitPlayer
+  case FailedToInitSessionError
+  case FailedToPlayURL
+  case FailedToRecordError
+  case FileDeletionError
+  case FileRenameError
+  case InvalidModelContainer
+  case InvalidModelContext
+  case InvalidRecording
+  case InvalidViewModel
+  case NilPlayer
+  case NilSpeechRecognizer
+  case NotAuthorizedToRecord
+  case NotAuthorizedToRecognize
+  case SaveFailed
+  case UnableToCreateAudioRecorder
+  case UnableToSelectDataSource
+  case UnableToSetMicrophone
+  case UnableToUpdateOrientation
 }

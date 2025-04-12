@@ -9,7 +9,7 @@ import Foundation
 import CoreTransferable
 
 extension Recording: Transferable {
-    public static var transferRepresentation: some TransferRepresentation {
-        ProxyRepresentation(exporting: \.name!)
-    }
+  public static var transferRepresentation: some TransferRepresentation {
+    ProxyRepresentation(exporting: \.name!)
+  }
 }

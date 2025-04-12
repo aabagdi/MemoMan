@@ -9,15 +9,15 @@ import Foundation
 import TipKit
 
 struct RecordViewTip: Tip {
-    var title: Text {
-        Text("Hi!")
-    }
-    
-    var message: Text? {
-        Text("To start recording, hold or double-tap the record button!")
-    }
-    
-    var image: Image? {
-        Image(systemName: "mic.fill")
-    }
+  var title: Text {
+    Text("Hi!")
+  }
+  
+  var message: Text? {
+    Text("To start recording, hold or double-tap the record button!")
+  }
+  
+  var image: Image? {
+    Image(systemName: "mic.fill")
+  }
 }

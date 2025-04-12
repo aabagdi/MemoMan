@@ -8,6 +8,6 @@
 import Foundation
 
 struct TranscriptionResult: Sendable {
-    let transcription : String
-    let isFinal : Bool
+  let transcription : String
+  let isFinal : Bool
 }
