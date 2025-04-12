@@ -24,6 +24,10 @@
 		39573A5F2C251AB4008B13D8 /* FileNameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */; };
 		39573A612C2606DB008B13D8 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39573A602C2606DB008B13D8 /* PlayerViewModel.swift */; };
 		3989D9202C43B162005D77BA /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3989D91F2C43B162005D77BA /* WaveformView.swift */; };
+		398B6C502DAA373F00A10365 /* LockScreenControlManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398B6C4C2DAA373F00A10365 /* LockScreenControlManager.swift */; };
+		398B6C512DAA373F00A10365 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398B6C4F2DAA373F00A10365 /* SpeechRecognizer.swift */; };
+		398B6C522DAA373F00A10365 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398B6C4D2DAA373F00A10365 /* Player.swift */; };
+		398B6C532DAA373F00A10365 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398B6C4E2DAA373F00A10365 /* Recorder.swift */; };
 		398C8A052AF1F46F009848AF /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A042AF1F46F009848AF /* Recorder.swift */; };
 		398C8A072AF1F49B009848AF /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordViewModel.swift */; };
 		399CEEA42C56DEF40012A712 /* UIDeviceOrientation++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */; };
@@ -56,6 +60,10 @@
 		39573A5E2C251AB4008B13D8 /* FileNameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNameButtonView.swift; sourceTree = "<group>"; };
 		39573A602C2606DB008B13D8 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		3989D91F2C43B162005D77BA /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
+		398B6C4C2DAA373F00A10365 /* LockScreenControlManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenControlManager.swift; sourceTree = "<group>"; };
+		398B6C4D2DAA373F00A10365 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		398B6C4E2DAA373F00A10365 /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
+		398B6C4F2DAA373F00A10365 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		398C8A042AF1F46F009848AF /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		398C8A062AF1F49B009848AF /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDeviceOrientation++.swift"; sourceTree = "<group>"; };
@@ -120,6 +128,10 @@
 		393E57BF2C39E0AE00690315 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				398B6C4C2DAA373F00A10365 /* LockScreenControlManager.swift */,
+				398B6C4D2DAA373F00A10365 /* Player.swift */,
+				398B6C4E2DAA373F00A10365 /* Recorder.swift */,
+				398B6C4F2DAA373F00A10365 /* SpeechRecognizer.swift */,
 				398C8A042AF1F46F009848AF /* Recorder.swift */,
 				393EAA222AF48FFF0042C085 /* RecordingModel.swift */,
 				390D49542AFB5ACE0033C879 /* Player.swift */,
@@ -254,6 +266,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				398B6C502DAA373F00A10365 /* LockScreenControlManager.swift in Sources */,
+				398B6C512DAA373F00A10365 /* SpeechRecognizer.swift in Sources */,
+				398B6C522DAA373F00A10365 /* Player.swift in Sources */,
+				398B6C532DAA373F00A10365 /* Recorder.swift in Sources */,
 				3989D9202C43B162005D77BA /* WaveformView.swift in Sources */,
 				3932BC7E2C6481770023DDC1 /* TranscriptionResult.swift in Sources */,
 				3909184E2C9DF82E00E487F9 /* RecordViewTip.swift in Sources */,
