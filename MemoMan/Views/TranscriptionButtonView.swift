@@ -16,9 +16,9 @@ struct TranscriptionButtonView: View {
   @State private var showNoCopyAlert = false
   @State private var recognizer : SpeechRecognizer
   
-  init(modelContainer: ModelContainer?, modelID: PersistentIdentifier) throws {
+  init(modelContext: ModelContext, modelID: PersistentIdentifier) throws {
     self.modelID = modelID
-    guard let recognizer = try? SpeechRecognizer(modelContainer: modelContainer) else {
+    guard let recognizer = try? SpeechRecognizer(modelContext: modelContext) else {
       throw Errors.NilSpeechRecognizer
     }
     _recognizer = State(wrappedValue: recognizer)

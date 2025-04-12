@@ -17,14 +17,10 @@ final class SpeechRecognizer {
   let modelContext : ModelContext
   var transcription : String = "No transcription available. Either it's still loading or no speech was detected."
   
-  init(modelContainer: ModelContainer?) throws {
-    guard let modelContainer else {
-      throw Errors.InvalidModelContainer
-    }
-    
+  init(modelContext: ModelContext) throws {
     let locale = Locale.current
     self.recognizer = SFSpeechRecognizer(locale: locale)
-    self.modelContext = ModelContext(modelContainer)
+    self.modelContext = modelContext
   }
   
   func transcribe(recordingID: PersistentIdentifier) async throws {

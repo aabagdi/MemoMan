@@ -38,7 +38,7 @@ struct MemoManApp: App {
           }
         }
     }
-    .modelContainer(container)
+    .modelContext(ModelContext(container))
   }
 }
 
