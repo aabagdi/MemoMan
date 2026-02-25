@@ -145,6 +145,7 @@
 				3951A90B29E13F6100C80C26 /* MemoMan */,
 				3951A90A29E13F6100C80C26 /* Products */,
 			);
+			indentWidth = 3;
 			sourceTree = "<group>";
 		};
 		3951A90A29E13F6100C80C26 /* Products */ = {
@@ -434,7 +435,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aabagdi.MemoMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -474,7 +475,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aabagdi.MemoMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

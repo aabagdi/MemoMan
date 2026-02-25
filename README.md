@@ -1,4 +1,4 @@
-# MicMan
+# MicMan (formerly known as MemoMan)
 
 A stereo voice memo app with advanced audio features including sample rate selection, external microphone support, and speech transcription.
 

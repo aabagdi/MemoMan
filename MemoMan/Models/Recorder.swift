@@ -52,7 +52,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
   private func configureAudioSession() throws {
     let audioSession = AVAudioSession.sharedInstance()
     do {
-      try audioSession.setCategory(.record, mode: .default, options: [.allowBluetooth])
+      try audioSession.setCategory(.record, mode: .default, options: [AVAudioSession.CategoryOptions.allowBluetoothHFP])
       try audioSession.setActive(true)
     } catch {
       print(error.localizedDescription)
