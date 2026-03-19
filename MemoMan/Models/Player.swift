@@ -2,13 +2,18 @@ import AVFoundation
 import Combine
 import Foundation
 
-class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
+final class Player: NSObject, ObservableObject, AVAudioPlayerDelegate, @unchecked Sendable {
    @Published private(set) var isPlaying = false
    @Published private(set) var currentTime: TimeInterval = 0
    
    private var player: AVAudioPlayer?
    private var timer: AnyCancellable?
+   
    let recording: Recording
+   
+   var duration: TimeInterval {
+      player?.duration ?? 0
+   }
    
    init?(recording: Recording) {
       self.recording = recording
@@ -32,6 +37,16 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
          try AVAudioSession.sharedInstance().setActive(true)
       } catch {
          print("Failed to set up audio session: \(error)")
+      }
+      
+      Task { [weak self] in
+         for await notification in NotificationCenter.default.notifications(
+            named: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance()) {
+            let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+            let optionsValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+            await self?.handleInterruption(typeValue: typeValue, optionsValue: optionsValue)
+         }
       }
    }
    
@@ -68,10 +83,6 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
       LockScreenControlManager.shared.updateNowPlayingInfo()
    }
    
-   var duration: TimeInterval {
-      player?.duration ?? 0
-   }
-   
    @MainActor
    private func startTimer() {
       timer = Timer.publish(every: 0.1, on: .main, in: .common)
@@ -80,6 +91,27 @@ class Player: NSObject, ObservableObject, AVAudioPlayerDelegate {
             self?.updateCurrentTime()
             LockScreenControlManager.shared.updateNowPlayingInfo()
          }
+   }
+   
+   @MainActor
+   private func handleInterruption(typeValue: UInt?, optionsValue: UInt?) {
+      guard let typeValue,
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+         return
+      }
+      
+      switch type {
+      case .began:
+         pause()
+      case .ended:
+          guard let optionsValue else { return }
+          let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+          if options.contains(.shouldResume) {
+              play()
+          }
+      @unknown default:
+          break
+      }
    }
    
    private func stopTimer() {

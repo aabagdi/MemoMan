@@ -11,6 +11,7 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
    private var audioRecorder : AVAudioRecorder!
    private var recording : Recording?
    private var meteringWorkItem : DispatchWorkItem?
+   private var activeModelContext: ModelContext?
    
    var avgPower : Float = 0.0
    
@@ -32,6 +33,16 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
          // If any errors occur during initialization,
          // terminate the app with a fatalError.
          fatalError("Error: \(error)")
+      }
+      
+      Task { [weak self] in
+         for await notification in NotificationCenter.default.notifications(
+            named: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance()) {
+            let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+            let optionsValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+            await self?.handleInterruption(typeValue: typeValue, optionsValue: optionsValue)
+         }
       }
    }
    
@@ -89,13 +100,17 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
    }
    
    // MARK: recording controls
-   @MainActor func record() throws {
+   var wasInterrupted: Bool = false
+   
+   @MainActor func record(modelContext: ModelContext) throws {
       try configureAudioSession()
       try setupAudioRecorder()
       guard audioRecorder != nil else {
          throw Errors.NilPlayer
       }
       startTime = Date()
+      wasInterrupted = false
+      activeModelContext = modelContext
       audioRecorder.record()
       startMetering()
    }
@@ -205,4 +220,26 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
       }
       self.recording = nil
    }
+   
+   //MARK: Interruption handling functions
+   @MainActor
+   private func handleInterruption(typeValue: UInt?, optionsValue: UInt?) {
+      guard let typeValue,
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+         return
+      }
+      
+      switch type {
+      case .began:
+         if audioRecorder.isRecording, let modelContext = activeModelContext {
+            try? stop(modelContext: modelContext)
+            wasInterrupted = true
+         }
+      case .ended:
+         break
+      @unknown default:
+         break
+      }
+   }
+   
 }

@@ -79,7 +79,7 @@ struct RecordView: View {
                      model.isRecording.toggle()
                      switch model.isRecording {
                      case true:
-                        try? recorder.record()
+                        try? recorder.record(modelContext: modelContext)
                      case false:
                         try? recorder.stop(modelContext: modelContext)
                      }
@@ -90,7 +90,7 @@ struct RecordView: View {
                            model.isRecording.toggle()
                            try? recorder.stop(modelContext: modelContext)
                         }
-                        try? recorder.record()
+                        try? recorder.record(modelContext: modelContext)
                         model.isRecording.toggle()
                      })
                         .sequenced(before: DragGesture(minimumDistance: 0)
@@ -148,6 +148,12 @@ struct RecordView: View {
                   SettingsView()
                }
             }
+         }
+      }
+      .onChange(of: recorder.wasInterrupted) {
+         if recorder.wasInterrupted {
+            model.isRecording = false
+            recorder.wasInterrupted = false
          }
       }
       .alert("Microphone permissions not enabled, you can change this in Privacy & Security settings", isPresented: $model.showAlert) {
