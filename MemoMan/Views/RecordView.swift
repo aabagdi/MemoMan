@@ -77,26 +77,41 @@ struct RecordView: View {
                   }
                   .simultaneousGesture(TapGesture(count: 2).onEnded({
                      model.isRecording.toggle()
-                     switch model.isRecording {
-                     case true:
-                        try? recorder.record(modelContext: modelContext)
-                     case false:
-                        try? recorder.stop(modelContext: modelContext)
+                     do {
+                        switch model.isRecording {
+                        case true:
+                           try recorder.record(modelContext: modelContext)
+                        case false:
+                           try recorder.stop(modelContext: modelContext)
+                        }
+                     } catch {
+                        model.isRecording = false
+                        model.handleError(error)
                      }
                   }))
                   .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
                      .onEnded({_ in
-                        if model.isRecording {
+                        do {
+                           if model.isRecording {
+                              model.isRecording.toggle()
+                              try recorder.stop(modelContext: modelContext)
+                           }
+                           try recorder.record(modelContext: modelContext)
                            model.isRecording.toggle()
-                           try? recorder.stop(modelContext: modelContext)
+                        } catch {
+                           model.isRecording = false
+                           model.handleError(error)
                         }
-                        try? recorder.record(modelContext: modelContext)
-                        model.isRecording.toggle()
                      })
                         .sequenced(before: DragGesture(minimumDistance: 0)
                            .onEnded({_ in
-                              model.isRecording.toggle()
-                              try? recorder.stop(modelContext: modelContext)
+                              do {
+                                 model.isRecording.toggle()
+                                 try recorder.stop(modelContext: modelContext)
+                              } catch {
+                                 model.isRecording = false
+                                 model.handleError(error)
+                              }
                            }))
                   )
                }
@@ -119,7 +134,11 @@ struct RecordView: View {
                Button {
                   if model.isRecording {
                      model.isRecording.toggle()
-                     try? recorder.stop(modelContext: modelContext)
+                     do {
+                        try recorder.stop(modelContext: modelContext)
+                     } catch {
+                        model.handleError(error)
+                     }
                   }
                   model.showFiles.toggle()
                } label: {
@@ -135,7 +154,11 @@ struct RecordView: View {
                Button {
                   if model.isRecording {
                      model.isRecording.toggle()
-                     try? recorder.stop(modelContext: modelContext)
+                     do {
+                        try recorder.stop(modelContext: modelContext)
+                     } catch {
+                        model.handleError(error)
+                     }
                   }
                   model.showSettings.toggle()
                   
@@ -159,11 +182,15 @@ struct RecordView: View {
       .alert("Microphone permissions not enabled, you can change this in Privacy & Security settings", isPresented: $model.showAlert) {
          Button("OK", role: .cancel) { }
       }
+      .alert("Error", isPresented: $model.showErrorAlert) {
+         Button("OK", role: .cancel) { }
+      } message: {
+         Text(model.currentError?.localizedDescription ?? "An unknown error occurred.")
+      }
       .task {
          do {
             if await AVAudioApplication.requestRecordPermission() {
                // The user grants access. Present recording interface.
-               print("Permission granted")
             } else {
                // The user denies access. Present a message that indicates
                // that they can change their permission settings in the
@@ -172,7 +199,7 @@ struct RecordView: View {
             }
             try await recorder.updateOrientation(deviceOrientation: deviceOrientation)
          } catch {
-            print(error.localizedDescription)
+            model.handleError(error)
          }
       }
       .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
@@ -185,7 +212,7 @@ struct RecordView: View {
                   try await recorder.updateOrientation(deviceOrientation: deviceOrientation)
                }
             } catch {
-               print("Failed to update orientation: \(error)")
+               model.handleError(error)
             }
          }
       }

@@ -14,6 +14,8 @@ struct TranscriptionButtonView: View {
    @State private var showTranscription = false
    @State private var showCopyAlert = false
    @State private var showNoCopyAlert = false
+   @State private var showErrorAlert = false
+   @State private var currentError : Error?
    @State private var recognizer : SpeechRecognizer
    
    init(modelContext: ModelContext, modelID: PersistentIdentifier) throws {
@@ -44,11 +46,17 @@ struct TranscriptionButtonView: View {
       .alert("No transcription available to copy!", isPresented: $showNoCopyAlert) {
          Button("OK", role: .cancel) { }
       }
+      .alert("Error", isPresented: $showErrorAlert) {
+         Button("OK", role: .cancel) { }
+      } message: {
+         Text(currentError?.localizedDescription ?? "An unknown error occurred.")
+      }
       .task {
          do {
             try await recognizer.transcribe(recordingID: modelID)
          } catch {
-            print(error.localizedDescription)
+            currentError = error
+            showErrorAlert = true
          }
       }
    }

@@ -17,6 +17,13 @@ extension RecordView {
       var showFiles : Bool = false
       var showSettings : Bool = false
       var showAlert : Bool = false
+      var showErrorAlert : Bool = false
+      var currentError : Error?
       var animationAmount : CGFloat = 1.0
+
+      func handleError(_ error: Error) {
+         currentError = error
+         showErrorAlert = true
+      }
    }
 }

@@ -12,6 +12,8 @@ struct FilesListView: View {
    var searchString: String
    @Query private var recordings : [Recording]
    @State private var openedGroup : UUID? = nil
+   @State private var showErrorAlert = false
+   @State private var currentError : Error?
    
    @Environment(\.modelContext) private var modelContext
    
@@ -60,16 +62,23 @@ struct FilesListView: View {
                }
             }
          }
+         .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+         } message: {
+            Text(currentError?.localizedDescription ?? "An unknown error occurred.")
+         }
       }
    }
    
    private func deleteRecording(_ recording: Recording) {
+      let fileURL = recording.fileURL
       modelContext.delete(recording)
       do {
-         try FileManager.default.removeItem(at: recording.fileURL)
+         try FileManager.default.removeItem(at: fileURL)
          try modelContext.save()
       } catch {
-         print("Error deleting recording: \(error.localizedDescription)")
+         currentError = Errors.FileDeletionError
+         showErrorAlert = true
       }
    }
 }
