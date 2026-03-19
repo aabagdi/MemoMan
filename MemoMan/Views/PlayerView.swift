@@ -4,16 +4,13 @@ import SwiftData
 
 struct PlayerView: View {
    var recording : Recording
-   @Binding var openedGroup : UUID?
    
    @StateObject private var viewModel : PlayerViewModel
-   @State private var modelContainer : ModelContainer?
    
    @Environment(\.modelContext) var modelContext
    
-   init(openedGroup: Binding<UUID?>, recording: Recording) throws {
+   init(recording: Recording) throws {
       self.recording = recording
-      self._openedGroup = openedGroup
       let player = LockScreenControlManager.shared.createPlayer(for: recording) ?? Player(recording: recording)
       let defaultViewModel = try PlayerViewModel(player: player, recording: recording)
       self._viewModel = StateObject(wrappedValue: defaultViewModel)
@@ -26,34 +23,11 @@ struct PlayerView: View {
             ProgressView("Loading")
             Spacer()
          }
-      }
-      else {
-         VStack {
-            DisclosureGroup(isExpanded:
-                              Binding(
-                                 get: { self.openedGroup == self.recording.id },
-                                 set: { newValue in
-                                    if newValue {
-                                       self.openedGroup = self.recording.id
-                                    } else if self.openedGroup == self.recording.id {
-                                       self.openedGroup = nil
-                                       viewModel.stop()
-                                    }
-                                 }
-                              )
-            ) {
-               expandedContent
-            } label: {
-               Text(recording.name ?? "")
-                  .padding()
+      } else {
+         expandedContent
+            .onDisappear {
+               viewModel.stop()
             }
-            .onChange(of: openedGroup) {
-               if openedGroup != self.recording.id {
-                  viewModel.stop()
-               }
-            }
-         }
-         .tint(Color("MemoManPurple"))
       }
    }
    

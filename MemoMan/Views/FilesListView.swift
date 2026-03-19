@@ -29,21 +29,36 @@ struct FilesListView: View {
       }
       else {
          List(recordings) { recording in
-            try? PlayerView(openedGroup: $openedGroup, recording: recording)
-               .swipeActions(edge: .trailing) {
-                  Button(role: .destructive) {
-                     deleteRecording(recording)
-                  } label: {
-                     Label("Delete", systemImage: "trash")
+            DisclosureGroup(isExpanded: Binding(
+               get: { openedGroup == recording.id },
+               set: { newValue in
+                  if newValue {
+                     openedGroup = recording.id
+                  } else if openedGroup == recording.id {
+                     openedGroup = nil
                   }
                }
-               .disabled(recording.samples == nil)
-               .swipeActions(edge: .leading) {
-                  ShareLink(item: recording.fileURL) {
-                     Label("Share", systemImage: "square.and.arrow.up")
-                  }
+            )) {
+               if openedGroup == recording.id {
+                  try? PlayerView(recording: recording)
                }
-               .disabled(recording.samples == nil)
+            } label: {
+               Text(recording.name ?? "")
+                  .padding()
+            }
+            .tint(Color("MemoManPurple"))
+            .swipeActions(edge: .trailing) {
+               Button(role: .destructive) {
+                  deleteRecording(recording)
+               } label: {
+                  Label("Delete", systemImage: "trash")
+               }
+            }
+            .swipeActions(edge: .leading) {
+               ShareLink(item: recording.fileURL) {
+                  Label("Share", systemImage: "square.and.arrow.up")
+               }
+            }
          }
       }
    }
