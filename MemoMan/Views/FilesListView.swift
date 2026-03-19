@@ -31,24 +31,32 @@ struct FilesListView: View {
       }
       else {
          List(recordings) { recording in
-            DisclosureGroup(isExpanded: Binding(
-               get: { openedGroup == recording.id },
-               set: { newValue in
-                  if newValue {
-                     openedGroup = recording.id
-                  } else if openedGroup == recording.id {
-                     openedGroup = nil
+            VStack(alignment: .leading, spacing: 0) {
+               HStack {
+                  Text(recording.name ?? "")
+                     .padding()
+                  Spacer()
+                  Image(systemName: "chevron.right")
+                     .font(.system(size: 14, weight: .semibold))
+                     .foregroundStyle(Color("MemoManPurple"))
+                     .rotationEffect(.degrees(openedGroup == recording.id ? 90 : 0))
+                     .animation(.easeInOut(duration: 0.2), value: openedGroup)
+               }
+               .contentShape(Rectangle())
+               .onTapGesture {
+                  withAnimation {
+                     if openedGroup == recording.id {
+                        openedGroup = nil
+                     } else {
+                        openedGroup = recording.id
+                     }
                   }
                }
-            )) {
+               
                if openedGroup == recording.id {
                   try? PlayerView(recording: recording)
                }
-            } label: {
-               Text(recording.name ?? "")
-                  .padding()
             }
-            .tint(Color("MemoManPurple"))
             .swipeActions(edge: .trailing) {
                Button(role: .destructive) {
                   deleteRecording(recording)
