@@ -23,6 +23,7 @@ enum Errors: Error, LocalizedError {
    case NilSpeechRecognizer
    case NotAuthorizedToRecord
    case NotAuthorizedToRecognize
+   case NoSpeechDetected
    case SaveFailed
    case UnableToCreateAudioRecorder
    case UnableToSelectDataSource
@@ -61,6 +62,8 @@ enum Errors: Error, LocalizedError {
          "Microphone access is required. You can enable it in Settings > Privacy & Security."
       case .NotAuthorizedToRecognize:
          "Speech recognition permission is required. You can enable it in Settings > Privacy & Security."
+      case .NoSpeechDetected:
+         "No speech was detected in this recording."
       case .SaveFailed:
          "Unable to save the recording. Please try again."
       case .UnableToCreateAudioRecorder:

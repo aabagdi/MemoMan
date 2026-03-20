@@ -21,7 +21,12 @@ extension SFSpeechRecognizer {
       AsyncThrowingStream { continuation in
          let task = self.recognitionTask(with: request) { result, error in
             if let error {
-               continuation.finish(throwing: error)
+               let nsError = error as NSError
+               if nsError.domain == "kAFAssistantErrorDomain" && nsError.code == 1110 {
+                  continuation.finish(throwing: Errors.NoSpeechDetected)
+               } else {
+                  continuation.finish(throwing: error)
+               }
             } else if let result {
                let transcriptionResult = TranscriptionResult(
                   transcription: result.bestTranscription.formattedString,
