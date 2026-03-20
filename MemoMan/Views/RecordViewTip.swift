@@ -18,6 +18,6 @@ struct RecordViewTip: Tip {
    }
    
    var image: Image? {
-      Image(systemName: "mic.fill")
+      Image(systemName: "microphone.fill")
    }
 }

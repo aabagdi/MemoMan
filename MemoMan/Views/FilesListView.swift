@@ -33,14 +33,17 @@ struct FilesListView: View {
          List(recordings) { recording in
             VStack(alignment: .leading, spacing: 0) {
                HStack {
-                  Text(recording.name ?? "")
+                  Text(recording.name ?? "No title")
                      .padding()
+                     .accessibilityLabel("Recording title: \(recording.name ?? "No title")")
                   Spacer()
                   Image(systemName: "chevron.right")
                      .font(.system(size: 14, weight: .semibold))
                      .foregroundStyle(Color("MemoManPurple"))
                      .rotationEffect(.degrees(openedGroup == recording.id ? 90 : 0))
                      .animation(.easeInOut(duration: 0.2), value: openedGroup)
+                     .accessibilityHint(openedGroup == nil ? "Expand recording" : "Collapse recording")
+                     .accessibilityLabel(openedGroup == nil ? "Tap to expand recording" : "Tap to collapse recording")
                }
                .contentShape(Rectangle())
                .onTapGesture {
@@ -63,11 +66,13 @@ struct FilesListView: View {
                } label: {
                   Label("Delete", systemImage: "trash")
                }
+               .accessibilityLabel("Delete recording")
             }
             .swipeActions(edge: .leading) {
                ShareLink(item: recording.fileURL) {
                   Label("Share", systemImage: "square.and.arrow.up")
                }
+               .accessibilityLabel("Share recording")
             }
          }
          .alert("Error", isPresented: $showErrorAlert) {

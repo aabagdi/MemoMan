@@ -40,7 +40,7 @@ struct RecordView: View {
                      .frame(width: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.8, height: circleSize(for: recorder.avgPower, maxWidth: g.size.width) * 0.8)
                   
                   Button(action: {}) {
-                     Image(systemName: "mic.fill")
+                     Image(systemName: "microphone.fill")
                         .font(.system(size: g.size.width/12))
                         .imageScale(.medium)
                         .frame(width: g.size.width/4, height: g.size.width/4)

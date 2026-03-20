@@ -97,15 +97,21 @@ struct TranscriptionView: View {
             .font(.headline)
             .padding()
             .accessibilityAddTraits(.isHeader)
-         TextEditor(text: .constant(transcription))
-            .padding()
-            .overlay {
-               RoundedRectangle(cornerRadius: 10)
-                  .stroke(Color.gray)
-                  .padding()
-            }
-            .accessibilityLabel("Transcription text")
-            .accessibilityValue(transcription)
+         ScrollView {
+            Text(transcription)
+               .textSelection(.enabled)
+               .frame(maxWidth: .infinity, alignment: .leading)
+               .padding()
+         }
+         .contentShape(.accessibility, Rectangle())
+         .overlay {
+            RoundedRectangle(cornerRadius: 10)
+               .stroke(Color.gray)
+         }
+         .padding()
+         .accessibilityElement(children: .combine)
+         .accessibilityLabel("Transcription text")
+         .accessibilityValue(transcription)
          HStack {
             Button("Cancel", action: onDismiss)
                .buttonStyle(PurpleButtonStyle())
