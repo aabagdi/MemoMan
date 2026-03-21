@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E9B4ECAA-95F5-4DF7-91D7-3CDBCED52506"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../../../var/folders/nv/yg0wwhl108l8mp7pwsll3qbh0000gn/T/swift-generated-sources/@__swiftmacro_7MemoMan8Recorder10ObservablefMm_.swift"
@@ -18,13 +18,43 @@
             endingLineNumber = "1"
             landmarkName = "unknown"
             landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "E9B4ECAA-95F5-4DF7-91D7-3CDBCED52506 - cb47a46d97a0c7ac"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MemoMan.Recorder.init() -&gt; MemoMan.Recorder"
+                  moduleName = "MemoMan.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aadit/Documents/Swift%20Stuff/MemoMan/@__swiftmacro_7MemoMan8Recorder10ObservablefMm_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1"
+                  endingLineNumber = "1">
+               </Location>
+               <Location
+                  uuid = "E9B4ECAA-95F5-4DF7-91D7-3CDBCED52506 - bcd01620ac86e612"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MemoMan.Recorder._$observationRegistrar.getter : Observation.ObservationRegistrar"
+                  moduleName = "MemoMan.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aadit/Documents/Swift%20Stuff/MemoMan/@__swiftmacro_7MemoMan8Recorder10ObservablefMm_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1"
+                  endingLineNumber = "1">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3FEE424C-EC3E-4228-816C-C6189D6B3258"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../../../var/folders/nv/yg0wwhl108l8mp7pwsll3qbh0000gn/T/swift-generated-sources/@__swiftmacro_7MemoMan9RecordingC7samples18_PersistedPropertyfMa_.swift"
@@ -40,7 +70,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FAF2728B-4802-4AFC-8067-432165C6BB67"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../../../var/folders/nv/yg0wwhl108l8mp7pwsll3qbh0000gn/T/swift-generated-sources/@__swiftmacro_7MemoMan10PlayerViewV0cD5ModelC11currentTime18ObservationTrackedfMp_.swift"

@@ -29,7 +29,6 @@
 		398C8A072AF1F49B009848AF /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C8A062AF1F49B009848AF /* RecordViewModel.swift */; };
 		399CEEA42C56DEF40012A712 /* UIDeviceOrientation++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */; };
 		39A013FA2C31EB0400BE7BBF /* RecordingModel++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A013F92C31EB0400BE7BBF /* RecordingModel++.swift */; };
-		39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */; };
 		39D7DBFE2BB73FD800EECAD9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D7DBFD2BB73FD800EECAD9 /* Errors.swift */; };
 		39E55A0A2C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E55A092C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift */; };
 		39E55A0C2C3A403500FBA9C3 /* TranscriptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E55A0B2C3A403500FBA9C3 /* TranscriptionButtonView.swift */; };
@@ -61,7 +60,6 @@
 		398C8A062AF1F49B009848AF /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDeviceOrientation++.swift"; sourceTree = "<group>"; };
 		39A013F92C31EB0400BE7BBF /* RecordingModel++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecordingModel++.swift"; sourceTree = "<group>"; };
-		39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recording+Transferable.swift"; sourceTree = "<group>"; };
 		39D7DBFD2BB73FD800EECAD9 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		39E55A092C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SFSpeechRecognizer++.swift"; sourceTree = "<group>"; };
 		39E55A0B2C3A403500FBA9C3 /* TranscriptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionButtonView.swift; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 				393E57B82C39D9CA00690315 /* RecordView++.swift */,
 				39A013F92C31EB0400BE7BBF /* RecordingModel++.swift */,
 				399CEEA32C56DEF40012A712 /* UIDeviceOrientation++.swift */,
-				39A41A232C2FFA39003B11B1 /* Recording+Transferable.swift */,
 				39E55A092C3A39AA00FBA9C3 /* SFSpeechRecognizer++.swift */,
 			);
 			path = Extensions;
@@ -120,10 +117,6 @@
 		393E57BF2C39E0AE00690315 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				398B6C542DAA3A3700A10365 /* LockScreenControlManager.swift */,
-				398B6C552DAA3A3700A10365 /* Player.swift */,
-				398B6C562DAA3A3700A10365 /* Recorder.swift */,
-				398B6C572DAA3A3700A10365 /* SpeechRecognizer.swift */,
 				393EAA222AF48FFF0042C085 /* RecordingModel.swift */,
 				3932BC7D2C6481770023DDC1 /* TranscriptionResult.swift */,
 			);
@@ -159,6 +152,7 @@
 		3951A90B29E13F6100C80C26 /* MemoMan */ = {
 			isa = PBXGroup;
 			children = (
+				39EA83CF2F6C91D100EFE499 /* Managers */,
 				393E57BF2C39E0AE00690315 /* Models */,
 				393E57BD2C39E07B00690315 /* Extensions */,
 				393E57C02C39E0C700690315 /* Components */,
@@ -179,6 +173,17 @@
 				3951A91329E13F6200C80C26 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		39EA83CF2F6C91D100EFE499 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				398B6C542DAA3A3700A10365 /* LockScreenControlManager.swift */,
+				398B6C552DAA3A3700A10365 /* Player.swift */,
+				398B6C562DAA3A3700A10365 /* Recorder.swift */,
+				398B6C572DAA3A3700A10365 /* SpeechRecognizer.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,7 +216,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					3951A90829E13F6100C80C26 = {
 						CreatedOnToolsVersion = 14.3;
@@ -259,7 +264,6 @@
 				3932BC7E2C6481770023DDC1 /* TranscriptionResult.swift in Sources */,
 				3909184E2C9DF82E00E487F9 /* RecordViewTip.swift in Sources */,
 				393E57AB2C372FD800690315 /* SettingsView.swift in Sources */,
-				39A41A242C2FFA39003B11B1 /* Recording+Transferable.swift in Sources */,
 				39E55A0E2C3A473600FBA9C3 /* PurpleButtonStyle.swift in Sources */,
 				39573A5F2C251AB4008B13D8 /* FileNameButtonView.swift in Sources */,
 				398C8A072AF1F49B009848AF /* RecordViewModel.swift in Sources */,
@@ -343,6 +347,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -400,6 +405,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -430,18 +436,19 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aabagdi.MemoMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
@@ -470,18 +477,19 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aabagdi.MemoMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
