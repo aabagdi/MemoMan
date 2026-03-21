@@ -23,6 +23,7 @@ struct FileNameButtonView : View {
       }
       .buttonStyle(PurpleButtonStyle())
       .accessibilityLabel("Rename recording")
+      .accessibilityInputLabels(["rename", "rename recording", "edit name"])
       .accessibilityHint("Opens a dialog to enter a new file name")
       .alert("Enter new file name", isPresented: $showingAlert) {
          TextField("New file name", text: $newFilename)

@@ -50,6 +50,21 @@ struct RecordView: View {
                   }
                   .accessibilityLabel(model.isRecording ? "Stop recording" : "Start recording")
                   .accessibilityHint("Double tap to toggle recording, or long press and release to record")
+                  .accessibilityInputLabels(!model.isRecording ? ["record", "start"] : ["stop", "end"])
+                  .accessibilityAction(.default) {
+                     model.isRecording.toggle()
+                     do {
+                        switch model.isRecording {
+                        case true:
+                           try recorder.record(modelContext: modelContext)
+                        case false:
+                           try recorder.stop(modelContext: modelContext)
+                        }
+                     } catch {
+                        model.isRecording = false
+                        model.handleError(error)
+                     }
+                  }
                   .popoverTip(recordViewTip)
                   .overlay(
                      Circle()
@@ -146,6 +161,7 @@ struct RecordView: View {
                      .foregroundStyle(Color("MemoManPurple"))
                }
                .accessibilityLabel("Recordings")
+               .accessibilityInputLabels(["files", "recordings"])
                .navigationDestination(isPresented: $model.showFiles) {
                   FilesView()
                }
@@ -167,6 +183,7 @@ struct RecordView: View {
                      .foregroundStyle(Color("MemoManPurple"))
                }
                .accessibilityLabel("Settings")
+               .accessibilityInputLabels(["settings", "options"])
                .navigationDestination(isPresented: $model.showSettings) {
                   SettingsView()
                }

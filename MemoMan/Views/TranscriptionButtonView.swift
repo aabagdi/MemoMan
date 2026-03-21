@@ -41,6 +41,7 @@ struct TranscriptionButtonView: View {
       }
       .buttonStyle(PurpleButtonStyle())
       .accessibilityLabel("View transcript")
+      .accessibilityInputLabels(["transcript", "transcription", "view transcript"])
       .accessibilityHint("Shows the speech transcription for this recording")
       .fullScreenCover(isPresented: $showTranscription) {
          TranscriptionView(
@@ -116,9 +117,11 @@ struct TranscriptionView: View {
             Button("Cancel", action: onDismiss)
                .buttonStyle(PurpleButtonStyle())
                .accessibilityLabel("Close transcript")
+               .accessibilityInputLabels(["cancel", "close", "dismiss"])
             Button("Copy", action: onCopy)
                .buttonStyle(PurpleButtonStyle())
                .accessibilityLabel("Copy transcript to clipboard")
+               .accessibilityInputLabels(["copy", "copy transcript"])
          }
          .padding()
       }

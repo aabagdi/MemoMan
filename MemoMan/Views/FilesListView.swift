@@ -30,49 +30,55 @@ struct FilesListView: View {
             .accessibilityLabel("No recordings found")
       }
       else {
-         List(recordings) { recording in
-            VStack(alignment: .leading, spacing: 0) {
-               HStack {
-                  Text(recording.name ?? "No title")
-                     .padding()
-                     .accessibilityLabel("Recording title: \(recording.name ?? "No title")")
-                  Spacer()
-                  Image(systemName: "chevron.right")
-                     .font(.system(size: 14, weight: .semibold))
-                     .foregroundStyle(Color("MemoManPurple"))
-                     .rotationEffect(.degrees(openedGroup == recording.id ? 90 : 0))
-                     .animation(.easeInOut(duration: 0.2), value: openedGroup)
-                     .accessibilityHint(openedGroup == nil ? "Expand recording" : "Collapse recording")
-                     .accessibilityLabel(openedGroup == nil ? "Tap to expand recording" : "Tap to collapse recording")
-               }
-               .contentShape(Rectangle())
-               .onTapGesture {
-                  withAnimation {
-                     if openedGroup == recording.id {
-                        openedGroup = nil
-                     } else {
-                        openedGroup = recording.id
+         List {
+            ForEach(recordings.enumerated(), id: \.element.id) { index, recording in
+               VStack(alignment: .leading, spacing: 0) {
+                  HStack {
+                     Text(recording.name ?? "No title")
+                        .padding()
+                        .accessibilityLabel("Recording title: \(recording.name ?? "No title")")
+                        .accessibilityInputLabels(["select \(index + 1)", "\(index + 1)"])
+                     Spacer()
+                     Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Color("MemoManPurple"))
+                        .rotationEffect(.degrees(openedGroup == recording.id ? 90 : 0))
+                        .animation(.easeInOut(duration: 0.2), value: openedGroup)
+                        .accessibilityHint(openedGroup == nil ? "Expand recording" : "Collapse recording")
+                        .accessibilityLabel(openedGroup == nil ? "Tap to expand recording \(recording.name ?? "")" : "Tap to collapse recording \(recording.name ?? "")")
+                        .accessibilityInputLabels(openedGroup == nil ? ["expand \(index + 1)", "open \(index + 1)", "expand \(recording.name ?? "")", "open \(recording.name ?? "")"] : ["close \(index + 1)", "close \(recording.name ?? "")"])
+                  }
+                  .contentShape(Rectangle())
+                  .onTapGesture {
+                     withAnimation {
+                        if openedGroup == recording.id {
+                           openedGroup = nil
+                        } else {
+                           openedGroup = recording.id
+                        }
                      }
                   }
+                  
+                  if openedGroup == recording.id {
+                     try? PlayerView(recording: recording)
+                  }
                }
-               
-               if openedGroup == recording.id {
-                  try? PlayerView(recording: recording)
+               .swipeActions(edge: .trailing) {
+                  Button(role: .destructive) {
+                     deleteRecording(recording)
+                  } label: {
+                     Label("Delete", systemImage: "trash")
+                  }
+                  .accessibilityLabel("Delete recording")
+                  .accessibilityInputLabels(["delete", "remove", "trash"])
                }
-            }
-            .swipeActions(edge: .trailing) {
-               Button(role: .destructive) {
-                  deleteRecording(recording)
-               } label: {
-                  Label("Delete", systemImage: "trash")
+               .swipeActions(edge: .leading) {
+                  ShareLink(item: recording.fileURL) {
+                     Label("Share", systemImage: "square.and.arrow.up")
+                  }
+                  .accessibilityLabel("Share recording")
+                  .accessibilityInputLabels(["share", "send"])
                }
-               .accessibilityLabel("Delete recording")
-            }
-            .swipeActions(edge: .leading) {
-               ShareLink(item: recording.fileURL) {
-                  Label("Share", systemImage: "square.and.arrow.up")
-               }
-               .accessibilityLabel("Share recording")
             }
          }
          .alert("Error", isPresented: $showErrorAlert) {

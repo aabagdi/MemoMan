@@ -128,9 +128,16 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
    //MARK: update orientation
    public func updateOrientation(deviceOrientation: UIDeviceOrientation) async throws {
       let session = AVAudioSession.sharedInstance()
-      guard let preferredInput = session.preferredInput ?? session.availableInputs?.first,
-            let dataSources = preferredInput.dataSources else {
+      guard let preferredInput = session.preferredInput ?? session.availableInputs?.first else {
          throw Errors.UnableToUpdateOrientation
+      }
+      
+      guard let dataSources = preferredInput.dataSources,
+            !dataSources.isEmpty else {
+         if preferredInput.portType == .builtInMic {
+            throw Errors.UnableToUpdateOrientation
+         }
+         return
       }
       
       let microphoneOrientation = deviceOrientation.microphoneOrientation
@@ -143,7 +150,10 @@ final class Recorder: NSObject, AVAudioRecorderDelegate, @unchecked Sendable {
       
       guard let newDataSource,
             let supportedPolarPatterns = newDataSource.supportedPolarPatterns else {
-         throw Errors.UnableToUpdateOrientation
+         if preferredInput.portType == .builtInMic {
+            throw Errors.UnableToUpdateOrientation
+         }
+         return
       }
       
       isStereoSupported = supportedPolarPatterns.contains(.stereo)

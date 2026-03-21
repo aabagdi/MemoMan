@@ -25,6 +25,7 @@ struct WaveformView: View {
       .frame(height: waveformHeight)
       .accessibilityElement(children: .ignore)
       .accessibilityLabel("Audio waveform")
+      .accessibilityInputLabels(["waveform", "scrubber", "audio position"])
       .accessibilityValue("\(Int(progress * 100)) percent")
       .accessibilityAdjustableAction { direction in
          switch direction {
@@ -38,6 +39,7 @@ struct WaveformView: View {
             break
          }
       }
+
    }
    
    @ViewBuilder

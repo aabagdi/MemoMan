@@ -71,6 +71,7 @@ struct PlayerView: View {
          Spacer()
          Image(systemName: viewModel.player.isPlaying ? "pause.fill" : "play.fill")
             .accessibilityLabel(viewModel.player.isPlaying ? "Pause" : "Play")
+            .accessibilityInputLabels(viewModel.player.isPlaying ? ["pause", "stop"] : ["play", "resume"])
             .accessibilityAddTraits(.isButton)
             .onTapGesture {
                if viewModel.player.isPlaying {

@@ -37,6 +37,7 @@ struct SettingsView: View {
                Text(inputSource)
             }
          }
+         .accessibilityInputLabels(["input source", "microphone", "input"])
          Picker("Sample rate", selection: $sampleRate) {
             ForEach(sampleRateList, id: \.self) { sampleRate in
                switch sampleRate {
@@ -49,6 +50,7 @@ struct SettingsView: View {
                }
             }
          }
+         .accessibilityInputLabels(["sample rate", "rate"])
          Picker("Audio quality", selection: $audioQuality) {
             ForEach(audioQualityList, id: \.self) { audioQuality in
                switch audioQuality {
@@ -61,6 +63,7 @@ struct SettingsView: View {
                }
             }
          }
+         .accessibilityInputLabels(["audio quality", "quality"])
       }
       .toolbar {
          ToolbarItem(placement: .principal) {
